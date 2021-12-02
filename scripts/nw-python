@@ -1,0 +1,9 @@
+#!/bin/sh
+set -ex
+for d in $(find . -maxdepth 1 -type d -regextype sed -regex ".*/day.*" -exec basename {} \;)
+do
+  cd $d
+  echo "attempting to run $d"
+  ../../ci/tools/hyperfine/hyperfine -w 3 'python *.py'
+  cd ../
+done

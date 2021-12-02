@@ -51,3 +51,5 @@ jobs:
         trigger: true
       - task: run-all
         file: ci/tasks/generic-python.yml
+        vars:
+          script: ci/scripts/nw-python
