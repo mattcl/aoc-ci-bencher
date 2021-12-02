@@ -20,7 +20,7 @@ jobs:
     public: true
     plan:
       - get: ci
-        trigger: false,
+        trigger: false
       - get: repo
         resource: mattcl
         trigger: true
@@ -30,7 +30,7 @@ jobs:
     public: true
     plan:
       - get: ci
-        trigger: false,
+        trigger: false
       - get: repo
         resource: lanjian
         trigger: true
