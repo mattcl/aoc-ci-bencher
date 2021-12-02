@@ -1,0 +1,34 @@
+resources:
+  - name: mattcl
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc2021.git
+  - name: LanJian
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/LanJian/aoc-2021.git
+  - name: ci
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc-ci-bencher.git
+
+jobs:
+  - name: mattcl
+    public: true
+    plan:
+      - get: repo
+        resource: mattcl
+        trigger: true
+      - task: run-all
+        file: tasks/generic-rust.yml
+  - name: LanJian
+    public: true
+    plan:
+      - get: repo
+        resource: LanJian
+        trigger: true
+      - task: run-all
+        file: tasks/generic-rust.yml
