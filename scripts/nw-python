@@ -4,6 +4,8 @@ for d in $(find . -maxdepth 1 -type d -regextype sed -regex ".*/day.*" -exec bas
 do
   cd $d
   echo "attempting to run $d"
+  python *.py
+  echo "benching"
   ../../ci/tools/hyperfine/hyperfine -w 3 'python *.py'
   cd ../
 done
