@@ -19,16 +19,20 @@ jobs:
   - name: mattcl
     public: true
     plan:
+      - get: ci
+        trigger: false,
       - get: repo
         resource: mattcl
         trigger: true
       - task: run-all
-        file: tasks/generic-rust.yml
+        file: ci/tasks/generic-rust.yml
   - name: lanjian
     public: true
     plan:
+      - get: ci
+        trigger: false,
       - get: repo
         resource: lanjian
         trigger: true
       - task: run-all
-        file: tasks/generic-rust.yml
+        file: ci/tasks/generic-rust.yml
