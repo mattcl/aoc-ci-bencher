@@ -24,7 +24,7 @@ jobs:
         trigger: true
       - task: run-all
         file: tasks/generic-rust.yml
-  - name: LanJian
+  - name: lanjian
     public: true
     plan:
       - get: repo
