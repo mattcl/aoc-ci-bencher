@@ -4,7 +4,7 @@ resources:
     icon: github
     source:
       uri: https://github.com/mattcl/aoc2021.git
-  - name: LanJian
+  - name: lanjian
     type: git
     icon: github
     source:
@@ -28,7 +28,7 @@ jobs:
     public: true
     plan:
       - get: repo
-        resource: LanJian
+        resource: lanjian
         trigger: true
       - task: run-all
         file: tasks/generic-rust.yml
