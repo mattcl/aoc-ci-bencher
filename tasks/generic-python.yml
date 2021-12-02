@@ -10,4 +10,4 @@ inputs:
 
 run:
   dir: repo
-  path: ((script))
+  path: ../((script))
