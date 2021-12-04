@@ -29,7 +29,7 @@ do
 
   commands=""
   # get the list of "executables"
-  candidate=$(find aoc2020-mattcl -name "${padded}_*")
+  candidate=$(find mattcl -name "${padded}_*")
   if [ ! -z candidate ]; then
     commands="${commands}\"${var_prefix}/\{fname\} {$candidate}\" "
   fi
