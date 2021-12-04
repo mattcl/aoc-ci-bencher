@@ -36,6 +36,8 @@ do
 
   if [ -z $commands ]; then
     echo "no executables for ${i}, breaking"
+  else
+    echo $commands
   fi
 
   echo "Benching day ${i}"
