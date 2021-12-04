@@ -16,5 +16,4 @@ outputs:
   - name: modified-aoc-inputs
 
 run:
-  dir: repo
   path: ci/scripts/extract-inputs
