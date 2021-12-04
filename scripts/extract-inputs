@@ -31,7 +31,10 @@ do
   fi
 
   # nathanwang2
-  find "nathanwang2/day${i}" -name "*.txt" -exec cp "{}" "${target}/input-nathanwang2" \;
+
+  if [ -f "nathanwang2/day${i}"]; then
+    find "nathanwang2/day${i}" -name "*.txt" -exec cp "{}" "${target}/input-nathanwang2" \;
+  fi
 
   i=`expr $i + 1`
 done
