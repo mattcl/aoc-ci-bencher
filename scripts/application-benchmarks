@@ -1,0 +1,42 @@
+#!/bin/sh
+set -e
+
+CUR=$(pwd)
+HYPERFINE="${CUR}/ci/tools/hyperfine/hyperfine"
+INPUTS="${CUR}aoc-inputs/2021"
+
+echo "unpacking mattcl examples"
+tar -xvf mattcl.tar.gz
+
+# inputs look like
+# aoc-inputs/year/day/files
+i=1
+while [ $i -ne 26 ]
+do
+  padded=`printf %03d $i`
+  input_dir="${INPUTS}/day_${padded}"
+
+  if [ ! -d "${input_dir}" ]; then
+    echo "no inputs for day ${i}, breaking"
+    break
+  fi
+
+  input_list=$(find "${input_dir}" -name "input-*" -exec basename {} \; | xargs | sed 's/ /,/g')
+  echo "detected the following inputs for day ${i}: ${input_list}"
+
+  var_prefix="AOC_INPUT=${input_dir}"
+
+  commands=""
+  # get the list of "executables"
+  candidate=$(find aoc2020-mattcl -name "${padded}_*")
+  if [ ! -z candidate ]; then
+    commands="${commands}\"${var_prefix}/\{fname\} {$candidate}\" "
+  fi
+
+  if [ -z $commands ]; then
+    echo "no executables for ${i}, breaking"
+  fi
+
+  echo "Benching day ${i}"
+  $HYPERFINE -w 3 -n $day -L fname $input_list --export-markdown "bench-${padded}.md" $commands
+done

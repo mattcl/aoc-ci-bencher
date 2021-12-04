@@ -1,0 +1,16 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: python
+    tag: 3.9
+
+inputs:
+  - name: ci
+  - name: aoc-inputs
+  - name: nathanwang2
+  - name: mattcl-examples
+    path: mattcl.tar.gz
+
+run:
+  path: ci/scripts/application-benchmarks

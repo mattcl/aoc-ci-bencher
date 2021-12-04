@@ -56,9 +56,9 @@ jobs:
         trigger: false
       - get: repo
         resource: mattcl
+        trigger: true
         passed:
           - collect-inputs
-        trigger: true
       - task: run-all
         file: ci/tasks/generic-rust.yml
 
@@ -70,9 +70,9 @@ jobs:
         trigger: false
       - get: repo
         resource: lanjian
+        trigger: true
         passed:
           - collect-inputs
-        trigger: true
       - task: run-all
         file: ci/tasks/generic-rust.yml
 
@@ -84,10 +84,40 @@ jobs:
         trigger: false
       - get: repo
         resource: nathanwang2
+        trigger: true
         passed:
           - collect-inputs
-        trigger: true
       - task: run-all
         file: ci/tasks/generic-python.yml
         vars:
           script: ci/scripts/nw-python
+
+  - name: application-bench
+    public: true
+    serial: true
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-inputs
+          trigger: false
+        - get: mattcl
+          trigger: true
+          passed:
+            - mattcl
+        # This requires additional support from repo author to make work
+        # - get: lanjian
+        #   trigger: true
+        #   passed:
+        #     - lanjian
+        - get: nathanwang2
+          trigger: true
+          passed:
+            - nathanwang2
+      # So yeah. This isn't ideal, but because I don't want to deal with setting
+      # up proper artifact storage, let's just rebuild these things here
+      - task: extract-rust-examples
+        file: ci/tasks/extract-examples.yml
+      - task: application-benchmarks
+        file: ci/tasks/application-benchmarks.yml
+
