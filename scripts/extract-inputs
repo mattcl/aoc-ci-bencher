@@ -1,6 +1,5 @@
 #!/bin/sh
-set +ex
-cd mattcl
+set -ex
 
 git config --global user.name "papercode ci"
 git config --global user.email "matt@questionable.engineering"
