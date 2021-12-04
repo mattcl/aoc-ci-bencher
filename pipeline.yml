@@ -30,7 +30,7 @@ jobs:
   - name: collect-inputs
     public: true
     plan:
-      - in_parrallel:
+      - in_parallel:
         - get: ci
           trigger: false
         - get: aoc-inputs
