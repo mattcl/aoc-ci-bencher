@@ -8,6 +8,7 @@ INPUTS="${CUR}/aoc-inputs/2021"
 echo "unpacking mattcl examples"
 tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
 mv aoc2021-mattcl mattcl
+ls -lh mattcl
 
 # inputs look like
 # aoc-inputs/year/day/files
@@ -33,8 +34,7 @@ do
     -w 3
     -n day_${padded}
     -L fname $input_list
-    --export-markdown
-    "bench-${padded}.md"
+    --export-markdown "bench-${padded}.md"
   )
   # get the list of "executables"
   candidate=$(find mattcl -name "${padded}_*")
