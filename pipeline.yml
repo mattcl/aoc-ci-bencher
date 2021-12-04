@@ -30,6 +30,7 @@ resources:
 jobs:
   - name: collect-inputs
     public: true
+    serial: true
     plan:
       - in_parallel:
         - get: ci
@@ -49,33 +50,42 @@ jobs:
 
   - name: mattcl
     public: true
+    serial: true
     plan:
       - get: ci
         trigger: false
       - get: repo
         resource: mattcl
+        passed:
+          - collect-inputs
         trigger: true
       - task: run-all
         file: ci/tasks/generic-rust.yml
 
   - name: lanjian
     public: true
+    serial: true
     plan:
       - get: ci
         trigger: false
       - get: repo
         resource: lanjian
+        passed:
+          - collect-inputs
         trigger: true
       - task: run-all
         file: ci/tasks/generic-rust.yml
 
   - name: nathanwang2
     public: true
+    serial: true
     plan:
       - get: ci
         trigger: false
       - get: repo
         resource: nathanwang2
+        passed:
+          - collect-inputs
         trigger: true
       - task: run-all
         file: ci/tasks/generic-python.yml

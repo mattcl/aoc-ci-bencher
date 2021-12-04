@@ -40,4 +40,8 @@ cd modified-aoc-inputs
 
 git add .
 
-git status --porcelain && git commit -a -m "automated: updated inputs from sources"
+if [ -z "$(git status --porcelain)" ]; then
+  echo "Working directory clean"
+else
+  git commit -a -m "automated: updated inputs from sources"
+fi
