@@ -31,7 +31,7 @@ do
   # get the list of "executables"
   candidate=$(find mattcl -name "${padded}_*")
   if [ ! -z candidate ]; then
-    commands="${commands}'${var_prefix}/{fname} {$candidate}' "
+    commands="${commands}'${var_prefix}/{fname} ${candidate}' "
   fi
 
   if [ -z $commands ]; then
