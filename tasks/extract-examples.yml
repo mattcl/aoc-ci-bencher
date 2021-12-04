@@ -6,6 +6,7 @@ image_resource:
     tag: 1.56
 
 inputs:
+  - name: ci
   - name: mattcl
 
 caches:
