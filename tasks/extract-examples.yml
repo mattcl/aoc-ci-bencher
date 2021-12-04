@@ -19,7 +19,6 @@ caches:
 
 outputs:
   - name: mattcl-examples
-    path: mattcl/aoc2021-mattcl.tar.gz
 
 run:
   path: ci/scripts/extract-rust-examples

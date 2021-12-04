@@ -6,7 +6,8 @@ HYPERFINE="${CUR}/ci/tools/hyperfine/hyperfine"
 INPUTS="${CUR}aoc-inputs/2021"
 
 echo "unpacking mattcl examples"
-tar -xvf mattcl.tar.gz
+tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
+mv aoc2021-mattcl mattcl
 
 # inputs look like
 # aoc-inputs/year/day/files

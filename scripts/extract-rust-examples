@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
+mkdir -p mattcl-examples
 cd mattcl
 cargo build --release --examples
 ls -l
-$(scripts/package-examples)
+scripts/package-examples
+mv aoc2021-mattcl.tar.gz ../mattcl-examples

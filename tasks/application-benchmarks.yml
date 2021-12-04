@@ -10,7 +10,6 @@ inputs:
   - name: aoc-inputs
   - name: nathanwang2
   - name: mattcl-examples
-    path: mattcl.tar.gz
 
 run:
   path: ci/scripts/application-benchmarks
