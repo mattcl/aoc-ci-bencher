@@ -6,7 +6,7 @@ git config --global user.name "papercode ci"
 git config --global user.email "matt@questionable.engineering"
 
 # make the working repo
-cp -r aoc-inputs modified-aoc-inputs
+git clone aoc-inputs modified-aoc-inputs
 
 i=1
 while [ $i -ne 26 ]

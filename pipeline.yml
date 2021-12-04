@@ -23,7 +23,8 @@ resources:
     type: git
     icon: github
     source:
-      uri: https://github.com/mattcl/aoc-aggregated-inputs.git
+      uri: git@github.com:mattcl/aoc-aggregated-inputs.git
+      branch: master
       private_key: ((aoc-inputs.deploy_key))
 
 jobs:
