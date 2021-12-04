@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 CUR=$(pwd)
@@ -35,7 +35,6 @@ do
     -L fname $input_list
     --export-markdown
     "bench-${padded}.md"
-    $commands
   )
   # get the list of "executables"
   candidate=$(find mattcl -name "${padded}_*")
@@ -45,4 +44,5 @@ do
 
   echo "Benching day ${i}"
   "${cmd[@]}"
+
 done
