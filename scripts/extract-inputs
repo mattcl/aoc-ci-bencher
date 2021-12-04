@@ -27,7 +27,7 @@ do
   # nathanwang2
   find nathanwang2 -name "day${i}/*.txt" -exec cp "{}" "${target}/input-nathanwang2" \;
 
-  i=`expr $1 + 1`
+  i=`expr $i + 1`
 done
 
 cd modified-aoc-inputs
