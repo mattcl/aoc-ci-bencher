@@ -18,14 +18,20 @@ do
   # since everyone sort of stores these in their own way
 
   # mattcl
-  find mattcl/examples -name "day_${padded}/input" -exec cp "{}" "${target}/input-mattcl" \;
+  source="mattcl/examples/day_${padded}/input"
+  if [ -f $source ]; then
+    cp $source "${target}/input-mattcl"
+  fi
 
   # lanjian
   padded=`printf %02d $i`
-  find lanjian/inputs -name "day_${padded}" -exec cp "{}" "${target}/input-lanjian" \;
+  source="lanjian/inputs/day_${padded}"
+  if [ -f $source ]; then
+    cp $source "${target}/input-lanjian"
+  fi
 
   # nathanwang2
-  find nathanwang2 -name "day${i}/*.txt" -exec cp "{}" "${target}/input-nathanwang2" \;
+  find "nathanwang2/day${i}" -name "*.txt" -exec cp "{}" "${target}/input-nathanwang2" \;
 
   i=`expr $i + 1`
 done
@@ -34,4 +40,4 @@ cd modified-aoc-inputs
 
 git add .
 
-git diff --quiet || git commit -am "automated: updated inputs from sources"
+git diff --quiet || git commit -a -m "automated: updated inputs from sources"
