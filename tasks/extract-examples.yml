@@ -27,4 +27,4 @@ run:
     - |
       cd mattcl
       cargo build --release --examples
-      ./scripts/package-examples
+      scripts/package-examples
