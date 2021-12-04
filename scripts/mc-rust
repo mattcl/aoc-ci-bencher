@@ -1,0 +1,8 @@
+#!/bin/sh
+set -ex
+for d in $(find examples -maxdepth 1 -type d -regextype sed -regex ".*/[0-9]\+.*" -exec basename {} \;)
+do
+  echo "attempting to run $d"
+  # ../ci/tools/hyperfine/hyperfine -w 3 "target/release/examples/${d}"
+  ../aoc-ci-bencher/tools/hyperfine/hyperfine -w 3 "target/release/examples/${d}"
+done
