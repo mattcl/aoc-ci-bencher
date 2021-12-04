@@ -21,10 +21,4 @@ outputs:
     path: mattcl/aoc2021-mattcl.tar.gz
 
 run:
-  path: /bin/sh
-  args:
-    - "-c"
-    - |
-      cd mattcl
-      cargo build --release --examples
-      scripts/package-examples
+  path: ci/scripts/extract-rust-examples
