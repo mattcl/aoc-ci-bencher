@@ -27,19 +27,22 @@ do
 
   var_prefix="AOC_INPUT=${input_dir}"
 
-  commands=""
+  cmd=(
+    $HYPERFINE
+    --show-output
+    -w 3
+    -n day_${padded}
+    -L fname $input_list
+    --export-markdown
+    "bench-${padded}.md"
+    $commands
+  )
   # get the list of "executables"
   candidate=$(find mattcl -name "${padded}_*")
   if [ ! -z candidate ]; then
-    commands="${commands}'${var_prefix}/\{fname\} ${candidate}' "
-  fi
-
-  if [ -z $commands ]; then
-    echo "no executables for ${i}, breaking"
-  else
-    echo $commands
+    cmd+=("'${var_prefix}/{fname} ${candidate}'")
   fi
 
   echo "Benching day ${i}"
-  $HYPERFINE --show-output -w 3 -n day_${padded} -L fname $input_list --export-markdown "bench-${padded}.md" $commands
+  "${cmd[@]}"
 done
