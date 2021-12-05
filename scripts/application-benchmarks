@@ -45,4 +45,5 @@ do
   echo "Benching day ${i}"
   "${cmd[@]}"
 
+  i=`expr $i + 1`
 done
