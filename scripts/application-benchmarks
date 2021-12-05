@@ -30,15 +30,30 @@ do
   cmd=(
     $HYPERFINE
     -w 3
-    -n "day_${padded}-{fname}"
     -L fname $input_list
     --export-markdown "bench-${padded}.md"
   )
   # get the list of "executables"
-  candidate=$(find mattcl -name "${padded}_*")
-  if [ ! -z candidate ]; then
-    cmd+=("${var_prefix}/{fname} ${candidate}")
-    cmd+=("${var_prefix}/{fname} ${candidate}")
+  mattcl_candidate=$(find mattcl -name "${padded}_*")
+  if [ ! -z mattcl_candidate ]; then
+    -n "day_${padded}-mattcl-with({fname})"
+  fi
+
+  nathanwang2_candidate=$(find nathanwang2 -maxdepth 1 -type d -name "day${i}")
+  if [ ! -z nathanwang2_candidate ]; then
+    -n "day_${padded}-nathanwang2-with({fname})"
+  fi
+
+  # order is important for these. They must be in the same order as the command
+  # names were
+  if [ ! -z mattcl_candidate ]; then
+    cmd+=("${var_prefix}/{fname} ${mattcl_candidate}")
+  fi
+
+  if [ ! -z nathanwang2_candidate ]; then
+    # for now, just run the example they have, but later we need to parametrize
+    # but this requires work from the repo owner
+    cmd+=("${var_prefix}/{fname} cd ${nathanwang2_candidate} && python *.py")
   fi
 
   declare -p cmd
