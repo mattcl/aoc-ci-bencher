@@ -1,2 +1,3 @@
 #!/bin/bash
+set -e
 AOC_INPUT="${INPUT_DIR}/$2" $1

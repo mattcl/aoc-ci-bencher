@@ -120,4 +120,5 @@ jobs:
         file: ci/tasks/extract-examples.yml
       - task: application-benchmarks
         file: ci/tasks/application-benchmarks.yml
-
+      - put: aoc-inputs
+        params: {repository: modified-aoc-inputs}

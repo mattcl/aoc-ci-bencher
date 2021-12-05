@@ -5,6 +5,9 @@ CUR=$(pwd)
 HYPERFINE="${CUR}/ci/tools/hyperfine/hyperfine"
 INPUTS="${CUR}/aoc-inputs/2021"
 
+# make the working repo
+git clone aoc-inputs modified-aoc-inputs
+
 echo "unpacking mattcl examples"
 tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
 mv aoc2021-mattcl mattcl
@@ -30,26 +33,20 @@ do
 
   var_prefix="AOC_INPUT=${input_dir}"
 
+  mkdir -p reports
+  output="reports/bench-${padded}.md"
+
   export INPUT_DIR=$input_dir
   cmd=(
     $HYPERFINE
     -w 3
     -L fname $input_list
-    --export-markdown "bench-${padded}.md"
+    --export-markdown "$output"
   )
   # get the list of "executables"
   mattcl_candidate=$(find mattcl -name "${padded}_*")
-  # if [ ! -z $mattcl_candidate ]; then
-  #   cmd+=(-n "day_${padded}-mattcl-with({fname})")
-  # fi
-
   nathanwang2_candidate=$(find nathanwang2 -maxdepth 1 -type d -name "day${i}")
-  # if [ ! -z $nathanwang2_candidate ]; then
-  #   cmd+=(-n "day_${padded}-nathanwang2-with({fname})")
-  # fi
 
-  # order is important for these. They must be in the same order as the command
-  # names were
   if [ ! -z $mattcl_candidate ]; then
     cmd+=("ci/scripts/run-example ${mattcl_candidate} {fname}")
   fi
@@ -57,11 +54,25 @@ do
   if [ ! -z $nathanwang2_candidate ]; then
     # for now, just run the example they have, but later we need to parametrize
     # but this requires work from the repo owner
-    cmd+=("${var_prefix}/{fname} cd ${nathanwang2_candidate} && python *.py")
+    cmd+=("ci/scripts/run-nathanwang2-example ${nathanwang2_candidate} {fname}")
   fi
 
   echo "Benching day ${i}"
   "${cmd[@]}"
 
+  echo "Cleaning output file"
+  sed -i 's/ci\/scripts\/run.*-example //g' $output
+
+  cp $output "modified-aoc-inputs/2021/day_${padded}/application-benches.md"
+
   i=`expr $i + 1`
 done
+
+# stupidly commit the latest report, because who needs an easy to view history?
+cd modified-aoc-inputs
+git add .
+if [ -z "$(git status --porcelain)" ]; then
+  echo "Working directory clean"
+else
+  git commit -a -m "automated: update benchmark reports"
+fi
