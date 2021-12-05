@@ -30,7 +30,7 @@ do
   cmd=(
     $HYPERFINE
     -w 3
-    -n day_${padded}
+    -n "day_${padded}-{fname}"
     -L fname $input_list
     --export-markdown "bench-${padded}.md"
   )
