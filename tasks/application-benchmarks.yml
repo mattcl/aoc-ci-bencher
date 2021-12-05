@@ -11,5 +11,8 @@ inputs:
   - name: nathanwang2
   - name: mattcl-examples
 
+outputs:
+  - name: modified-aoc-inputs
+
 run:
   path: ci/scripts/application-benchmarks
