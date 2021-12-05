@@ -8,7 +8,6 @@ INPUTS="${CUR}/aoc-inputs/2021"
 echo "unpacking mattcl examples"
 tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
 mv aoc2021-mattcl mattcl
-ls -lh mattcl
 
 # inputs look like
 # aoc-inputs/year/day/files
@@ -41,6 +40,8 @@ do
   if [ ! -z candidate ]; then
     cmd+=("'${var_prefix}/{fname} ${candidate}'")
   fi
+
+  declare -p cmd
 
   echo "Benching day ${i}"
   "${cmd[@]}"
