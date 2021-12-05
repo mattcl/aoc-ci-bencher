@@ -31,6 +31,8 @@ jobs:
   - name: collect-inputs
     public: true
     serial: true
+    build_log_retention:
+      builds: 50
     plan:
       - in_parallel:
         - get: ci
@@ -51,6 +53,8 @@ jobs:
   - name: mattcl
     public: true
     serial: true
+    build_log_retention:
+      builds: 50
     plan:
       - get: ci
         trigger: false
@@ -65,6 +69,8 @@ jobs:
   - name: lanjian
     public: true
     serial: true
+    build_log_retention:
+      builds: 50
     plan:
       - get: ci
         trigger: false
@@ -79,6 +85,8 @@ jobs:
   - name: nathanwang2
     public: true
     serial: true
+    build_log_retention:
+      builds: 50
     plan:
       - get: ci
         trigger: false
@@ -95,6 +103,8 @@ jobs:
   - name: application-bench
     public: true
     serial: true
+    build_log_retention:
+      builds: 50
     plan:
       - in_parallel:
         - get: ci
