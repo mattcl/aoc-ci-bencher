@@ -30,8 +30,8 @@ do
 
   var_prefix="AOC_INPUT=${input_dir}"
 
+  export INPUT_DIR=$input_dir
   cmd=(
-    INPUT_DIR=$input_dir
     $HYPERFINE
     -w 3
     -L fname $input_list
