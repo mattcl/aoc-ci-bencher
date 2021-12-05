@@ -9,6 +9,8 @@ echo "unpacking mattcl examples"
 tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
 mv aoc2021-mattcl mattcl
 
+mattcl/001_sonar_sweep
+
 # inputs look like
 # aoc-inputs/year/day/files
 i=1
