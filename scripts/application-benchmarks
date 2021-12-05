@@ -36,12 +36,12 @@ do
   # get the list of "executables"
   mattcl_candidate=$(find mattcl -name "${padded}_*")
   if [ ! -z mattcl_candidate ]; then
-    -n "day_${padded}-mattcl-with({fname})"
+    cmd+=(-n "day_${padded}-mattcl-with({fname})")
   fi
 
   nathanwang2_candidate=$(find nathanwang2 -maxdepth 1 -type d -name "day${i}")
   if [ ! -z nathanwang2_candidate ]; then
-    -n "day_${padded}-nathanwang2-with({fname})"
+    cmd+=(-n "day_${padded}-nathanwang2-with({fname})")
   fi
 
   # order is important for these. They must be in the same order as the command
