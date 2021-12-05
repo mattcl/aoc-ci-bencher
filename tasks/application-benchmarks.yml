@@ -9,6 +9,7 @@ inputs:
   - name: ci
   - name: aoc-inputs
   - name: nathanwang2
+  - name: lanjian-examples
   - name: mattcl-examples
 
 outputs:

@@ -12,8 +12,12 @@ echo "unpacking mattcl examples"
 tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
 mv aoc2021-mattcl mattcl
 
-# inputs look like
-# aoc-inputs/year/day/files
+echo "unpacking lanjian examples"
+tar -xvf lanjian-examples/aoc-2021-lanjian.tar.gz
+mv aoc-2021-lanjian lanjian
+
+inputs look like
+aoc-inputs/year/day/files
 i=1
 while [ $i -ne 26 ]
 do
@@ -45,10 +49,20 @@ do
   )
   # get the list of "executables"
   mattcl_candidate=$(find mattcl -name "${padded}_*")
+
+  short_padded=`printf %02d $i`
+  lanjian_candidate=$(find lanjian -name "day_${short_padded}")
+
   nathanwang2_candidate=$(find nathanwang2 -maxdepth 1 -type d -name "day${i}")
 
   if [ ! -z $mattcl_candidate ]; then
     cmd+=("ci/scripts/run-example ${mattcl_candidate} {fname}")
+  fi
+
+  if [ ! -z $lanjian_candidate ]; then
+    # for now, just run the example they have, but later we need to parametrize
+    # but this requires work from the repo owner
+    cmd+=("ci/scripts/run-example ${lanjian_candidate} {fname}")
   fi
 
   if [ ! -z $nathanwang2_candidate ]; then

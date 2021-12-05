@@ -7,6 +7,7 @@ image_resource:
 
 inputs:
   - name: ci
+  - name: lanjian
   - name: mattcl
 
 caches:
@@ -15,9 +16,11 @@ caches:
   - path: ../../../usr/local/cargo/registry
 
   # cache the target folder to speed up builds
+  - path: lanjian/target
   - path: mattcl/target
 
 outputs:
+  - name: lanjian-examples
   - name: mattcl-examples
 
 run:

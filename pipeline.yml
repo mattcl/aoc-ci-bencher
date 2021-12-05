@@ -115,11 +115,10 @@ jobs:
           trigger: true
           passed:
             - mattcl
-        # This requires additional support from repo author to make work
-        # - get: lanjian
-        #   trigger: true
-        #   passed:
-        #     - lanjian
+        - get: lanjian
+          trigger: true
+          passed:
+            - lanjian
         - get: nathanwang2
           trigger: true
           passed:

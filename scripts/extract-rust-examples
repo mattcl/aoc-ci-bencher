@@ -1,8 +1,22 @@
 #!/bin/sh
 set -e
+
+# mattcl
+echo "Getting examples for mattcl"
 mkdir -p mattcl-examples
 cd mattcl
 cargo build --release --examples
 ls -l
 scripts/package-examples
 mv aoc2021-mattcl.tar.gz ../mattcl-examples
+cd ../
+
+# lanjian
+echo "Getting examples for lanjian"
+mkdir -p lanjian-examples
+cd lanjian
+cargo build --release --examples
+ls -l
+scripts/package-examples
+mv aoc-2021-lanjian.tar.gz ../lanjian-examples
+cd ../
