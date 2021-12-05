@@ -38,6 +38,7 @@ do
   candidate=$(find mattcl -name "${padded}_*")
   if [ ! -z candidate ]; then
     cmd+=("${var_prefix}/{fname} ${candidate}")
+    cmd+=("${var_prefix}/{fname} ${candidate}")
   fi
 
   declare -p cmd
