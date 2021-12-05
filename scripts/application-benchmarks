@@ -14,6 +14,9 @@ mv aoc2021-mattcl mattcl
 i=1
 while [ $i -ne 26 ]
 do
+  echo ""
+  echo "--- Preparing environment for day ${i} ---"
+
   padded=`printf %03d $i`
   input_dir="${INPUTS}/day_${padded}"
 
@@ -28,6 +31,7 @@ do
   var_prefix="AOC_INPUT=${input_dir}"
 
   cmd=(
+    INPUT_DIR=$input_dir
     $HYPERFINE
     -w 3
     -L fname $input_list
@@ -47,7 +51,7 @@ do
   # order is important for these. They must be in the same order as the command
   # names were
   if [ ! -z $mattcl_candidate ]; then
-    cmd+=("${var_prefix}/{fname} ${mattcl_candidate}")
+    cmd+=("ci/scripts/run-example ${mattcl_candidate} {fname}")
   fi
 
   if [ ! -z $nathanwang2_candidate ]; then
@@ -55,8 +59,6 @@ do
     # but this requires work from the repo owner
     cmd+=("${var_prefix}/{fname} cd ${nathanwang2_candidate} && python *.py")
   fi
-
-  declare -p cmd
 
   echo "Benching day ${i}"
   "${cmd[@]}"
