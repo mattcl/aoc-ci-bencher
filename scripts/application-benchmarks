@@ -9,8 +9,6 @@ echo "unpacking mattcl examples"
 tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
 mv aoc2021-mattcl mattcl
 
-mattcl/001_sonar_sweep
-
 # inputs look like
 # aoc-inputs/year/day/files
 i=1
@@ -31,7 +29,6 @@ do
 
   cmd=(
     $HYPERFINE
-    --show-output
     -w 3
     -n day_${padded}
     -L fname $input_list
@@ -40,7 +37,7 @@ do
   # get the list of "executables"
   candidate=$(find mattcl -name "${padded}_*")
   if [ ! -z candidate ]; then
-    cmd+=("'${var_prefix}/{fname} ${candidate}'")
+    cmd+=("${var_prefix}/{fname} ${candidate}")
   fi
 
   declare -p cmd
