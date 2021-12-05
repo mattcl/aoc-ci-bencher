@@ -70,6 +70,8 @@ done
 
 # stupidly commit the latest report, because who needs an easy to view history?
 cd modified-aoc-inputs
+git config --global user.name "papercode ci"
+git config --global user.email "matt@questionable.engineering"
 git add .
 if [ -z "$(git status --porcelain)" ]; then
   echo "Working directory clean"
