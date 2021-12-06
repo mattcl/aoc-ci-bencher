@@ -79,6 +79,7 @@ do
 
   aggregate_output="day_${padded}_application-benches.md"
   echo "## Day ${i} benchmarks using officially generated inputs" > $aggregate_output
+  cat $output >> $aggregate_output
 
   # large benchmarks
   large_input_list=$(find "${input_dir}" -name "large-input-*" -exec basename {} \; | xargs | sed 's/ /,/g')
