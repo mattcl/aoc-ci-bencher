@@ -82,7 +82,7 @@ do
   # large benchmarks
   large_input_list=$(find "${input_dir}" -name "large-input-*" -exec basename {} \; | xargs | sed 's/ /,/g')
   if [ ! -z $large_input_list ]; then
-    echo "detected the following large inputs for day ${i}: ${input_list}"
+    echo "detected the following large inputs for day ${i}: ${large_input_list}"
 
     # for large benchmarks, we have to ignore failure
     cmd=(
