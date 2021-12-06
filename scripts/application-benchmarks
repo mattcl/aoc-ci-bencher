@@ -39,14 +39,8 @@ do
 
   mkdir -p reports
   output="reports/bench-${padded}.md"
+  large_output="reports/bench-large-${padded}.md"
 
-  export INPUT_DIR=$input_dir
-  cmd=(
-    $HYPERFINE
-    -w 3
-    -L fname $input_list
-    --export-markdown "$output"
-  )
   # get the list of "executables"
   mattcl_candidate=$(find mattcl -name "${padded}_*")
 
@@ -55,13 +49,19 @@ do
 
   nathanwang2_candidate=$(find nathanwang2 -maxdepth 1 -type d -name "day${i}")
 
+  # normal benchmarks
+  export INPUT_DIR=$input_dir
+  cmd=(
+    $HYPERFINE
+    -w 3
+    -L fname $input_list
+    --export-markdown "$output"
+  )
   if [ ! -z $mattcl_candidate ]; then
     cmd+=("ci/scripts/run-example ${mattcl_candidate} {fname}")
   fi
 
   if [ ! -z $lanjian_candidate ]; then
-    # for now, just run the example they have, but later we need to parametrize
-    # but this requires work from the repo owner
     cmd+=("ci/scripts/run-example ${lanjian_candidate} {fname}")
   fi
 
@@ -78,6 +78,42 @@ do
   sed -i 's/ci\/scripts\/run.*-example //g' $output
 
   cp $output "modified-aoc-inputs/2021/day_${padded}/application-benches.md"
+
+  # large benchmarks
+  large_input_list=$(find "${input_dir}" -name "large-input-*" -exec basename {} \; | xargs | sed 's/ /,/g')
+  if [ ! -z $large_input_list ]; then
+    echo "detected the following large inputs for day ${i}: ${input_list}"
+
+    # for large benchmarks, we have to ignore failure
+    cmd=(
+      $HYPERFINE
+      -w 3
+      -L fname $large_input_list
+      --ignore-failure
+      --export-markdown "$large_output"
+    )
+    if [ ! -z $mattcl_candidate ]; then
+      cmd+=("ci/scripts/run-example ${mattcl_candidate} {fname}")
+    fi
+
+    if [ ! -z $lanjian_candidate ]; then
+      cmd+=("ci/scripts/run-example ${lanjian_candidate} {fname}")
+    fi
+
+    if [ ! -z $nathanwang2_candidate ]; then
+      # for now, just run the example they have, but later we need to parametrize
+      # but this requires work from the repo owner
+      cmd+=("ci/scripts/run-nathanwang2-example ${nathanwang2_candidate} {fname}")
+    fi
+
+    echo "Benching day ${i} with large inputs"
+    "${cmd[@]}"
+
+    echo "Cleaning output file"
+    sed -i 's/ci\/scripts\/run.*-example //g' $large_output
+
+    cp $output "modified-aoc-inputs/2021/day_${padded}/application-large-benches.md"
+  fi
 
   i=`expr $i + 1`
 done
