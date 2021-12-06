@@ -78,7 +78,17 @@ do
   sed -i 's/ci\/scripts\/run.*-example //g' $output
 
   aggregate_output="day_${padded}_application-benches.md"
-  echo "## Day ${i} benchmarks using officially generated inputs" > $aggregate_output
+  cat > $aggregate_output <<-EOF
+# Day ${i} benchmarks
+
+[link to problem](http://adventofcode.com/2021/day/${i})
+
+The following benchmarks are auto-generated via [hyperfine](https://github.com/sharkdp/hyperfine) by a ci system running on shared hardware. Results may be inaccurate, particularly for execution times < 5ms, as per the hyperfine warnings.
+
+The "official" inputs were aggregated from repositories participating in the generation of these benchmarks. The "large" inputs (if any) were sourced from various places, including the subreddit.
+
+## Benchmarks with officially generated inputs
+EOF
   cat $output >> $aggregate_output
 
   # large benchmarks
@@ -114,7 +124,7 @@ do
     echo "Cleaning output file"
     sed -i 's/ci\/scripts\/run.*-example //g' $large_output
 
-    echo "## Day ${i} benchmarks using unofficial large inputs" >> $aggregate_output
+    echo "## Benchmarks using unofficial large inputs" >> $aggregate_output
     cat $large_output >> $aggregate_output
   fi
 
