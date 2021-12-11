@@ -30,7 +30,7 @@ resources:
 jobs:
   - name: collect-inputs
     public: true
-    serial: true
+    serial_groups: [collection]
     build_log_retention:
       builds: 50
     plan:
@@ -52,7 +52,7 @@ jobs:
 
   - name: mattcl
     public: true
-    serial: true
+    serial_groups: [benches]
     build_log_retention:
       builds: 50
     plan:
@@ -68,7 +68,7 @@ jobs:
 
   - name: lanjian
     public: true
-    serial: true
+    serial_groups: [benches]
     build_log_retention:
       builds: 50
     plan:
@@ -84,7 +84,7 @@ jobs:
 
   - name: nathanwang2
     public: true
-    serial: true
+    serial_groups: [benches]
     build_log_retention:
       builds: 50
     plan:
@@ -102,7 +102,7 @@ jobs:
 
   - name: application-bench
     public: true
-    serial: true
+    serial_groups: [collection, benches]
     build_log_retention:
       builds: 50
     plan:
