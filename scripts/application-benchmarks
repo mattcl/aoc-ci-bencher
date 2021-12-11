@@ -91,8 +91,11 @@ The "official" inputs were aggregated from repositories participating in the gen
 EOF
   cat $output >> $aggregate_output
 
+  # un-tar any compressed files, if necessary
+  find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
+
   # large benchmarks
-  large_input_list=$(find "${input_dir}" -name "large-input-*" -exec basename {} \; | xargs | sed 's/ /,/g')
+  large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/large-input-[^.]*" -exec basename {} \; | xargs | sed 's/ /,/g')
   if [ ! -z $large_input_list ]; then
     echo "detected the following large inputs for day ${i}: ${large_input_list}"
 
