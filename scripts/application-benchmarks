@@ -77,6 +77,9 @@ do
   echo "Cleaning output file"
   sed -i 's/ci\/scripts\/run.*-example //g' $output
 
+  echo "Sorting output file"
+  sorted=$(head -n 2 "${output}" && tail -n +3 "${output}" | sort --field-separator=\| --key=2)
+
   aggregate_output="day_${padded}_application-benches.md"
   cat > $aggregate_output <<-EOF
 # Day ${i} benchmarks
@@ -89,7 +92,7 @@ The "official" inputs were aggregated from repositories participating in the gen
 
 ## Benchmarks with officially generated inputs
 EOF
-  cat $output >> $aggregate_output
+  echo $sorted >> $aggregate_output
 
   # un-tar any compressed files, if necessary
   find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
@@ -127,8 +130,11 @@ EOF
     echo "Cleaning output file"
     sed -i 's/ci\/scripts\/run.*-example //g' $large_output
 
+    echo "Sorting output file"
+    sorted=$(head -n 2 "${large_output}" && tail -n +3 "${large_output}" | sort --field-separator=\| --key=2)
+
     echo "## Benchmarks using unofficial large inputs" >> $aggregate_output
-    cat $large_output >> $aggregate_output
+    echo $sorted >> $aggregate_output
   fi
 
   cp $aggregate_output "modified-aoc-inputs/2021/day_${padded}/application-benches.md"
