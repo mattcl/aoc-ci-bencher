@@ -4,22 +4,39 @@ resources:
     icon: github
     source:
       uri: https://github.com/mattcl/aoc2021.git
+
   - name: lanjian
     type: git
     icon: github
     source:
       uri: https://github.com/LanJian/aoc-2021.git
+
   - name: nathanwang2
     type: git
     icon: github
     source:
       uri: https://github.com/NathanWang2/adventOfCode2021.git
+
   - name: ci
     type: git
     icon: github
     source:
       uri: https://github.com/mattcl/aoc-ci-bencher.git
+
   - name: aoc-inputs
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc-aggregated-inputs.git
+      branch: master
+      ignore_paths:
+        - '**/application-benches.md'
+        - '**/solutions.md'
+
+  # this is the same repository as the aoc-inputs resource, but this one allows
+  # writes (this is done to avoid new concourse version detection for ignored
+  # paths) see https://github.com/concourse/git-resource
+  - name: aoc-inputs-write
     type: git
     icon: github
     source:
@@ -38,7 +55,7 @@ jobs:
         - get: ci
           trigger: false
         - get: aoc-inputs
-          trigger: false
+          trigger: true
         - get: mattcl
           trigger: true
         - get: lanjian
@@ -47,8 +64,43 @@ jobs:
           trigger: true
       - task: collect
         file: ci/tasks/collect-inputs.yml
-      - put: aoc-inputs
-        params: {repository: modified-aoc-inputs}
+      - put: aoc-inputs-write
+        params:
+          repository: modified-aoc-inputs
+          rebase: true
+
+  - name: solve-inputs
+    public: true
+    serial_groups: [solving]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - collect-inputs
+        - get: mattcl
+          trigger: true
+          passed:
+            - collect-inputs
+      # this is repeated from the subsequent application-bench job, but, again,
+      # I didn't want to manage releases or something. With the cache the
+      # overhead isn't as bad as it could be.
+      - task: extract-mattcl-rust-examples
+        file: ci/tasks/extract-examples.yml
+        vars:
+          archive-name: aoc2021-mattcl.tar.gz
+        input_mapping:
+          repo: mattcl
+      - task: solve
+        file: ci/tasks/solve-inputs.yml
+      - put: aoc-inputs-write
+        params:
+          repository: modified-aoc-inputs
+          rebase: true
 
   - name: mattcl
     public: true
@@ -110,7 +162,9 @@ jobs:
         - get: ci
           trigger: false
         - get: aoc-inputs
-          trigger: false
+          trigger: true
+          passed:
+            - solve-inputs
         - get: mattcl
           trigger: true
           passed:
@@ -146,36 +200,7 @@ jobs:
 
       - task: application-benchmarks
         file: ci/tasks/application-benchmarks.yml
-      - put: aoc-inputs
-        params: {repository: modified-aoc-inputs}
-
-  - name: solve-inputs
-    public: true
-    serial_groups: [solving]
-    build_log_retention:
-      builds: 50
-    plan:
-      - in_parallel:
-        - get: ci
-          trigger: false
-        - get: aoc-inputs
-          trigger: true
-          passed:
-            - application-bench
-        - get: mattcl
-          trigger: false
-          passed:
-            - application-bench
-      # this is repeated from the subsequent application-bench job, but, again,
-      # I didn't want to manage releases or something. With the cache the
-      # overhead isn't as bad as it could be.
-      - task: extract-mattcl-rust-examples
-        file: ci/tasks/extract-examples.yml
-        vars:
-          archive-name: aoc2021-mattcl.tar.gz
-        input_mapping:
-          repo: mattcl
-      - task: solve
-        file: ci/tasks/solve-inputs.yml
-      - put: aoc-inputs
-        params: {repository: modified-aoc-inputs}
+      - put: aoc-inputs-write
+        params:
+          repository: modified-aoc-inputs
+          rebase: true
