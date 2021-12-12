@@ -163,9 +163,9 @@ jobs:
           passed:
             - application-bench
         - get: mattcl
-          trigger: true
+          trigger: false
           passed:
-            - mattcl
+            - application-bench
       # this is repeated from the subsequent application-bench job, but, again,
       # I didn't want to manage releases or something. With the cache the
       # overhead isn't as bad as it could be.
