@@ -1,0 +1,17 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: python
+    tag: 3.9
+
+inputs:
+  - name: ci
+  - name: aoc-inputs
+  - name: examples
+
+outputs:
+  - name: modified-aoc-inputs
+
+run:
+  path: ci/scripts/solve-inputs

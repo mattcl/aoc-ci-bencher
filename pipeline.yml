@@ -66,29 +66,36 @@ jobs:
       - task: run-all
         file: ci/tasks/generic-rust.yml
 
-  # - name: solve-inputs
-  #   public: true
-  #   serial_groups: [labeling, benches]
-  #   build_log_retention:
-  #     builds: 50
-  #   plan:
-  #     - in_parallel:
-  #       - get: ci
-  #         trigger: false
-  #       - get: aoc-inputs
-  #         trigger: true
-  #         passed:
-  #           - collect-inputs
-  #       - get: mattcl
-  #         trigger: false
-  #         passed:
-  #           - mattcl
-  #     - task: extract-rust-examples
-  #       file: ci/tasks/extract-examples.yml
-  #     - task: solve
-  #       file: ci/tasks/solve-inputs.yml
-  #     - put: aoc-inputs
-  #       params: {repository: modified-aoc-inputs}
+  - name: solve-inputs
+    public: true
+    serial_groups: [labeling, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - collect-inputs
+        - get: mattcl
+          trigger: false
+          passed:
+            - mattcl
+      # this is repeated from the subsequent application-bench job, but, again,
+      # I didn't want to manage releases or something. With the cache the
+      # overhead isn't as bad as it could be.
+      - task: extract-mattcl-rust-examples
+        file: ci/tasks/extract-examples.yml
+        vars:
+          archive-name: aoc2021-mattcl.tar.gz
+        input_mapping:
+          repo: mattcl
+      - task: solve
+        file: ci/tasks/solve-inputs.yml
+      - put: aoc-inputs
+        params: {repository: modified-aoc-inputs}
 
   - name: lanjian
     public: true
