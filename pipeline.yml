@@ -100,6 +100,37 @@ jobs:
         vars:
           script: ci/scripts/nw-python
 
+  - name: solve-inputs
+    public: true
+    serial_groups: [solving, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - collect-inputs
+        - get: mattcl
+          trigger: true
+          passed:
+            - mattcl
+      # this is repeated from the subsequent application-bench job, but, again,
+      # I didn't want to manage releases or something. With the cache the
+      # overhead isn't as bad as it could be.
+      - task: extract-mattcl-rust-examples
+        file: ci/tasks/extract-examples.yml
+        vars:
+          archive-name: aoc2021-mattcl.tar.gz
+        input_mapping:
+          repo: mattcl
+      - task: solve
+        file: ci/tasks/solve-inputs.yml
+      - put: aoc-inputs
+        params: {repository: modified-aoc-inputs}
+
   - name: application-bench
     public: true
     serial_groups: [collection, solving, benches]
@@ -111,6 +142,8 @@ jobs:
           trigger: false
         - get: aoc-inputs
           trigger: false
+          passed:
+            - solve-inputs
         - get: mattcl
           trigger: true
           passed:
@@ -146,37 +179,6 @@ jobs:
 
       - task: application-benchmarks
         file: ci/tasks/application-benchmarks.yml
-      - put: aoc-inputs
-        params: {repository: modified-aoc-inputs}
-
-  - name: solve-inputs
-    public: true
-    serial_groups: [solving]
-    build_log_retention:
-      builds: 50
-    plan:
-      - in_parallel:
-        - get: ci
-          trigger: false
-        - get: aoc-inputs
-          trigger: true
-          passed:
-            - collect-inputs
-        - get: mattcl
-          trigger: false
-          passed:
-            - mattcl
-      # this is repeated from the subsequent application-bench job, but, again,
-      # I didn't want to manage releases or something. With the cache the
-      # overhead isn't as bad as it could be.
-      - task: extract-mattcl-rust-examples
-        file: ci/tasks/extract-examples.yml
-        vars:
-          archive-name: aoc2021-mattcl.tar.gz
-        input_mapping:
-          repo: mattcl
-      - task: solve
-        file: ci/tasks/solve-inputs.yml
       - put: aoc-inputs
         params: {repository: modified-aoc-inputs}
 
