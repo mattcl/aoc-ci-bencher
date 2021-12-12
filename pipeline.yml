@@ -66,6 +66,30 @@ jobs:
       - task: run-all
         file: ci/tasks/generic-rust.yml
 
+  # - name: solve-inputs
+  #   public: true
+  #   serial_groups: [labeling, benches]
+  #   build_log_retention:
+  #     builds: 50
+  #   plan:
+  #     - in_parallel:
+  #       - get: ci
+  #         trigger: false
+  #       - get: aoc-inputs
+  #         trigger: true
+  #         passed:
+  #           - collect-inputs
+  #       - get: mattcl
+  #         trigger: false
+  #         passed:
+  #           - mattcl
+  #     - task: extract-rust-examples
+  #       file: ci/tasks/extract-examples.yml
+  #     - task: solve
+  #       file: ci/tasks/solve-inputs.yml
+  #     - put: aoc-inputs
+  #       params: {repository: modified-aoc-inputs}
+
   - name: lanjian
     public: true
     serial_groups: [benches]
@@ -102,7 +126,7 @@ jobs:
 
   - name: application-bench
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [collection, labeling, benches]
     build_log_retention:
       builds: 50
     plan:
@@ -125,8 +149,25 @@ jobs:
             - nathanwang2
       # So yeah. This isn't ideal, but because I don't want to deal with setting
       # up proper artifact storage, let's just rebuild these things here
-      - task: extract-rust-examples
-        file: ci/tasks/extract-examples.yml
+      - in_parallel:
+        - task: extract-mattcl-rust-examples
+          file: ci/tasks/extract-examples.yml
+          vars:
+            archive-name: aoc2021-mattcl.tar.gz
+          input_mapping:
+            repo: mattcl
+          output_mapping:
+            examples: mattcl-examples
+
+        - task: extract-lanjian-rust-examples
+          file: ci/tasks/extract-examples.yml
+          vars:
+            archive-name: aoc-2021-lanjian.tar.gz
+          input_mapping:
+            repo: lanjian
+          output_mapping:
+            examples: lanjian-examples
+
       - task: application-benchmarks
         file: ci/tasks/application-benchmarks.yml
       - put: aoc-inputs
