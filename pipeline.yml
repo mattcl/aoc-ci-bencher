@@ -82,6 +82,8 @@ jobs:
           trigger: true
           passed:
             - collect-inputs
+        - get: aoc-inputs-write
+          trigger: false
         - get: mattcl
           trigger: true
           passed:
