@@ -78,7 +78,7 @@ do
   sed -i 's/ci\/scripts\/run.*-example //g' $output
 
   echo "Sorting output file"
-  sorted="sorted-${output}"
+  sorted="day_${padded}_sorted_output.md"
   (head -n 2 "${output}" && tail -n +3 "${output}" | sort --field-separator=\| --key=2) > $sorted
 
   aggregate_output="day_${padded}_application-benches.md"
@@ -132,7 +132,7 @@ EOF
     sed -i 's/ci\/scripts\/run.*-example //g' $large_output
 
     echo "Sorting output file"
-    sorted="sorted-${output}"
+    sorted="day_${padded}_sorted_large_output.md"
     (head -n 2 "${large_output}" && tail -n +3 "${large_output}" | sort --field-separator=\| --key=2) > $sorted
 
     echo "## Benchmarks using unofficial large inputs" >> $aggregate_output
