@@ -165,6 +165,8 @@ jobs:
           trigger: true
           passed:
             - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
         - get: mattcl
           trigger: true
           passed:

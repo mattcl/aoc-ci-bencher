@@ -6,7 +6,7 @@ HYPERFINE="${CUR}/ci/tools/hyperfine/hyperfine"
 INPUTS="${CUR}/aoc-inputs/2021"
 
 # make the working repo
-git clone aoc-inputs modified-aoc-inputs
+git clone aoc-inputs-write modified-aoc-inputs
 
 echo "unpacking mattcl examples"
 tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
