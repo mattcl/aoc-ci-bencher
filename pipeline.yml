@@ -165,6 +165,10 @@ jobs:
           trigger: true
           passed:
             - solve-inputs
+        # so... because we're just blindly overwiting the benchmark results
+        # here, it's not sufficient to just rebase before the put, since we'rebase
+        # pretty much guaranteed to have a conflict. Instead, fetch the write
+        # resource (which will have a later revision).
         - get: aoc-inputs-write
           trigger: false
         - get: mattcl
