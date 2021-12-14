@@ -55,7 +55,7 @@ jobs:
         - get: ci
           trigger: false
         - get: aoc-inputs
-          trigger: true
+          trigger: false
         - get: mattcl
           trigger: true
         - get: lanjian
