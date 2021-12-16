@@ -2,7 +2,7 @@
 set -e
 
 CUR=$(pwd)
-INPUTS="${CUR}/aoc-inputs/2021"
+INPUTS="${CUR}/aoc-inputs-write/2021"
 OUTPUTS="${CUR}/modified-aoc-inputs/2021"
 
 git config --global user.name "papercode ci"
