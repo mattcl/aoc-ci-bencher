@@ -2,8 +2,12 @@ import sys
 import json
 
 def sanitize(solution):
-    s = f"{solution}".replace('\n', '<br>')
-    return f"<pre>{s}</pre>"
+    if isinstance(solution, str):
+        # this is a hack for now
+        solution = f"{solution}".replace('0', '&#9608;').replace('\n', '<br>')
+
+    return f"<pre>{solution}</pre>"
+
 
 solution = json.load(sys.stdin)
 p1 = sanitize(solution['part_one'])
