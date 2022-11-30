@@ -18,9 +18,7 @@ caches:
   - path: repo/target
 
 outputs:
-  - name: examples
+  - name: solver
 
 run:
-  path: ci/scripts/extract-rust-examples
-  args:
-    - ((archive-name))
+  path: ci/scripts/build-solver

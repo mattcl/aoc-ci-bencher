@@ -2,8 +2,8 @@
 set -e
 
 CUR=$(pwd)
-INPUTS="${CUR}/aoc-inputs-write/2021"
-OUTPUTS="${CUR}/modified-aoc-inputs/2021"
+INPUTS="${CUR}/aoc-inputs-write/2022"
+OUTPUTS="${CUR}/modified-aoc-inputs/2022"
 
 git config --global user.name "papercode ci"
 git config --global user.email "matt@questionable.engineering"
@@ -11,9 +11,9 @@ git config --global user.email "matt@questionable.engineering"
 # make the working repo
 git clone aoc-inputs-write modified-aoc-inputs
 
-echo "unpacking examples"
-tar -xvf examples/aoc2021-mattcl.tar.gz
-mv aoc2021-mattcl mattcl
+echo "ensuring solver is executable"
+chmod +x solver/aoc
+mv aoc2022-mattcl mattcl
 
 i=1
 while [ $i -ne 26 ]
@@ -29,6 +29,11 @@ do
     break
   fi
 
+  if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
+    echo "no solver for day ${1}, breaking"
+    break
+  fi
+
   mapping="day_${padded}_mapping.md"
 
   example_prog=$(find mattcl -name "${padded}_*")
@@ -40,12 +45,11 @@ do
 EOF
     find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
 
-    cmd+=("ci/scripts/run-example ${example_prog} {fname}")
     input_files=$(find "${input_dir}" -type f -regextype sed -regex ".*/.*input-[^.]*" -exec basename {} \;)
 
     for fname in $input_files
     do
-      out=$(AOC_OUTPUT_JSON=1 ci/scripts/run-example $example_prog $fname | python ci/scripts/format_example_output.py)
+      out=$(solver/aoc run $i $fname -j | python ci/scripts/format_example_output.py)
       echo "|${fname}|${out}|" >> $mapping
     done
     cp $mapping "${output_dir}/solutions.md"

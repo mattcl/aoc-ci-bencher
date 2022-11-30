@@ -8,7 +8,7 @@ image_resource:
 inputs:
   - name: ci
   - name: aoc-inputs-write
-  - name: examples
+  - name: solver
 
 outputs:
   - name: modified-aoc-inputs
