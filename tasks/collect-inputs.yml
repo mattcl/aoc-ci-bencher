@@ -9,8 +9,6 @@ inputs:
   - name: ci
   - name: aoc-inputs
   - name: mattcl
-  - name: lanjian
-  - name: nathanwang2
 
 outputs:
   - name: modified-aoc-inputs
