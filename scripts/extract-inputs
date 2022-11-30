@@ -18,7 +18,7 @@ do
   # since everyone sort of stores these in their own way
 
   # mattcl
-  find "mattcl/day" -type d -name "day-${padded}*" -exec cp "{}/input.txt" "${target}/input-mattcl" \;
+  find "mattcl" -type d -name "day-${padded}*" -exec cp "{}/input.txt" "${target}/input-mattcl" \;
 
   i=`expr $i + 1`
 done
