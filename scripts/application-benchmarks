@@ -73,7 +73,10 @@ do
 
   echo "Cleaning output file"
   sed -i 's/ci\/scripts\/run.*-example //g' $output
+  sed -i "s#${var_prefix}/##g" $output
   sed -i "s#${input_dir}/##g" $output
+  # ugh
+  sed -i "s/\(input-[a-z0-9]*\) \([^\s]*\)\(.*\)/\2 \1\3/" $output
 
   echo "Sorting output file"
   sorted="day_${padded}_sorted_output.md"
