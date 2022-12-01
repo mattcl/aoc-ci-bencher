@@ -20,6 +20,10 @@ do
   # mattcl
   find "mattcl" -type d -name "day-${padded}*" -exec cp "{}/input.txt" "${target}/input-mattcl" \;
 
+  # pting
+  padded=`printf %02d $i`
+  find "pting" -type f -name "input${padded}.txt" -exec cp "{}" "${target}/input-pting" \;
+
   i=`expr $i + 1`
 done
 

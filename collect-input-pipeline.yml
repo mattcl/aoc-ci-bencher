@@ -5,6 +5,12 @@ resources:
     source:
       uri: https://github.com/mattcl/aoc2022.git
 
+  - name: pting
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/pting/aoc2022.git
+
   - name: ci
     type: git
     icon: github
@@ -46,8 +52,37 @@ jobs:
           trigger: false
         - get: mattcl
           trigger: true
+        - get: pting
+          trigger: true
       - task: collect
         file: ci/tasks/collect-inputs.yml
+      - put: aoc-inputs-write
+        params:
+          repository: modified-aoc-inputs
+          rebase: true
+
+  - name: solve-inputs
+    public: true
+    serial_groups: [collection]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+        - get: mattcl
+          trigger: false
+          passed:
+            - collect-inputs
+
+      - task: build-solver
+        file: ci/tasks/build-solver.yml
+        input_mapping:
+          repo: mattcl
+      - task: solve
+        file: ci/tasks/solve-inputs.yml
       - put: aoc-inputs-write
         params:
           repository: modified-aoc-inputs

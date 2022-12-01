@@ -9,6 +9,7 @@ inputs:
   - name: ci
   - name: aoc-inputs
   - name: mattcl
+  - name: pting
 
 outputs:
   - name: modified-aoc-inputs
