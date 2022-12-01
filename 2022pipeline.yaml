@@ -177,6 +177,10 @@ jobs:
           trigger: true
           passed:
             - lanjian
+        - get: pting
+          trigger: true
+          passed:
+            - pting
 
       # So yeah. This isn't ideal, but because I don't want to deal with setting
       # up proper artifact storage, let's just rebuild these things here
