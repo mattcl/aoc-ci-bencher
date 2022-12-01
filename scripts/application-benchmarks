@@ -6,7 +6,7 @@ HYPERFINE="${CUR}/ci/tools/hyperfine/hyperfine"
 INPUTS="${CUR}/aoc-inputs/2022"
 
 # make the working repo
-git clone aoc-inputs-write modified-aoc-inputs
+git clone aoc-inputs modified-aoc-inputs
 
 echo "ensuring mattcl solver is executable"
 chmod +x mattcl-solver/aoc
