@@ -1,7 +1,7 @@
 #!bin/sh
 set -ex
-for d in $(find . -maxdepth 1 -type f -regextype sed -regex "day*.py" -exec basename {} \;)
+for f in $(find . -maxdepth 1 -type f -regextype sed -regex "day*.py")
 do
-  echo "attempting to run $d"
-  python *.py
+  echo "attempting to run $f"
+  python $f
 done
