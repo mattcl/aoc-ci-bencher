@@ -2,8 +2,8 @@ platform: linux
 image_resource:
   type: registry-image
   source:
-    repository: python
-    tag: 3.10.8
+    repository: mattcl/py-ghc
+    tag: 3.10.8-9.2.4
 
 inputs:
   - name: ci
@@ -12,6 +12,7 @@ inputs:
   - name: lanjian-examples
   - name: mattcl-solver
   - name: pting
+  - name: aspidites
 
 outputs:
   - name: modified-aoc-inputs

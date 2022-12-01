@@ -11,10 +11,12 @@ git clone aoc-inputs-write modified-aoc-inputs
 echo "ensuring mattcl solver is executable"
 chmod +x mattcl-solver/aoc
 
-
 echo "unpacking lanjian examples"
 tar -xvf lanjian-examples/aoc-2022-lanjian.tar.gz
 mv aoc-2022-lanjian lanjian
+
+echo "ensuring aspidites solver is executable"
+chmod +x aspidites-solver/aoc
 
 # inputs look like
 # aoc-inputs/year/day/files
@@ -54,8 +56,8 @@ do
     -L fname $input_list
     --export-markdown "$output"
   )
-  if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
-    echo "No solution for mattcl day ${1}"
+  if mattcl-solver/aoc run $i foo 2>&1 | grep -q 'Unknown'; then
+    echo "No solution for mattcl day ${i}"
   else
     cmd+=("mattcl-solver/aoc run ${i} ${input_dir}/{fname}")
   fi
@@ -66,6 +68,12 @@ do
 
   if [ ! -z $pting_candidate ]; then
     cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
+  fi
+
+  if aspidites-solver/aoc foo $i 2>&1 | grep -q 'do not exist'; then
+    echo "No solution for aspidites day ${i}"
+  else
+    cmd+=("aspidites-solver/aoc ${input_dir}/{fname} ${i}")
   fi
 
   echo "Benching day ${i}"
@@ -112,8 +120,8 @@ EOF
       --ignore-failure
       --export-markdown "$large_output"
     )
-    if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
-      echo "No solution for mattcl day ${1}"
+    if mattcl-solver/aoc run $i foo 2>&1 | grep -q 'Unknown'; then
+      echo "No solution for mattcl day ${i}"
     else
       cmd+=("mattcl-solver/aoc run ${i} {fname}")
     fi
@@ -124,6 +132,12 @@ EOF
 
     if [ ! -z $pting_candidate ]; then
       cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
+    fi
+
+    if aspidites-solver/aoc foo $i 2>&1 | grep -q 'do not exist'; then
+      echo "No solution for aspidites day ${i}"
+    else
+      cmd+=("aspidites-solver/aoc ${input_dir}/{fname} ${i}")
     fi
 
     echo "Benching day ${i} with large inputs"

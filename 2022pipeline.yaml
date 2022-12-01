@@ -160,6 +160,26 @@ jobs:
         input_mapping:
           repo: pting
 
+  - name: aspidites
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aspidites
+          trigger: true
+          passed:
+            - collect-inputs
+      - task: test-and-bench
+        file: ci/tasks/generic-haskell.yml
+        vars:
+          script: ci/scripts/aspidites-haskell
+        input_mapping:
+          repo: aspidites
+
   - name: comparative-bench
     public: true
     serial_groups: [collection, benches]
@@ -187,6 +207,10 @@ jobs:
           trigger: true
           passed:
             - pting
+        - get: aspidites
+          trigger: true
+          passed:
+            - aspidites
 
       # So yeah. This isn't ideal, but because I don't want to deal with setting
       # up proper artifact storage, let's just rebuild these things here
@@ -206,6 +230,13 @@ jobs:
             repo: lanjian
           output_mapping:
             examples: lanjian-examples
+
+        - task: build-aspidites-solver
+          file: ci/tasks/build-aspidites-solver.yml
+          input_mapping:
+            repo: aspidites
+          output_mapping:
+            solver: aspidites-solver
 
       - task: comparative-benches
         file: ci/tasks/application-benchmarks.yml
