@@ -35,26 +35,21 @@ do
 
   mapping="day_${padded}_mapping.md"
 
-  example_prog=$(find mattcl -name "${padded}_*")
-  if [ ! -z $example_prog ]; then
-    cat > $mapping <<-EOF
+  cat > $mapping <<-EOF
 # input -> solutions mapping
 |input|part 1|part 2|
 |:---|:---|:---|
 EOF
-    find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
+  find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
 
-    input_files=$(find "${input_dir}" -type f -regextype sed -regex ".*/.*input-[^.]*" -exec basename {} \;)
+  input_files=$(find "${input_dir}" -type f -regextype sed -regex ".*/.*input-[^.]*" -exec basename {} \;)
 
-    for fname in $input_files
-    do
-      out=$(solver/aoc run $i $fname -j | python ci/scripts/format_example_output.py)
-      echo "|${fname}|${out}|" >> $mapping
-    done
-    cp $mapping "${output_dir}/solutions.md"
-  else
-    echo "no example for day ${i}"
-  fi
+  for fname in $input_files
+  do
+    out=$(solver/aoc run $i $fname -j | python ci/scripts/format_example_output.py)
+    echo "|${fname}|${out}|" >> $mapping
+  done
+  cp $mapping "${output_dir}/solutions.md"
 
   i=`expr $i + 1`
 done
