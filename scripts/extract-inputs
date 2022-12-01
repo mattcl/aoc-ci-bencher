@@ -20,8 +20,16 @@ do
   # mattcl
   find "mattcl" -type d -name "day-${padded}*" -exec cp "{}/input.txt" "${target}/input-mattcl" \;
 
-  # pting
+  # everyone else uses two digits
   padded=`printf %02d $i`
+
+  # aspidites
+  find "aspidites/inputs" -type f -name "${padded}.txt" -exec cp "{}" "${target}/input-aspidites" \;
+
+  # lanjian
+  find "lanjian/inputs" -type f -name "day_${padded}" -exec cp "{}" "${target}/input-lanjian" \;
+
+  # pting
   find "pting" -type f -name "input${padded}.txt" -exec cp "{}" "${target}/input-pting" \;
 
   i=`expr $i + 1`

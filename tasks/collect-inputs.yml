@@ -9,6 +9,8 @@ inputs:
   - name: ci
   - name: aoc-inputs
   - name: mattcl
+  - name: lanjian
+  - name: aspidites
   - name: pting
 
 outputs:
