@@ -149,10 +149,10 @@ jobs:
           trigger: true
       - task: test-and-bench
         file: ci/tasks/generic-python.yml
-        input_mapping:
-          repo: pting
         vars:
           script: ci/scripts/pt-python
+        input_mapping:
+          repo: pting
 
   - name: comparative-bench
     public: true
