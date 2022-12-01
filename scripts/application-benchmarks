@@ -11,6 +11,7 @@ git clone aoc-inputs modified-aoc-inputs
 echo "ensuring mattcl solver is executable"
 chmod +x mattcl-solver/aoc
 
+
 echo "unpacking lanjian examples"
 tar -xvf lanjian-examples/aoc-2022-lanjian.tar.gz
 mv aoc-2022-lanjian lanjian
@@ -55,7 +56,7 @@ do
   if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
     echo "No solution for mattcl day ${1}"
   else
-    cmd+=("mattcl/aoc run ${i} {fname}")
+    cmd+=("mattcl-solver/aoc run ${i} {fname}")
   fi
 
   if [ ! -z $lanjian_candidate ]; then
@@ -105,7 +106,7 @@ EOF
     if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
       echo "No solution for mattcl day ${1}"
     else
-      cmd+=("mattcl/aoc run ${i} {fname}")
+      cmd+=("mattcl-solver/aoc run ${i} {fname}")
     fi
 
     if [ ! -z $lanjian_candidate ]; then
