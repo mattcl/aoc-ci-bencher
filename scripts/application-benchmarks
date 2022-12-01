@@ -60,7 +60,7 @@ do
   fi
 
   if [ ! -z $lanjian_candidate ]; then
-    cmd+=("AOC_INPUT=${INPUT_DIR}/{fname} ${lanjian_candidate}")
+    cmd+=("${var_prefix}/{fname} ${lanjian_candidate}")
   fi
 
   echo "Benching day ${i}"
@@ -111,7 +111,7 @@ EOF
     fi
 
     if [ ! -z $lanjian_candidate ]; then
-      cmd+=("ci/scripts/run-example ${lanjian_candidate} {fname}")
+      cmd+=("${var_prefix}/{fnmae} ${lanjian_candidate}")
     fi
 
     echo "Benching day ${i} with large inputs"
