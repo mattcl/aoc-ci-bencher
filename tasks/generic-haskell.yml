@@ -10,6 +10,11 @@ inputs:
   - name: repo
 
 caches:
+  # yeah, I'm not sure how I feel about caching the registry like this,
+  # but concourse only allows relative paths instead of absolute ones
+  #
+  - path: ../../../root/.cabal/store
+
   # cache the target folder to speed up builds
   - path: repo/dist-newstyle
 

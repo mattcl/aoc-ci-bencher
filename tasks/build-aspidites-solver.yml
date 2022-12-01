@@ -10,6 +10,8 @@ inputs:
   - name: repo
 
 caches:
+  - path: ../../../root/.cabal/store
+
   # cache the target folder to speed up builds
   - path: repo/dist-newstyle
 
