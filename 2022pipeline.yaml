@@ -166,7 +166,7 @@ jobs:
           input_mapping:
             repo: mattcl
           output_mapping:
-            examples: mattcl-solver
+            solver: mattcl-solver
 
         - task: extract-lanjian-rust-examples
           file: ci/tasks/extract-examples.yml
