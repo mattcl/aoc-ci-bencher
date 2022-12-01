@@ -3,15 +3,13 @@ image_resource:
   type: registry-image
   source:
     repository: python
-    tag: 3.9
+    tag: 3.10.8
 
 inputs:
   - name: ci
   - name: aoc-inputs
-  - name: aoc-inputs-write
-  - name: nathanwang2
   - name: lanjian-examples
-  - name: mattcl-examples
+  - name: mattcl-solver
 
 outputs:
   - name: modified-aoc-inputs

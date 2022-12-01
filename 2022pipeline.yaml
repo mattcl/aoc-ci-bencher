@@ -119,3 +119,67 @@ jobs:
         file: mattcl/ci/tasks/test-and-bench.yaml
         input_mapping:
           repo: mattcl
+
+  - name: lanjian
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: lanjian
+          trigger: true
+      - task: test-and-bench
+        file: ci/tasks/generic-rust.yml
+        input_mapping:
+          repo: lanjian
+
+  - name: comparative-bench
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: mattcl
+          trigger: true
+          passed:
+            - mattcl
+        - get: lanjian
+          trigger: true
+          passed:
+            - lanjian
+
+      # So yeah. This isn't ideal, but because I don't want to deal with setting
+      # up proper artifact storage, let's just rebuild these things here
+      - in_parallel:
+        - task: build-mattcl-solver
+          file: ci/tasks/build-solver.yml
+          input_mapping:
+            repo: mattcl
+          output_mapping:
+            examples: mattcl-solver
+
+        - task: extract-lanjian-rust-examples
+          file: ci/tasks/extract-examples.yml
+          vars:
+            archive-name: aoc-2022-lanjian.tar.gz
+          input_mapping:
+            repo: lanjian
+          output_mapping:
+            examples: lanjian-examples
+
+      - task: comparative-benches
+        file: ci/tasks/application-benchmarks.yml
+      - put: aoc-inputs-write
+        params:
+          repository: modified-aoc-inputs
+          rebase: true

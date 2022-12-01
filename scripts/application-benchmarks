@@ -3,18 +3,17 @@ set -e
 
 CUR=$(pwd)
 HYPERFINE="${CUR}/ci/tools/hyperfine/hyperfine"
-INPUTS="${CUR}/aoc-inputs/2021"
+INPUTS="${CUR}/aoc-inputs/2022"
 
 # make the working repo
 git clone aoc-inputs-write modified-aoc-inputs
 
-echo "unpacking mattcl examples"
-tar -xvf mattcl-examples/aoc2021-mattcl.tar.gz
-mv aoc2021-mattcl mattcl
+echo "ensuring mattcl solver is executable"
+chmod +x mattcl-solver/aoc
 
 echo "unpacking lanjian examples"
-tar -xvf lanjian-examples/aoc-2021-lanjian.tar.gz
-mv aoc-2021-lanjian lanjian
+tar -xvf lanjian-examples/aoc-2022-lanjian.tar.gz
+mv aoc-2022-lanjian lanjian
 
 # inputs look like
 # aoc-inputs/year/day/files
@@ -42,12 +41,8 @@ do
   large_output="reports/bench-large-${padded}.md"
 
   # get the list of "executables"
-  mattcl_candidate=$(find mattcl -name "${padded}_*")
-
   short_padded=`printf %02d $i`
   lanjian_candidate=$(find lanjian -name "day_${short_padded}")
-
-  nathanwang2_candidate=$(find nathanwang2 -maxdepth 1 -type d -name "day${i}")
 
   # normal benchmarks
   export INPUT_DIR=$input_dir
@@ -57,18 +52,14 @@ do
     -L fname $input_list
     --export-markdown "$output"
   )
-  if [ ! -z $mattcl_candidate ]; then
-    cmd+=("ci/scripts/run-example ${mattcl_candidate} {fname}")
+  if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
+    echo "No solution for mattcl day ${1}"
+  else
+    cmd+=("mattcl/aoc run ${i} {fname}")
   fi
 
   if [ ! -z $lanjian_candidate ]; then
     cmd+=("ci/scripts/run-example ${lanjian_candidate} {fname}")
-  fi
-
-  if [ ! -z $nathanwang2_candidate ]; then
-    # for now, just run the example they have, but later we need to parametrize
-    # but this requires work from the repo owner
-    cmd+=("ci/scripts/run-nathanwang2-example ${nathanwang2_candidate} {fname}")
   fi
 
   echo "Benching day ${i}"
@@ -85,7 +76,7 @@ do
   cat > $aggregate_output <<-EOF
 # Day ${i} benchmarks
 
-[link to problem](http://adventofcode.com/2021/day/${i})
+[link to problem](http://adventofcode.com/2022/day/${i})
 
 The following benchmarks are auto-generated via [hyperfine](https://github.com/sharkdp/hyperfine) by a ci system running on shared hardware. Results may be inaccurate, particularly for execution times < 5ms, as per the hyperfine warnings.
 
@@ -111,18 +102,14 @@ EOF
       --ignore-failure
       --export-markdown "$large_output"
     )
-    if [ ! -z $mattcl_candidate ]; then
-      cmd+=("ci/scripts/run-example ${mattcl_candidate} {fname}")
+    if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
+      echo "No solution for mattcl day ${1}"
+    else
+      cmd+=("mattcl/aoc run ${i} {fname}")
     fi
 
     if [ ! -z $lanjian_candidate ]; then
       cmd+=("ci/scripts/run-example ${lanjian_candidate} {fname}")
-    fi
-
-    if [ ! -z $nathanwang2_candidate ]; then
-      # for now, just run the example they have, but later we need to parametrize
-      # but this requires work from the repo owner
-      cmd+=("ci/scripts/run-nathanwang2-example ${nathanwang2_candidate} {fname}")
     fi
 
     echo "Benching day ${i} with large inputs"
@@ -139,7 +126,7 @@ EOF
     cat $sorted >> $aggregate_output
   fi
 
-  cp $aggregate_output "modified-aoc-inputs/2021/day_${padded}/application-benches.md"
+  cp $aggregate_output "modified-aoc-inputs/2022/day_${padded}/application-benches.md"
 
   i=`expr $i + 1`
 done
