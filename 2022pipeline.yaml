@@ -115,6 +115,8 @@ jobs:
           trigger: false
         - get: mattcl
           trigger: true
+          passed:
+            - collect-inputs
       - task: test-and-bench
         file: mattcl/ci/tasks/test-and-bench.yaml
         input_mapping:
@@ -131,6 +133,8 @@ jobs:
           trigger: false
         - get: lanjian
           trigger: true
+          passed:
+            - collect-inputs
       - task: test-and-bench
         file: ci/tasks/generic-rust.yml
         input_mapping:
@@ -147,6 +151,8 @@ jobs:
           trigger: false
         - get: pting
           trigger: true
+          passed:
+            - collect-inputs
       - task: test-and-bench
         file: ci/tasks/generic-python.yml
         vars:

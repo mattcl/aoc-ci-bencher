@@ -44,6 +44,7 @@ do
   # get the list of "executables"
   short_padded=`printf %02d $i`
   lanjian_candidate=$(find lanjian -name "day_${short_padded}")
+  pting_candidate=$(find pting -name "day${short_padded}.py")
 
   # normal benchmarks
   export INPUT_DIR=$input_dir
@@ -61,6 +62,10 @@ do
 
   if [ ! -z $lanjian_candidate ]; then
     cmd+=("${var_prefix}/{fname} ${lanjian_candidate}")
+  fi
+
+  if [ ! -z $pting_candidate ]; then
+    cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
   fi
 
   echo "Benching day ${i}"
@@ -112,6 +117,10 @@ EOF
 
     if [ ! -z $lanjian_candidate ]; then
       cmd+=("${var_prefix}/{fnmae} ${lanjian_candidate}")
+    fi
+
+    if [ ! -z $pting_candidate ]; then
+      cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
     fi
 
     echo "Benching day ${i} with large inputs"

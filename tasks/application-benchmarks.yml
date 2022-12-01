@@ -11,6 +11,7 @@ inputs:
   - name: aoc-inputs-write
   - name: lanjian-examples
   - name: mattcl-solver
+  - name: pting
 
 outputs:
   - name: modified-aoc-inputs
