@@ -46,6 +46,7 @@ EOF
 
   for fname in $input_files
   do
+    echo "using input ${fname}"
     out=$(solver/aoc run $i $fname -j | python ci/scripts/format_example_output.py)
     echo "|${fname}|${out}|" >> $mapping
   done
