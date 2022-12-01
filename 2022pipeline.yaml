@@ -136,6 +136,24 @@ jobs:
         input_mapping:
           repo: lanjian
 
+  - name: pting
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: pting
+          trigger: true
+      - task: test-and-bench
+        file: ci/tasks/generic-python.yml
+        input_mapping:
+          repo: pting
+        vars:
+          script: ci/scripts/pt-python
+
   - name: comparative-bench
     public: true
     serial_groups: [collection, benches]
@@ -151,8 +169,6 @@ jobs:
             - solve-inputs
         - get: aoc-inputs-write
           trigger: false
-          passed:
-            - solve-inputs
         - get: mattcl
           trigger: true
           passed:
