@@ -52,7 +52,6 @@ do
   export INPUT_DIR=$input_dir
   cmd=(
     $HYPERFINE
-    -N
     -w 3
     -L fname $input_list
     --export-markdown "$output"
