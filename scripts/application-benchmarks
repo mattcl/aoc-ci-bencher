@@ -54,6 +54,7 @@ do
     $HYPERFINE
     -w 3
     -L fname $input_list
+    --show-output
     --export-markdown "$output"
   )
   if mattcl-solver/aoc run $i foo 2>&1 | grep -q 'Unknown'; then
