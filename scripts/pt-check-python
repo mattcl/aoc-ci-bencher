@@ -24,7 +24,7 @@ do
     break
   fi
 
-  input_list=$(find "${input_dir}" -name "input-*" -exec basename {} \; | xargs | sed 's/ /,/g')
+  input_list=$(find "${input_dir}" -name "input-*" -exec basename {} \;)
   echo "detected the following inputs for day ${i}: ${input_list}"
 
   var_prefix="AOC_INPUT=${input_dir}"
@@ -47,7 +47,7 @@ do
   find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
 
   # large benchmarks
-  large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/large-input-[^.]*" -exec basename {} \; | xargs | sed 's/ /,/g')
+  large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/large-input-[^.]*" -exec basename {} \;)
   if [ ! -z $large_input_list ]; then
     echo "detected the following large inputs for day ${i}: ${large_input_list}"
 
