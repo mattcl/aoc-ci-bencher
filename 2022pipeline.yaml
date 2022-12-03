@@ -150,6 +150,36 @@ jobs:
         input_mapping:
           repo: lanjian
 
+  - name: lanjian-check-inputs
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: lanjian
+          trigger: true
+          passed:
+            - lanjian
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+      - task: extract-lanjian-rust-examples
+        file: ci/tasks/extract-examples.yml
+        vars:
+          archive-name: aoc-2022-lanjian.tar.gz
+        input_mapping:
+          repo: lanjian
+      - task: check-inputs
+        file: ci/tasks/generic-check-rust.yml
+        vars:
+          script: ci/scripts/lj-check-rust
+        input_mapping:
+          repo: lanjian
+
   - name: pting
     public: true
     serial_groups: [collection, benches]

@@ -1,0 +1,14 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: rust
+    tag: 1.65
+
+inputs:
+  - name: ci
+  - name: examples
+  - name: aoc-inputs
+
+run:
+  path: ((script))
