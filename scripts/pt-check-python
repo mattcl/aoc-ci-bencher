@@ -42,9 +42,16 @@ do
 
   for name in $input_list
   do
+    export INPUT_NAME="${name}"
     echo "Checking ${name}"
     solution=$(AOC_INPUT="${input_dir}/${name}" python $pting_candidate)
     echo "${solution}"
+    if [ ! -f "${solutions}" ]; then
+      echo "no solutions for day ${i}, skipping check"
+    else
+      echo "checking solution against recorded solution"
+      echo "${solution}" | python ci/scripts/check_solution.py
+    fi
     echo ""
   done
 
@@ -63,7 +70,7 @@ do
       solution=$(AOC_INPUT="${input_dir}/${name}" python $pting_candidate)
       echo "${solution}"
 
-      if [ ! -f "${input_dir}" ]; then
+      if [ ! -f "${solutions" ]; then
         echo "no solutions for day ${i}, skipping check"
       else
         echo "checking solution against recorded solution"
