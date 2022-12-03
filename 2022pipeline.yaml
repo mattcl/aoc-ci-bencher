@@ -233,6 +233,10 @@ jobs:
           trigger: true
           passed:
             - pting
+        - get: kcen
+          trigger: true
+          passed:
+            - kcen
         - get: aspidites
           trigger: true
           passed:

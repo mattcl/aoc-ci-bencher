@@ -13,6 +13,7 @@ inputs:
   - name: mattcl-solver
   - name: pting
   - name: aspidites-solver
+  - name: kcen
 
 outputs:
   - name: modified-aoc-inputs
