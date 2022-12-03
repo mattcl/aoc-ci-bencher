@@ -31,7 +31,7 @@ do
 
   # get the list of "executables"
   short_padded=`printf %02d $i`
-  pting_candidate=$(find pting -name "day${short_padded}.py")
+  pting_candidate=$(find repo -name "day${short_padded}.py")
 
   if [ -z $pting_candidate ]; then
       echo "no solution implemented for day ${i}"
