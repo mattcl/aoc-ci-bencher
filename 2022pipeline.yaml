@@ -212,6 +212,30 @@ jobs:
         input_mapping:
           repo: kcen
 
+  - name: kcen-check-inputs
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: kcen
+          trigger: true
+          passed:
+            - kcen
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+      - task: check-inputs
+        file: ci/tasks/generic-check-ruby.yml
+        vars:
+          script: ci/scripts/kc-check-ruby
+        input_mapping:
+          repo: kcen
+
   - name: aspidites
     public: true
     serial_groups: [collection, benches]
@@ -262,7 +286,7 @@ jobs:
         - get: kcen
           trigger: true
           passed:
-            - kcen
+            - kcen-check-inputs
         - get: aspidites
           trigger: true
           passed:

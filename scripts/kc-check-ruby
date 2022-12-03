@@ -1,0 +1,69 @@
+#!/bin/sh
+set -e
+
+CUR=$(pwd)
+INPUTS="${CUR}/aoc-inputs/2022"
+
+cd repo
+bundle install
+cd ../
+
+# inputs look like
+# aoc-inputs/year/day/files
+i=1
+while [ $i -ne 26 ]
+do
+  echo ""
+  echo "--- Checking inputs for day ${i} ---"
+
+  padded=`printf %03d $i`
+  input_dir="${INPUTS}/day_${padded}"
+
+  if [ ! -d "${input_dir}" ]; then
+    echo "no inputs for day ${i}, breaking"
+    break
+  fi
+
+  input_list=$(find "${input_dir}" -name "input-*" -exec basename {} \;)
+  echo "detected the following inputs for day ${i}: ${input_list}"
+
+  var_prefix="AOC_INPUT=${input_dir}"
+
+  # get the list of "executables"
+  short_padded=`printf %02d $i`
+  kcen_candidate=$(find repo/2022 -type d -name "${short_padded}")
+
+  if [ -z $kcen_candidate ]; then
+      echo "no solution implemented for day ${i}"
+      break
+  fi
+
+  kcen_candidate="${kcen_candidate}/solve.sh"
+
+  for name in $input_list
+  do
+    echo "Checking ${name}"
+    solution=$($kcen_candidate "${input_dir}/${nmae}")
+    echo "${solution}"
+    echo ""
+  done
+
+  # un-tar any compressed files, if necessary
+  find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
+
+  # large benchmarks
+  large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/large-input-[^.]*" -exec basename {} \;)
+  if [ ! -z $large_input_list ]; then
+    echo "detected the following large inputs for day ${i}: ${large_input_list}"
+
+    for name in $large_input_list
+    do
+      echo "Checking ${name}"
+      solution=$($kcen_candidate "${input_dir}/${nmae}")
+      echo "${solution}"
+      echo ""
+    done
+  fi
+
+  i=`expr $i + 1`
+done
