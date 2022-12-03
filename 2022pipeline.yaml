@@ -168,6 +168,24 @@ jobs:
         input_mapping:
           repo: pting
 
+  - name: kcen
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: kcen
+          trigger: true
+          passed:
+            - collect-inputs
+      - task: test-and-bench
+        file: ci/tasks/generic-ruby.yml
+        input_mapping:
+          repo: kcen
+
   - name: aspidites
     public: true
     serial_groups: [collection, benches]

@@ -18,6 +18,8 @@ mv aoc-2022-lanjian lanjian
 echo "ensuring aspidites solver is executable"
 chmod +x aspidites-solver/aoc
 
+# TODO: handle python/ruby deps installs
+
 # inputs look like
 # aoc-inputs/year/day/files
 i=1
@@ -47,6 +49,7 @@ do
   short_padded=`printf %02d $i`
   lanjian_candidate=$(find lanjian -name "day_${short_padded}")
   pting_candidate=$(find pting -name "day${short_padded}.py")
+  kcen_candidate=$(find "kcen/2022" -name "${short_padded}")
 
   # normal benchmarks
   export INPUT_DIR=$input_dir
@@ -69,6 +72,10 @@ do
 
   if [ ! -z $pting_candidate ]; then
     cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
+  fi
+
+  if [ ! -z $kcen_candidate ]; then
+    cmd+=("${kcen_candidate}/solve.sh {fname}")
   fi
 
   if aspidites-solver/aoc foo $i 2>&1 | grep -q 'do not exist'; then
@@ -133,6 +140,10 @@ EOF
 
     if [ ! -z $pting_candidate ]; then
       cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
+    fi
+
+    if [ ! -z $kcen_candidate ]; then
+      cmd+=("${kcen_candidate}/solve.sh {fname}")
     fi
 
     if aspidites-solver/aoc foo $i 2>&1 | grep -q 'do not exist'; then
