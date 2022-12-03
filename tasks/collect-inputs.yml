@@ -12,6 +12,7 @@ inputs:
   - name: lanjian
   - name: aspidites
   - name: pting
+  - name: kcen
 
 outputs:
   - name: modified-aoc-inputs

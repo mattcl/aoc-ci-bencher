@@ -23,6 +23,12 @@ resources:
     source:
       uri: https://github.com/pting/aoc2022.git
 
+  - name: kcen
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/kcen/AdventOfCode.git
+
   - name: ci
     type: git
     icon: github
@@ -69,6 +75,8 @@ jobs:
         - get: aspidites
           trigger: true
         - get: pting
+          trigger: true
+        - get: kcen
           trigger: true
       - task: collect
         file: ci/tasks/collect-inputs.yml

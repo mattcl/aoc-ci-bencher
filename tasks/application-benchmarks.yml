@@ -2,8 +2,8 @@ platform: linux
 image_resource:
   type: registry-image
   source:
-    repository: mattcl/py-ghc
-    tag: 3.10.8-9.2.4
+    repository: mattcl/aoc-bencher
+    tag: 3.10.8-9.2.4-3.1.2
 
 inputs:
   - name: ci

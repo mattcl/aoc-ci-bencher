@@ -32,6 +32,9 @@ do
   # pting
   find "pting" -type f -name "input${padded}.txt" -exec cp "{}" "${target}/input-pting" \;
 
+  # kcen
+  find "kcen/2022" -type f -name "${padded}/input" -exec cp "{}" "${target}/input-kcen" \;
+
   i=`expr $i + 1`
 done
 
