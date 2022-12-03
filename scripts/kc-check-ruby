@@ -4,9 +4,9 @@ set -e
 CUR=$(pwd)
 INPUTS="${CUR}/aoc-inputs/2022"
 
-cd repo
+cd repo/2022
 bundle install
-cd ../
+cd ../../
 
 # inputs look like
 # aoc-inputs/year/day/files
