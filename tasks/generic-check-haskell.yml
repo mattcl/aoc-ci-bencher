@@ -1,0 +1,23 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: mattcl/py-ghc
+    tag: 3.10.8-9.2.4
+
+inputs:
+  - name: ci
+  - name: repo
+  - name: aoc-inputs
+
+caches:
+  # yeah, I'm not sure how I feel about caching the registry like this,
+  # but concourse only allows relative paths instead of absolute ones
+  #
+  - path: ../../../root/.cabal/store
+
+  # cache the target folder to speed up builds
+  - path: repo/dist-newstyle
+
+run:
+  path: ((script))

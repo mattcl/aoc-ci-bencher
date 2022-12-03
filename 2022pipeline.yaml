@@ -256,6 +256,30 @@ jobs:
         input_mapping:
           repo: aspidites
 
+  - name: aspidites-check-inputs
+    public: true
+    serial_groups: [collection, benches]
+    build_log_retention:
+      builds: 50
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aspidites
+          trigger: true
+          passed:
+            - aspidites
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+      - task: check-inputs
+        file: ci/tasks/generic-check-haskell.yml
+        vars:
+          script: ci/scripts/asp-check-haskell
+        input_mapping:
+          repo: aspidites
+
   - name: comparative-bench
     public: true
     serial_groups: [collection, benches]
@@ -290,7 +314,7 @@ jobs:
         - get: aspidites
           trigger: true
           passed:
-            - aspidites
+            - aspidites-check-inputs
 
       # So yeah. This isn't ideal, but because I don't want to deal with setting
       # up proper artifact storage, let's just rebuild these things here
