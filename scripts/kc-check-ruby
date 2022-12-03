@@ -43,7 +43,7 @@ do
   for name in $input_list
   do
     echo "Checking ${name}"
-    solution=$($kcen_candidate "${input_dir}/${nmae}")
+    solution=$(AOC_INPUT="${input_dir}/${name}" $kcen_candidate)
     echo "${solution}"
     echo ""
   done
@@ -59,7 +59,7 @@ do
     for name in $large_input_list
     do
       echo "Checking ${name}"
-      solution=$($kcen_candidate "${input_dir}/${nmae}")
+      solution=$(AOC_INPUT="${input_dir}/${name}" $kcen_candidate)
       echo "${solution}"
       echo ""
     done
