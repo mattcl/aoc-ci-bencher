@@ -36,6 +36,8 @@ do
     json="day_${padded}.json"
     export OUTPUT_FILE=$json
 
+    echo "{}" > $json
+
     mapping="day_${padded}_mapping.md"
 
     cat > $mapping <<-EOF
