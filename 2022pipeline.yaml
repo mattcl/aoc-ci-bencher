@@ -332,7 +332,7 @@ jobs:
         - get: lanjian
           trigger: true
           passed:
-            - lanjian
+            - lanjian-check-inputs
         - get: pting
           trigger: true
           passed:
