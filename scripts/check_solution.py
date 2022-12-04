@@ -13,22 +13,22 @@ with open(solution_file, "r") as f:
 
 if input_name not in data:
     print(f"No solution for {input_name}, skipping check")
+else:
+    solution = json.load(sys.stdin)
 
-solution = json.load(sys.stdin)
+    if 'part_1' in solution:
+        solution['part_one'] = solution['part_1']
 
-if 'part_1' in solution:
-    solution['part_one'] = solution['part_1']
+    if 'part_2' in solution:
+        solution['part_two'] = solution['part_2']
 
-if 'part_2' in solution:
-    solution['part_two'] = solution['part_2']
+    p1 = solution['part_one']
+    p2 = solution['part_two']
 
-p1 = solution['part_one']
-p2 = solution['part_two']
+    e1 = data[input_name]['part_one']
+    e2 = data[input_name]['part_two']
 
-e1 = data[input_name]['part_one']
-e2 = data[input_name]['part_two']
+    assert p1 == e1, f"Mismatched solution for part 1 using input {input_name}. Expected `{e1}` but got `{p1}`"
+    assert p2 == e2, f"Mismatched solution for part 2 using input {input_name}. Expected `{e2}` but got `{p2}`"
 
-assert p1 == e1, f"Mismatched solution for part 1 using input {input_name}. Expected `{e1}` but got `{p1}`"
-assert p2 == e2, f"Mismatched solution for part 2 using input {input_name}. Expected `{e2}` but got `{p2}`"
-
-print("solutions match, OK")
+    print("solutions match, OK")
