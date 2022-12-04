@@ -15,6 +15,13 @@ if input_name not in data:
     print(f"No solution for {input_name}, skipping check")
 
 solution = json.load(sys.stdin)
+
+if 'part_1' in solution:
+    solution['part_one'] = solution['part_1']
+
+if 'part_2' in solution:
+    solution['part_two'] = solution['part_2']
+
 p1 = solution['part_one']
 p2 = solution['part_two']
 
