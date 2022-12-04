@@ -106,7 +106,7 @@ do
   sorted="day_${padded}_sorted_output.md"
   (head -n 2 "${output}" && tail -n +3 "${output}" | sort --field-separator=\| --key=2) > $sorted
 
-  $sorted_repos=$(cat participants | sort -k 2)
+  sorted_repos=$(cat participants | sort -k 2)
 
   aggregate_output="day_${padded}_application-benches.md"
   cat > $aggregate_output <<-EOF
