@@ -6,12 +6,28 @@ git config --global user.email "matt@questionable.engineering"
 
 # make the working repo
 git clone aoc-inputs modified-aoc-inputs
+year=2022
+readme="modified-aoc-inputs/${year}/README.md"
+
+cat > $readme <<-EOF
+# AoC ${year} aggregated inputs, solutions and benchmarks
+
+[ci pipeline](http://ci.papercode.net:8080/teams/aoc2022/pipelines/aoc-compare-2022)
+
+## Participating repos
+
+- [aspidites](https://github.com/aspidites/aoc2022)
+- [kcen](https://github.com/kcen/AdventOfCode)
+- [lanjian](https://github.com/LanJian/aoc-2022)
+- [mattcl](https://github.com/mattcl/aoc2022)
+- [pting](https://github.com/pting/aoc2022)
+EOF
 
 i=1
 while [ $i -ne 26 ]
 do
   padded=`printf %03d $i`
-  target="modified-aoc-inputs/2022/day_${padded}"
+  target="modified-aoc-inputs/${year}/day_${padded}"
   mkdir -p $target
 
   # Find all of the relevant input files. This can't really be generic

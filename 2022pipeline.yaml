@@ -176,12 +176,14 @@ jobs:
           archive-name: aoc-2022-lanjian.tar.gz
         input_mapping:
           repo: lanjian
+        output_mapping:
+          examples: lanjian-examples
       - task: check-inputs
         file: ci/tasks/generic-check-python.yml
         vars:
           script: ci/scripts/lj-check-rust
         input_mapping:
-          repo: example
+          repo: lanjian-examples
 
   - name: pting
     public: true
