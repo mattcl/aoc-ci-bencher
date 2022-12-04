@@ -18,9 +18,13 @@ else:
 
     if 'part_1' in solution:
         solution['part_one'] = solution['part_1']
+    elif 'part1' in solution:
+        solution['part_one'] = solution['part1']
 
     if 'part_2' in solution:
         solution['part_two'] = solution['part_2']
+    elif 'part2' in solution:
+        solution['part_two'] = solution['part,']
 
     p1 = solution['part_one']
     p2 = solution['part_two']
