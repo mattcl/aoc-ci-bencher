@@ -59,7 +59,7 @@ resources:
 jobs:
   - name: collect-inputs
     public: true
-    serial_groups: [collection]
+    serial_groups: [collect]
     build_log_retention:
       builds: 50
     plan:
@@ -87,7 +87,7 @@ jobs:
 
   - name: solve-inputs
     public: true
-    serial_groups: [collection]
+    serial_groups: [collect]
     build_log_retention:
       builds: 50
     plan:
@@ -116,7 +116,7 @@ jobs:
 
   - name: mattcl
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [constrained, collect]
     build_log_retention:
       builds: 50
     plan:
@@ -134,7 +134,7 @@ jobs:
 
   - name: lanjian
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [constrained, collect]
     build_log_retention:
       builds: 50
     plan:
@@ -152,7 +152,7 @@ jobs:
 
   - name: lanjian-check-inputs
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [lan-check]
     build_log_retention:
       builds: 50
     plan:
@@ -182,7 +182,7 @@ jobs:
 
   - name: pting
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [constrained]
     build_log_retention:
       builds: 50
     plan:
@@ -202,7 +202,7 @@ jobs:
 
   - name: pting-check-inputs
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [pting-check]
     build_log_retention:
       builds: 50
     plan:
@@ -226,7 +226,7 @@ jobs:
 
   - name: kcen
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [constrained]
     build_log_retention:
       builds: 50
     plan:
@@ -244,7 +244,7 @@ jobs:
 
   - name: kcen-check-inputs
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [kcen-check]
     build_log_retention:
       builds: 50
     plan:
@@ -268,7 +268,7 @@ jobs:
 
   - name: aspidites
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [constrained]
     build_log_retention:
       builds: 50
     plan:
@@ -288,7 +288,7 @@ jobs:
 
   - name: aspidites-check-inputs
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [asp-check]
     build_log_retention:
       builds: 50
     plan:
@@ -312,7 +312,7 @@ jobs:
 
   - name: comparative-bench
     public: true
-    serial_groups: [collection, benches]
+    serial_groups: [collect, constrained, lan-check, pting-check, kcen-check, asp-check]
     build_log_retention:
       builds: 50
     plan:
