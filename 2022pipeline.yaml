@@ -177,7 +177,7 @@ jobs:
         input_mapping:
           repo: lanjian
       - task: check-inputs
-        file: ci/tasks/generic-check-rust.yml
+        file: ci/tasks/generic-check-python.yml
         vars:
           script: ci/scripts/lj-check-rust
         input_mapping:
