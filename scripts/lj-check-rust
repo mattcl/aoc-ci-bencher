@@ -5,7 +5,7 @@ CUR=$(pwd)
 INPUTS="${CUR}/aoc-inputs/2022"
 
 echo "unpacking lanjian examples"
-tar -xvf examples/aoc-2022-lanjian.tar.gz
+tar -xvf repo/aoc-2022-lanjian.tar.gz
 mv aoc-2022-lanjian lanjian
 
 # inputs look like

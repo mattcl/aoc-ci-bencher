@@ -181,7 +181,7 @@ jobs:
         vars:
           script: ci/scripts/lj-check-rust
         input_mapping:
-          repo: lanjian
+          repo: example
 
   - name: pting
     public: true
