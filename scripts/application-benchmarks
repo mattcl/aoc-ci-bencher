@@ -77,7 +77,7 @@ do
     cmd+=("${kcen_candidate}/solve.sh {fname}")
   fi
 
-  if aspidites-solver/aoc foo $i 2>&1 | grep -q 'do not exist'; then
+  if aspidites-solver/aoc -i foo -d $i 2>&1 | grep -q 'do not exist'; then
     echo "No solution for aspidites day ${i}"
   else
     cmd+=("aspidites-solver/aoc -i ${input_dir}/{fname} -d ${i}")

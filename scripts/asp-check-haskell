@@ -34,7 +34,7 @@ do
   # get the list of "executables"
   short_padded=`printf %02d $i`
 
-  if ./aoc foo $i 2>&1 | grep -q 'do not exist'; then
+  if ./aoc -i foo -d $i 2>&1 | grep -q 'do not exist'; then
     echo "no solution implemented for day ${i}"
     break
   fi
