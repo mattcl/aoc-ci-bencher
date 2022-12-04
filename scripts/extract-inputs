@@ -10,7 +10,7 @@ year=2022
 readme="modified-aoc-inputs/${year}/README.md"
 
 cat > $readme <<-EOF
-# AoC ${year} aggregated inputs, solutions and benchmarks
+# AoC ${year} aggregated inputs, solutions, and benchmarks
 
 [ci pipeline](http://ci.papercode.net:8080/teams/aoc2022/pipelines/aoc-compare-2022)
 
