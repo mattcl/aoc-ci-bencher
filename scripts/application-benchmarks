@@ -53,7 +53,7 @@ do
   pting_candidate=$(find pting -name "day${short_padded}.py")
   kcen_candidate=$(find "kcen/2022" -name "${short_padded}")
 
-  touch participants
+  echo "" > participants
 
   # normal benchmarks
   export INPUT_DIR=$input_dir
