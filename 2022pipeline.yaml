@@ -4,6 +4,9 @@ resources:
     icon: github
     source:
       uri: https://github.com/mattcl/aoc2022.git
+      ignore_paths:
+        - 'README.md'
+        - 'template/*'
 
   - name: lanjian
     type: git
