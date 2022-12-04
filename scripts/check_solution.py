@@ -24,7 +24,7 @@ else:
     if 'part_2' in solution:
         solution['part_two'] = solution['part_2']
     elif 'part2' in solution:
-        solution['part_two'] = solution['part,']
+        solution['part_two'] = solution['part2']
 
     p1 = solution['part_one']
     p2 = solution['part_two']
