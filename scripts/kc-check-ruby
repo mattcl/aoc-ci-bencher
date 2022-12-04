@@ -38,7 +38,7 @@ do
       break
   fi
 
-  kcen_candidate="${kcen_candidate}/solve.sh"
+  kcen_candidate="${kcen_candidate}/solve"
 
   for name in $input_list
   do
