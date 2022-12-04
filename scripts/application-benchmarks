@@ -80,7 +80,7 @@ do
   if aspidites-solver/aoc foo $i 2>&1 | grep -q 'do not exist'; then
     echo "No solution for aspidites day ${i}"
   else
-    cmd+=("aspidites-solver/aoc ${input_dir}/{fname} ${i}")
+    cmd+=("aspidites-solver/aoc -i ${input_dir}/{fname} -d ${i}")
   fi
 
   echo "Benching day ${i}"
@@ -148,7 +148,7 @@ EOF
     if aspidites-solver/aoc foo $i 2>&1 | grep -q 'do not exist'; then
       echo "No solution for aspidites day ${i}"
     else
-      cmd+=("aspidites-solver/aoc ${input_dir}/{fname} ${i}")
+      cmd+=("aspidites-solver/aoc -i ${input_dir}/{fname} -d ${i}")
     fi
 
     echo "Benching day ${i} with large inputs"

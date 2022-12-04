@@ -18,6 +18,8 @@ do
 
   padded=`printf %03d $i`
   input_dir="${INPUTS}/day_${padded}"
+  solutions="${input_dir}/solutions.json"
+  export SOLUTION_FILE="${solutions}"
 
   if [ ! -d "${input_dir}" ]; then
     echo "no inputs for day ${i}, breaking"
@@ -39,9 +41,16 @@ do
 
   for name in $input_list
   do
+    export INPUT_NAME="${name}"
     echo "Checking ${name}"
-    solution=$(./aoc "${input_dir}/${name}" $i)
+    solution=$(./aoc -i "${input_dir}/${name}" -d $i -j)
     echo "${solution}"
+    if [ ! -f "${solutions}" ]; then
+      echo "no solutions for day ${i}, skipping check"
+    else
+      echo "checking solution against recorded solution"
+      echo "${solution}" | python ci/scripts/check_solution.py
+    fi
     echo ""
   done
 
@@ -55,9 +64,16 @@ do
 
     for name in $large_input_list
     do
+      export INPUT_NAME="${name}"
       echo "Checking ${name}"
-      solution=$(./aoc "${input_dir}/${name}" $i)
+      solution=$(./aoc -i "${input_dir}/${name}" -d $i -j)
       echo "${solution}"
+      if [ ! -f "${solutions}" ]; then
+        echo "no solutions for day ${i}, skipping check"
+      else
+        echo "checking solution against recorded solution"
+        echo "${solution}" | python ci/scripts/check_solution.py
+      fi
       echo ""
     done
   fi
