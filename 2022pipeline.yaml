@@ -45,6 +45,7 @@ resources:
       uri: https://github.com/mattcl/aoc-aggregated-inputs.git
       branch: master
       ignore_paths:
+        - '**/README.md'
         - '**/application-benches.md'
         - '**/solutions.md'
 

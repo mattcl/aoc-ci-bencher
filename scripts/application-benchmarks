@@ -186,7 +186,7 @@ EOF
     cat $sorted >> $aggregate_output
   fi
 
-  cp $aggregate_output "modified-aoc-inputs/2022/day_${padded}/application-benches.md"
+  cp $aggregate_output "modified-aoc-inputs/2022/day_${padded}/README.md"
 
   i=`expr $i + 1`
 done
