@@ -76,7 +76,7 @@ do
   fi
 
   if [ ! -z $kcen_candidate ]; then
-    cmd+=("${kcen_candidate}/solve {fname}")
+    cmd+=("${kcen_candidate}/solve ${input_dir}/{fname}")
   fi
 
   if aspidites-solver/aoc -i testfilename -d $i 2>&1 | grep -q 'do not exist'; then
@@ -144,7 +144,7 @@ EOF
     fi
 
     if [ ! -z $kcen_candidate ]; then
-      cmd+=("${kcen_candidate}/solve {fname}")
+      cmd+=("${kcen_candidate}/solve ${input_dir}/{fname}")
     fi
 
     if aspidites-solver/aoc -i testfilename -d $i 2>&1 | grep -q 'do not exist'; then
