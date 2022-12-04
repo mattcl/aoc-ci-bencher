@@ -190,7 +190,8 @@ EOF
 
   if [ -f "$calculated_solutons_file" ]; then
     solution_map=$(cat "$calculated_solutons_file")
-    echo "\n#${solution_map}" >> $aggregate_output
+    echo "" >> $aggregate_output
+    echo "#${solution_map}" >> $aggregate_output
   fi
 
   cp $aggregate_output "modified-aoc-inputs/2022/day_${padded}/README.md"
