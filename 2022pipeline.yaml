@@ -82,6 +82,8 @@ jobs:
           trigger: true
         - get: kcen
           trigger: true
+        - get: aoc-inputs-write
+          trigger: false
       - task: collect
         file: ci/tasks/collect-inputs.yml
       - put: aoc-inputs-write
