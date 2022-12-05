@@ -8,6 +8,7 @@ image_resource:
 inputs:
   - name: ci
   - name: aoc-inputs
+  - name: aoc-inputs-write
   - name: mattcl
   - name: lanjian
   - name: aspidites
