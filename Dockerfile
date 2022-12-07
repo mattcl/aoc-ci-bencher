@@ -1,7 +1,7 @@
 FROM python:3.10.8
 
 ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
-ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.2.4
+ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.4.3
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
