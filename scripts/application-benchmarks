@@ -22,7 +22,7 @@ chmod +x aspidites-solver/aoc
 
 # inputs look like
 # aoc-inputs/year/day/files
-i=1
+i=5
 while [ $i -ne 26 ]
 do
   echo ""
