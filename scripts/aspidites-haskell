@@ -1,4 +1,4 @@
 #!/bin/sh
 set -ex
 
-cabal build
+cabal build --ghc-options='-fllvm'

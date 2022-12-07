@@ -290,7 +290,7 @@ jobs:
       - task: test-and-bench
         file: ci/tasks/generic-haskell.yml
         vars:
-          script: repo/ci/run.sh
+          script: ci/scripts/aspidites-haskell
         input_mapping:
           repo: aspidites
 
