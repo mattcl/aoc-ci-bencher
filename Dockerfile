@@ -2,13 +2,14 @@ FROM python:3.10.8
 
 ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
 ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.4.3
+ENV BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
 ENV PATH=${PATH}:/root/.local/bin
 ENV PATH=${PATH}:/root/.ghcup/bin
 
-RUN ghcup install cabal
+# RUN ghcup install cabal
 
 # lifted from the official ruby images
 # skip installing gem documentation
