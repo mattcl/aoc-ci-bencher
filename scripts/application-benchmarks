@@ -18,6 +18,14 @@ mv aoc-2022-lanjian lanjian
 echo "ensuring aspidites solver is executable"
 chmod +x aspidites-solver/aoc
 
+cd kcen/2022
+bundle install
+cd ../../
+
+cd pting
+pip install -r requirements.txt
+cd ../
+
 # TODO: handle python/ruby deps installs
 
 # inputs look like
