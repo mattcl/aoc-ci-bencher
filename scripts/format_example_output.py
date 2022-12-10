@@ -5,6 +5,8 @@ def sanitize(solution):
     if isinstance(solution, str):
         # this is a hack for now
         solution = f"{solution}".replace('0', '&#9608;').replace('\n', '<br>')
+        solution = f"{solution}".replace('#', '&#9608;').replace('\n', '<br>')
+        solution = f"{solution}".replace('.', ' ').replace('\n', '<br>')
 
     return f"<pre>{solution}</pre>"
 
