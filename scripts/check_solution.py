@@ -14,7 +14,7 @@ with open(solution_file, "r") as f:
 if input_name not in data:
     print(f"No solution for {input_name}, skipping check")
 else:
-    solution = json.load(sys.stdin)
+    solution = json.load(sys.stdin, strict=False)
 
     if 'part_1' in solution:
         solution['part_one'] = solution['part_1']
