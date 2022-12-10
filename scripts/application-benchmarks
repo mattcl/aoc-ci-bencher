@@ -3,7 +3,7 @@ set -e
 
 CUR=$(pwd)
 HYPERFINE="${CUR}/ci/tools/hyperfine/hyperfine"
-INPUTS="${CUR}/aoc-inputs/2022"
+INPUTS="${CUR}/aoc-inputs-write/2022"
 
 # make the working repo
 git clone aoc-inputs-write modified-aoc-inputs
