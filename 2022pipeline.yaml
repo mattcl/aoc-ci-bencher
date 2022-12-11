@@ -200,7 +200,7 @@ jobs:
       - task: test-and-bench
         file: ci/tasks/generic-python.yml
         vars:
-          script: ci/scripts/pt-python
+          script: repo/run.sh
         input_mapping:
           repo: pting
 
@@ -221,7 +221,7 @@ jobs:
           passed:
             - solve-inputs
       - task: check-inputs
-        file: repo/run.sh
+        file: ci/tasks/generic-check-python.yml
         vars:
           script: ci/scripts/pt-check-python
         input_mapping:
