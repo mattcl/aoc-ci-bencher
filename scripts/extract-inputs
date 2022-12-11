@@ -46,7 +46,7 @@ do
   find "lanjian/inputs" -type f -name "day_${padded}" -exec cp "{}" "${target}/input-lanjian" \;
 
   # pting
-  find "pting" -type f -name "input${padded}.txt" -exec cp "{}" "${target}/input-pting" \;
+  find "pting" -type d -name "day${padded}" -exec cp "{}/input.txt" "${target}/input-pting" \;
 
   # kcen
   find "kcen/2022" -type d -name "${padded}" -exec cp "{}/input" "${target}/input-kcen" \;

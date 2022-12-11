@@ -28,8 +28,8 @@ do
         break
     fi
 
-    if solver/aoc run $1 foo 2>&1 | grep -q 'Unknown'; then
-        echo "no solver for day ${1}, breaking"
+    if solver/aoc run $i foo 2>&1 | grep -q 'Unknown'; then
+        echo "no solver for day ${i}, breaking"
         break
     fi
 
