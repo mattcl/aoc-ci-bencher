@@ -126,7 +126,7 @@ The following benchmarks are auto-generated via [hyperfine](https://github.com/s
 
 [ci pipeline](http://ci.papercode.net:8080/teams/aoc2022/pipelines/aoc-compare-2022)
 
-The "official" inputs were aggregated from repositories participating in the generation of these benchmarks. The "large" inputs (if any) were sourced from various places, including the subreddit.
+The "official" inputs were aggregated from repositories participating in the generation of these benchmarks. The "challenge" inputs (if any) were sourced from various places, including the subreddit.
 
 ## Repos (with solutions for day ${i})
 
@@ -140,9 +140,9 @@ EOF
   find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
 
   # large benchmarks
-  large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/large-input-[^.]*" -exec basename {} \; | xargs | sed 's/ /,/g')
+  large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/challenge-input-[^.]*" -exec basename {} \; | xargs | sed 's/ /,/g')
   if [ ! -z $large_input_list ]; then
-    echo "detected the following large inputs for day ${i}: ${large_input_list}"
+    echo "detected the following challenge inputs for day ${i}: ${large_input_list}"
 
     # for large benchmarks, we have to ignore failure
     cmd=(
@@ -176,7 +176,7 @@ EOF
       cmd+=("aspidites-solver/aoc -i ${input_dir}/{fname} -d ${i}")
     fi
 
-    echo "Benching day ${i} with large inputs"
+    echo "Benching day ${i} with challenge inputs"
     "${cmd[@]}"
 
     echo "Cleaning output file"
@@ -190,7 +190,7 @@ EOF
     sorted="day_${padded}_sorted_large_output.md"
     (head -n 2 "${large_output}" && tail -n +3 "${large_output}" | sort --field-separator=\| --key=2) > $sorted
 
-    echo "## Benchmarks using unofficial large inputs" >> $aggregate_output
+    echo "## Benchmarks using unofficial challenge inputs" >> $aggregate_output
     cat $sorted >> $aggregate_output
   fi
 
