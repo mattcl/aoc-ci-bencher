@@ -47,7 +47,7 @@ do
 EOF
     find "${input_dir}" -type f -name "*.tar.gz" -exec tar -xvf {} -C "${input_dir}" \; || true
 
-    input_files=$(find "${input_dir}" -type f -regextype sed -regex ".*/.*input-[^.]*" -exec basename {} \;)
+    input_files=$(find "${input_dir}" -type f -regextype sed -regex ".*/.*input-[^.]*" -exec basename {} \; | sort)
 
     for fname in $input_files
     do
