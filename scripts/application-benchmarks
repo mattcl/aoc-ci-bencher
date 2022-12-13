@@ -159,7 +159,7 @@ EOF
     fi
 
     if [ ! -z $lanjian_candidate ]; then
-      cmd+=("${var_prefix}/{fnmae} ${lanjian_candidate}")
+      cmd+=("${var_prefix}/{fname} ${lanjian_candidate}")
     fi
 
     if [ ! -z $pting_candidate ]; then

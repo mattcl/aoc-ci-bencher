@@ -61,27 +61,22 @@ do
 
   # large benchmarks
   large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/challenge-input-[^.]*" -exec basename {} \;)
-  echo "detected the following challenge inputs for day ${i}: ${large_input_list}"
-  if [ ! -z $large_input_list ]; then
-    echo "detected the following challenge inputs for day ${i}: ${large_input_list}"
-
-    for name in $large_input_list
-    do
-      export INPUT_NAME="${name}"
-      echo "Checking ${name}"
-      solution=$(AOC_INPUT="${input_dir}/${name}" $lanjian_candidate)
-      echo "${solution}"
-      if [ ! -f "${solutions}" ]; then
-        echo "no solutions for day ${i}, skipping check"
-      else
-        echo "checking solution against recorded solution"
-        set +e
-        echo "${solution}" | python ci/scripts/check_solution.py
-        set -e
-      fi
-      echo ""
-    done
-  fi
+  for name in $large_input_list
+  do
+    export INPUT_NAME="${name}"
+    echo "Checking ${name}"
+    solution=$(AOC_INPUT="${input_dir}/${name}" $lanjian_candidate)
+    echo "${solution}"
+    if [ ! -f "${solutions}" ]; then
+      echo "no solutions for day ${i}, skipping check"
+    else
+      echo "checking solution against recorded solution"
+      set +e
+      echo "${solution}" | python ci/scripts/check_solution.py
+      set -e
+    fi
+    echo ""
+  done
 
   i=`expr $i + 1`
 done
