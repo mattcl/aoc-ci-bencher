@@ -5,6 +5,6 @@ set -e
 echo "Building aoc cli"
 mkdir -p examples
 cd repo
-cargo build -p aoc-cli --release
+cargo build -p aoc-cli --release --features par
 mv target/release/aoc ../solver/
 cd ../
