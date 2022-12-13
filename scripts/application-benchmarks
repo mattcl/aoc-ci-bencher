@@ -155,7 +155,7 @@ EOF
     if mattcl-solver/aoc run $i foo 2>&1 | grep -q 'Unknown'; then
       echo "No solution for mattcl day ${i}"
     else
-      cmd+=("mattcl-solver/aoc run ${i} {fname}")
+        cmd+=("mattcl-solver/aoc run ${i} ${input_dir}/{fname}")
     fi
 
     if [ ! -z $lanjian_candidate ]; then
@@ -181,10 +181,10 @@ EOF
 
     echo "Cleaning output file"
     sed -i 's/ci\/scripts\/run.*-example //g' $large_output
-    sed -i "s#${var_prefix}/##g" $output
-    sed -i "s#${input_dir}/##g" $output
+    sed -i "s#${var_prefix}/##g" $large_output
+    sed -i "s#${input_dir}/##g" $large_output
     # ugh
-    sed -i 's/`\(challenge-input-[a-z0-9-]*\) \(.*\)`/`\2 \1`/' $output
+    sed -i 's/`\(challenge-input-[a-z0-9-]*\) \(.*\)`/`\2 \1`/' $large_output
 
     echo "Sorting output file"
     sorted="day_${padded}_sorted_large_output.md"

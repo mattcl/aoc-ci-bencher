@@ -53,19 +53,17 @@ do
 
   # large benchmarks
   large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/challenge-input-[^.]*" -exec basename {} \;)
-  if [ ! -z $large_input_list ]; then
-    echo "detected the following challenge inputs for day ${i}: ${large_input_list}"
+  echo "detected the following challenge inputs for day ${i}: ${large_input_list}"
 
-    for name in $large_input_list
-    do
-      echo "Checking ${name}"
-      set +e
-      solution=$($kcen_candidate "${input_dir}/${name}")
-      echo "${solution}"
-      set -e
-      echo ""
-    done
-  fi
+  for name in $large_input_list
+  do
+    echo "Checking ${name}"
+    set +e
+    solution=$($kcen_candidate "${input_dir}/${name}")
+    echo "${solution}"
+    set -e
+    echo ""
+  done
 
   i=`expr $i + 1`
 done
