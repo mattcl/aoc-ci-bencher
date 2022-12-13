@@ -184,7 +184,7 @@ EOF
     sed -i "s#${var_prefix}/##g" $output
     sed -i "s#${input_dir}/##g" $output
     # ugh
-    sed -i 's/`\(challenge-input-[a-z0-9\-]*\) \(.*\)`/`\2 \1`/' $output
+    sed -i 's/`\(challenge-input-[a-z0-9-]*\) \(.*\)`/`\2 \1`/' $output
 
     echo "Sorting output file"
     sorted="day_${padded}_sorted_large_output.md"
