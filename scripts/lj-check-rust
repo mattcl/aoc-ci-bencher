@@ -61,6 +61,7 @@ do
 
   # large benchmarks
   large_input_list=$(find "${input_dir}" -type f -regextype sed -regex ".*/challenge-input-[^.]*" -exec basename {} \;)
+  echo "detected the following challenge inputs for day ${i}: ${large_input_list}"
   if [ ! -z $large_input_list ]; then
     echo "detected the following challenge inputs for day ${i}: ${large_input_list}"
 
