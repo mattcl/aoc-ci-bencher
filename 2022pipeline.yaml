@@ -48,6 +48,7 @@ resources:
         - '**/README.md'
         - '**/application-benches.md'
         - '**/solutions.md'
+        - '**/solutions.json'
 
   # this is the same repository as the aoc-inputs resource, but this one allows
   # writes (this is done to avoid new concourse version detection for ignored
