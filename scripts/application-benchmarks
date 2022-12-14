@@ -30,7 +30,7 @@ cd ../
 
 # inputs look like
 # aoc-inputs/year/day/files
-i=9
+i=12
 while [ $i -ne 26 ]
 do
   echo ""
