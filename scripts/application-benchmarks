@@ -68,6 +68,7 @@ do
   cmd=(
     $HYPERFINE
     -w 3
+    -m 3
     -L fname $input_list
     --export-markdown "$output"
   )
@@ -148,6 +149,7 @@ EOF
     cmd=(
       $HYPERFINE
       -w 3
+      -m 3
       -L fname $large_input_list
       --ignore-failure
       --export-markdown "$large_output"
