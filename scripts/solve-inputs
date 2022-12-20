@@ -33,6 +33,8 @@ do
         break
     fi
 
+    echo "solving day ${i}"
+
     json="day_${padded}.json"
     export OUTPUT_FILE=$json
 
