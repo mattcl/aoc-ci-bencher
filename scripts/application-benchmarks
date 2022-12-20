@@ -30,7 +30,7 @@ cd ../
 
 # inputs look like
 # aoc-inputs/year/day/files
-i=12
+i=15
 while [ $i -ne 26 ]
 do
   echo ""
@@ -84,7 +84,7 @@ do
     echo "- [lanjian](https://github.com/LanJian/aoc-2022)" >> participants
   fi
 
-  if [ ! -z $pting_candidate ]; then
+  if [ ! -z $pting_candidate ] && [ $i -ne 19 ]; then
     cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
     echo "- [pting](https://github.com/pting/aoc2022)" >> participants
   fi
@@ -164,7 +164,7 @@ EOF
       cmd+=("${var_prefix}/{fname} ${lanjian_candidate}")
     fi
 
-    if [ ! -z $pting_candidate ]; then
+    if [ ! -z $pting_candidate ] && [ $i -ne 19 ]; then
       cmd+=("${var_prefix}/{fname} python ${pting_candidate}")
     fi
 

@@ -40,6 +40,11 @@ do
       break
   fi
 
+  if [ $i -eq 19 ]; then
+      echo "skipping day 19 for performance reasons"
+      continue
+  fi
+
   for name in $input_list
   do
     export INPUT_NAME="${name}"
