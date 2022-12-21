@@ -356,7 +356,7 @@ jobs:
           output_mapping:
             solver: mattcl-solver
 
-        - task: extract-lanjian-rust-examples
+        - task: extract-lanjian-rust-examples2
           file: ci/tasks/extract-examples.yml
           vars:
             archive-name: aoc-2022-lanjian.tar.gz
