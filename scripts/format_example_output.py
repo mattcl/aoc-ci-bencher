@@ -5,7 +5,7 @@ import json
 def sanitize(solution):
     if isinstance(solution, str):
         # this is a hack for now
-        solution = f"{solution}".replace('.', ' ').replace('#', '0').replace('0', '&#9608;').replace('\n', '<br>')
+        solution = f"{solution}".replace('.', ' ').replace('#', '&#9608;').replace('\n', '<br>')
 
     return f"<pre>{solution}</pre>"
 
