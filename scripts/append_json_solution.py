@@ -2,6 +2,7 @@ import os
 import sys
 import json
 
+day = int(os.getenv("DAY"))
 out = os.getenv("OUTPUT_FILE")
 input_name = os.getenv("INPUT_NAME")
 
@@ -14,7 +15,11 @@ with open(out, "r") as f:
 solution = json.load(sys.stdin)
 # we do this to ensure that we write only the format we want to the output file
 p1 = solution['part_one']
-p2 = solution['part_two']
+
+if day == 25:
+    p2 = "no part two on day 25"
+else:
+    p2 = solution['part_two']
 
 data[input_name] = {'part_one': p1, 'part_two': p2}
 
