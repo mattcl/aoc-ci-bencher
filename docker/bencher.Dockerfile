@@ -1,14 +1,4 @@
-FROM python:3.12-slim-bullseye
-
-# haskell
-ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
-ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.4.3
-ENV BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0
-
-RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-
-ENV PATH=${PATH}:/root/.local/bin
-ENV PATH=${PATH}:/root/.ghcup/bin
+FROM mattcl/aoc-python:3.12
 
 # ruby and friends
 # RUN ghcup install cabal
@@ -27,6 +17,12 @@ ENV RUBY_MAJOR 3.2
 ENV RUBY_VERSION 3.2.2
 ENV RUBY_DOWNLOAD_SHA256 4b352d0f7ec384e332e3e44cdbfdcd5ff2d594af3c8296b5636c710975149e23
 
+# haskell
+ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
+ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.4.3
+ENV BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0
+
+
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
 RUN set -eux; \
@@ -34,16 +30,44 @@ RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-        curl \
-        build-essential \
+		autoconf \
 		bison \
+		ca-certificates \
 		dpkg-dev \
+		g++ \
+		gcc \
+		libbz2-dev \
+		libgdbm-compat-dev \
 		libgdbm-dev \
+		libglib2.0-dev \
+		libgmp-dev \
+		libncurses-dev \
+		libreadline-dev \
+		libssl-dev \
+		libxml2-dev \
+		libxslt-dev \
+		libyaml-dev \
+		make \
+		procps \
 		ruby \
+		xz-utils \
+		zlib1g-dev \
+        autoconf \
+        bison \
+        build-essential \
+        bzip2 \
         clang \
+        libffi-dev \
+        libffi7 \
+        libgmp-dev \
+        libgmp10 \
+        libncurses-dev \
+        libncurses5 \
+        libtinfo5 \
         llvm-11 \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
+    curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh; \
 	\
     rustArch=; \
 	dpkgArch="$(dpkg --print-architecture)"; \
@@ -128,22 +152,5 @@ ENV PATH $GEM_HOME/bin:$PATH
 RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 
 ENV PATH $PATH:/usr/lib/llvm-11/bin
-
-# pipx, virtualenv, poetry
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_HOME="/opt/poetry"
-ENV PATH $POETRY_HOME/bin:$PATH
-
-RUN pip install pipx && \
-    pipx install virtualenv && \
-    pipx install poetry==1.6.1
-
-# hyperfine & just
-RUN wget https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_amd64.deb && \
-    dpkg -i hyperfine_1.18.0_amd64.deb && \
-    rm hyperfine_1.18.0_amd64.deb && \
-    wget https://github.com/casey/just/releases/download/1.15.0/just-1.15.0-x86_64-unknown-linux-musl.tar.gz && \
-    tar -xvf just-1.15.0-x86_64-unknown-linux-musl.tar.gz && \
-    chmod +x just && \
-    mv just /usr/local/bin/ && \
-    rm just-1.15.0-x86_64-unknown-linux-musl.tar.gz
+ENV PATH=${PATH}:/root/.local/bin
+ENV PATH=${PATH}:/root/.ghcup/bin

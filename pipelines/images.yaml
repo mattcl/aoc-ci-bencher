@@ -29,6 +29,14 @@ resources:
       username: ((dockerhub.user))
       password: ((dockerhub.token))
 
+  - name: output-bencher
+    type: registry-image
+    source:
+      repository: mattcl/aoc-ci-bencher
+      tag: latest
+      username: ((dockerhub.user))
+      password: ((dockerhub.token))
+
   - name: notify
     type: slack-alert
     source:
@@ -45,9 +53,9 @@ jobs:
     plan:
       - in_parallel:
         - get: aoc-ci-bencher
-          trigger: false
-        - get: python
           trigger: true
+        - get: python
+          trigger: false
           params:
             skip_download: true
 
@@ -73,6 +81,59 @@ jobs:
         params:
           image: image/image.tar
           additional_tags: python/tag
+
+    on_success:
+      put: notify
+      params:
+        alert_type: success
+    on_failure:
+      put: notify
+      params:
+        alert_type: failed
+    on_abort:
+      put: notify
+      params:
+        alert_type: aborted
+    on_error:
+      put: notify
+      params:
+        alert_type: errored
+
+  - name: bencher
+    build_log_retention:
+      days: 2
+      builds: 20
+      minimum_succeeded_builds: 1
+    plan:
+      - in_parallel:
+        - get: aoc-ci-bencher
+          trigger: false
+        - get: output-python
+          trigger: true
+          params:
+            skip_download: true
+
+      - task: build
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: concourse/oci-build-task
+          inputs:
+            - name: aoc-ci-bencher
+          outputs:
+            - name: image
+          params:
+            CONTEXT: aoc-ci-bencher/docker
+            DOCKERFILE: aoc-ci-bencher/docker/bencher.Dockerfile
+          run:
+            path: build
+
+      - put: output-bencher
+        params:
+          image: image/image.tar
 
     on_success:
       put: notify
