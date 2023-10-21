@@ -1,0 +1,139 @@
+# Specification: Advent of code comparative benchmarking
+
+## Introduction
+
+The normal Advent of Code leaderboard only takes into consideration time to
+submit an answer for a given day's problems. This is a proposal for enabling
+evaluating submissions on 1) the ability so solve the generalized problem
+against any official input, and 2) the time a solution takes to to produce the
+answer.
+
+In the past, this was done by creating bespoke shell scripts and runtime
+environments that enabled comparing code written in different languages. While
+the goal is to still allow for writing in a variety of languages, this proposal
+is for a standard interface to reduce the overhead involved in aggregating
+inputs, validating solutions, and running comparative benchmarks.
+
+
+## Definitions
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
+
+1. Official input(s): Official inputs are the inputs generated/distributed by
+   Advent of Code.
+
+2. Unofficial input(s)/challenge input(s): Unofficial inputs or challenge inputs
+   are inputs sourced from the community that demonstrate an edge case not
+   necessarily present in the official inputs. These may be larger and/or more
+   complicated.
+
+
+## Pipeline
+
+Submitted solutions are evaluated using the following pipeline sequence:
+
+1. Inputs are collected from the submission's project repository.
+2. The submission's build task is executed.
+3. The submission is checked against all available official inputs.
+4. The submission is compared to other submissions using `hyperfine`.
+   Comparisons happen in two phases:
+    1. Solutions are compared using official inputs
+    2. Solutions are compared using unofficial inputs
+
+
+Solutions that do not pass a particular step will not be evaluated for
+subsequent steps.
+
+
+## Publicly accessible git repository
+
+Submissions MUST be available via a single, publicly accessible git repository.
+
+
+## General solutions
+
+Submissions MUST solve any official input. Submissions are not required to solve
+the unofficial inputs.
+
+
+## Inputs
+
+Submissions MAY include their inputs. If inputs are included, a way (script,
+executable, etc.) MUST be provided that, when run with the following:
+
+1. `AOC_DAY`: an integer corresponding to the desired day to run.
+
+MUST output a path (relative to the project root or absolute), that corresponds
+to the input for the day specified by `AOC_DAY`. The input MUST exist in the
+submission's repository.
+
+If an input for a specified day does not exist, the script MUST exit with a
+nonzero exit code.
+
+
+## Entrypoint
+
+Submissions MUST provide an entrypoint that minimally accepts the following
+environment variables:
+
+1. `AOC_DAY`: an integer from 1 to 25 inclusive, corresponding to the desired
+   day to run.
+2. `AOC_INPUT`: a path corresponding to a file containing the problem input.
+3. `AOC_JSON`: if present, will ALWAYS be set to `true` (`AOC_JSON=true`).
+
+A fourth `AOC_CI=true` environment variable will be specified. Consuming this
+variable is OPTIONAL.
+
+If `AOC_JSON` is specified, the solution MUST exit with 0 _AND_ be rendered as
+valid JSON to stdout with the following schema:
+
+```json
+{"part_one": <SOLUTION1>, "part_two": <SOLUTION2>}
+```
+
+Where the solution values are whatever appropriate type for the given day's
+answer. The solution values will be interpreted as strings for checking
+purposes.
+
+If a solution does not exist for a given day the entrypoint MUST exit with 0
+_AND_ write the following to stdout:
+
+```
+not implemented
+```
+
+## Pipeline build task
+
+The build task in the pipeline is intended to be used by a submission to run
+linters, tests, and local benchmarks.
+
+It is RECOMMENDED that compiled submissions perform the appropriate compilation
+steps in the build task, providing a binary that can be propagated to the check
+step and the comparative benchmark step. To facilitate this, the
+`AOC_ARTIFACT_PATH` environment variable will be provided. This will specify a
+directory into which the compiled artifact(s) MUST be placed.
+
+
+## Runtime environment.
+
+Submissions MUST be runnable in a debian bullseye container that is provisioned
+with the following runtimes/packages (additional packages may be available, but
+these are the explicitly specified ones):
+
+* python 3.12.x
+* ruby 3.2.2
+* poetry 1.6.1
+* clang
+* llvm-11
+* pipx
+* virtualenv
+* just
+* hyperfine
+
+Python solutions will be installed in separate virtual environments to isolate
+their dependencies.
+
+Any additional requirements MUST be communicated to the event organizer (Matt)
+so that they may be added to the container.

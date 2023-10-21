@@ -204,6 +204,8 @@ jobs:
           script: repo/run.sh
         input_mapping:
           repo: pting
+        tags:
+          - bencher
 
   - name: pting-check-inputs
     public: true
@@ -227,6 +229,8 @@ jobs:
           script: ci/scripts/pt-check-python
         input_mapping:
           repo: pting
+        tags:
+          - bencher
 
   - name: kcen
     public: true

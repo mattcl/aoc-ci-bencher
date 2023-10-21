@@ -1,0 +1,92 @@
+resource_types:
+  - name: slack-alert
+    type: registry-image
+    source:
+      repository: arbourd/concourse-slack-alert-resource
+
+resources:
+  - name: aoc-ci-bencher
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc-ci-bencher.git
+      paths:
+        - 'docker/*'
+
+  - name: python
+    type: registry-image
+    source:
+      repository: python
+      tag: ((python.version))-slim-bullseye
+      username: ((dockerhub.user))
+      password: ((dockerhub.token))
+
+  - name: output-python
+    type: registry-image
+    source:
+      repository: mattcl/aoc-python
+      tag: ((python.version))
+      username: ((dockerhub.user))
+      password: ((dockerhub.token))
+
+  - name: notify
+    type: slack-alert
+    source:
+      url: ((slack.webhook-url))
+      channel: ((slack.channel))
+      concourse_url: ((server.url))
+
+jobs:
+  - name: python
+    build_log_retention:
+      days: 2
+      builds: 20
+      minimum_succeeded_builds: 1
+    plan:
+      - in_parallel:
+        - get: aoc-ci-bencher
+          trigger: false
+        - get: python
+          trigger: true
+          params:
+            skip_download: true
+
+      - task: build
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: concourse/oci-build-task
+          inputs:
+            - name: aoc-ci-bencher
+          outputs:
+            - name: image
+          params:
+            CONTEXT: aoc-ci-bencher/docker
+            DOCKERFILE: aoc-ci-bencher/docker/python.Dockerfile
+          run:
+            path: build
+
+      - put: output-python
+        params:
+          image: image/image.tar
+          additional_tags: python/tag
+
+    on_success:
+      put: notify
+      params:
+        alert_type: success
+    on_failure:
+      put: notify
+      params:
+        alert_type: failed
+    on_abort:
+      put: notify
+      params:
+        alert_type: aborted
+    on_error:
+      put: notify
+      params:
+        alert_type: errored

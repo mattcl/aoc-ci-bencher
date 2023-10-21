@@ -1,5 +1,6 @@
-FROM python:3.10.8
+FROM python:3.12-slim-bullseye
 
+# haskell
 ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
 ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.4.3
 ENV BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0
@@ -9,6 +10,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 ENV PATH=${PATH}:/root/.local/bin
 ENV PATH=${PATH}:/root/.ghcup/bin
 
+# ruby and friends
 # RUN ghcup install cabal
 
 # lifted from the official ruby images
@@ -21,9 +23,9 @@ RUN set -eux; \
 	} >> /usr/local/etc/gemrc
 
 ENV LANG C.UTF-8
-ENV RUBY_MAJOR 3.1
-ENV RUBY_VERSION 3.1.2
-ENV RUBY_DOWNLOAD_SHA256 ca10d017f8a1b6d247556622c841fc56b90c03b1803f87198da1e4fd3ec3bf2a
+ENV RUBY_MAJOR 3.2
+ENV RUBY_VERSION 3.2.2
+ENV RUBY_DOWNLOAD_SHA256 4b352d0f7ec384e332e3e44cdbfdcd5ff2d594af3c8296b5636c710975149e23
 
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
@@ -32,6 +34,8 @@ RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+        curl \
+        build-essential \
 		bison \
 		dpkg-dev \
 		libgdbm-dev \
@@ -40,6 +44,28 @@ RUN set -eux; \
         llvm-11 \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
+	\
+    rustArch=; \
+	dpkgArch="$(dpkg --print-architecture)"; \
+	case "$dpkgArch" in \
+		'amd64') rustArch='x86_64-unknown-linux-gnu'; rustupUrl='https://static.rust-lang.org/rustup/archive/1.25.1/x86_64-unknown-linux-gnu/rustup-init'; rustupSha256='5cc9ffd1026e82e7fb2eec2121ad71f4b0f044e88bca39207b3f6b769aaa799c' ;; \
+		'arm64') rustArch='aarch64-unknown-linux-gnu'; rustupUrl='https://static.rust-lang.org/rustup/archive/1.25.1/aarch64-unknown-linux-gnu/rustup-init'; rustupSha256='e189948e396d47254103a49c987e7fb0e5dd8e34b200aa4481ecc4b8e41fb929' ;; \
+	esac; \
+	\
+	if [ -n "$rustArch" ]; then \
+		mkdir -p /tmp/rust; \
+		\
+		wget -O /tmp/rust/rustup-init "$rustupUrl"; \
+		echo "$rustupSha256 */tmp/rust/rustup-init" | sha256sum --check --strict; \
+		chmod +x /tmp/rust/rustup-init; \
+		\
+		export RUSTUP_HOME='/tmp/rust/rustup' CARGO_HOME='/tmp/rust/cargo'; \
+		export PATH="$CARGO_HOME/bin:$PATH"; \
+		/tmp/rust/rustup-init -y --no-modify-path --profile minimal --default-toolchain '1.66.0' --default-host "$rustArch"; \
+		\
+		rustc --version; \
+		cargo --version; \
+	fi; \
 	\
 	wget -O ruby.tar.xz "https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR%-rc}/ruby-$RUBY_VERSION.tar.xz"; \
 	echo "$RUBY_DOWNLOAD_SHA256 *ruby.tar.xz" | sha256sum --check --strict; \
@@ -65,24 +91,28 @@ RUN set -eux; \
 		--build="$gnuArch" \
 		--disable-install-doc \
 		--enable-shared \
+		${rustArch:+--enable-yjit} \
 	; \
 	make -j "$(nproc)"; \
 	make install; \
 	\
+	rm -rf /tmp/rust; \
 	apt-mark auto '.*' > /dev/null; \
 	apt-mark manual $savedAptMark > /dev/null; \
 	find /usr/local -type f -executable -not \( -name '*tkinter*' \) -exec ldd '{}' ';' \
-		| awk '/=>/ { print $(NF-1) }' \
+		| awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); print so }' \
 		| sort -u \
-		| grep -vE '^/usr/local/lib/' \
 		| xargs -r dpkg-query --search \
 		| cut -d: -f1 \
 		| sort -u \
 		| xargs -r apt-mark manual \
 	; \
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	\
 	cd /; \
 	rm -r /usr/src/ruby; \
 # verify we have no "ruby" packages installed
+	if dpkg -l | grep -i ruby; then exit 1; fi; \
 	[ "$(command -v ruby)" = '/usr/local/bin/ruby' ]; \
 # rough smoke test
 	ruby --version; \
@@ -98,3 +128,22 @@ ENV PATH $GEM_HOME/bin:$PATH
 RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 
 ENV PATH $PATH:/usr/lib/llvm-11/bin
+
+# pipx, virtualenv, poetry
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_HOME="/opt/poetry"
+ENV PATH $POETRY_HOME/bin:$PATH
+
+RUN pip install pipx && \
+    pipx install virtualenv && \
+    pipx install poetry==1.6.1
+
+# hyperfine & just
+RUN wget https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_amd64.deb && \
+    dpkg -i hyperfine_1.18.0_amd64.deb && \
+    rm hyperfine_1.18.0_amd64.deb && \
+    wget https://github.com/casey/just/releases/download/1.15.0/just-1.15.0-x86_64-unknown-linux-musl.tar.gz && \
+    tar -xvf just-1.15.0-x86_64-unknown-linux-musl.tar.gz && \
+    chmod +x just && \
+    mv just /usr/local/bin/ && \
+    rm just-1.15.0-x86_64-unknown-linux-musl.tar.gz
