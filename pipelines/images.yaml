@@ -10,8 +10,6 @@ resources:
     icon: github
     source:
       uri: https://github.com/mattcl/aoc-ci-bencher.git
-      paths:
-        - 'docker/*'
 
   - name: python
     type: registry-image
@@ -53,7 +51,7 @@ jobs:
     plan:
       - in_parallel:
         - get: aoc-ci-bencher
-          trigger: true
+          trigger: false
         - get: python
           trigger: false
           params:
