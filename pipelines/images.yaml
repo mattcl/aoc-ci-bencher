@@ -110,6 +110,8 @@ jobs:
           trigger: true
           params:
             skip_download: true
+          passed:
+            - python
 
       - task: build
         privileged: true

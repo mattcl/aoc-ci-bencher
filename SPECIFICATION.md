@@ -89,7 +89,7 @@ variable is OPTIONAL.
 If `AOC_JSON` is specified, the solution MUST exit with 0 _AND_ be rendered as
 valid JSON to stdout with the following schema:
 
-```json
+```
 {"part_one": <SOLUTION1>, "part_two": <SOLUTION2>}
 ```
 
