@@ -1,5 +1,7 @@
 # Specification: Advent of code comparative benchmarking
 
+Version 1.0.0
+
 ## Introduction
 
 The normal Advent of Code leaderboard only takes into consideration time to
@@ -65,8 +67,8 @@ executable, etc.) MUST be provided that, when run with the following:
 
 1. `AOC_DAY`: an integer corresponding to the desired day to run.
 
-MUST output a path (relative to the project root or absolute), that corresponds
-to the input for the day specified by `AOC_DAY`. The input MUST exist in the
+MUST output a path - relative to the project root - that corresponds to the
+input for the day specified by `AOC_DAY`. The input MUST exist in the
 submission's repository.
 
 If an input for a specified day does not exist, the script MUST exit with a
