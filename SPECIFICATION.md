@@ -6,7 +6,7 @@ Version 1.0.0
 
 The normal Advent of Code leaderboard only takes into consideration time to
 submit an answer for a given day's problems. This is a proposal for enabling
-evaluating submissions on 1) the ability so solve the generalized problem
+evaluating submissions on 1) the ability to solve the generalized problem
 against any official input, and 2) the time a solution takes to to produce the
 answer.
 
