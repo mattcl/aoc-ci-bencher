@@ -88,7 +88,8 @@ submission's repository.
 If an input for a specified day does not exist, the script MUST exit with a
 nonzero exit code.
 
-This is the input script provided by the python template:
+This is the input script provided by the python template at
+`ci/scripts/input_path.sh`:
 
 ```sh
 #!/bin/sh
