@@ -32,6 +32,19 @@ interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
    complicated.
 
 
+## Quick-start reference templates
+
+The following templates generate projects that conform to this specification.
+
+* [python template](https://github.com/mattcl/aoc-python-template) via
+  [cookiecutter](https://cookiecutter.readthedocs.io/en/stable/)
+* [rust template](https://github.com/mattcl/aoc-template) via
+  [cargo-generate](https://github.com/cargo-generate/cargo-generate)
+
+If you want to implement in a different language or implement things on your
+own, you MUST implement the required sections of this specification.
+
+
 ## Pipeline
 
 Submitted solutions are evaluated using the following pipeline sequence:
@@ -41,8 +54,8 @@ Submitted solutions are evaluated using the following pipeline sequence:
 3. The submission is checked against all available official inputs.
 4. The submission is compared to other submissions using `hyperfine`.
    Comparisons happen in two phases:
-    1. Solutions are compared using official inputs
-    2. Solutions are compared using unofficial inputs
+    1. Solutions are compared using official inputs.
+    2. Solutions are compared using unofficial inputs (if they exist).
 
 
 Solutions that do not pass a particular step will not be evaluated for
@@ -57,22 +70,55 @@ Submissions MUST be available via a single, publicly accessible git repository.
 ## General solutions
 
 Submissions MUST solve any official input. Submissions are not required to solve
-the unofficial inputs.
+the unofficial (challenge) inputs.
 
 
 ## Inputs
 
-Submissions MAY include their inputs. If inputs are included, a way (script,
-executable, etc.) MUST be provided that, when run with the following:
+Submissions are encouraged to include their inputs, but it's not strictly
+necessary. If inputs are included, a way (script, executable, etc.) MUST be
+provided that MUST consume the following environment variables:
 
 1. `AOC_DAY`: an integer corresponding to the desired day to run.
 
-MUST output a path - relative to the project root - that corresponds to the
-input for the day specified by `AOC_DAY`. The input MUST exist in the
+The script MUST output a path - relative to the project root - that corresponds
+to the input for the day specified by `AOC_DAY`. The input MUST exist in the
 submission's repository.
 
 If an input for a specified day does not exist, the script MUST exit with a
 nonzero exit code.
+
+This is the input script provided by the python template:
+
+```sh
+#!/bin/sh
+set -e
+
+# This script is used by the ci pipeline to extract our inputs for use in the
+# benchmarking and checking of solutions.
+
+# The specification says that AOC_DAY will be set from 1-25, so make sure that
+# var is set.
+if [ -z ${AOC_DAY+x} ]; then
+    echo "env var AOC_DAY must be set"
+    exit 1
+fi
+
+# We need to zero-pad the day to 2 digits to properly match our inputs.
+padded=$(printf "%02d" "$AOC_DAY")
+
+# paths are relative tot he project root
+expected="inputs/day${padded}.txt"
+
+# The specification says that if an input does not exist for a given day, we
+# need to exit with a nonzero code.
+if [ -f "$expected" ]; then
+    echo "$expected"
+else
+    echo "no input for day ${AOC_DAY}"
+    exit 1
+fi
+```
 
 
 ## Entrypoint
@@ -99,30 +145,85 @@ Where the solution values are whatever appropriate type for the given day's
 answer. The solution values will be interpreted as strings for checking
 purposes.
 
-If a solution does not exist for a given day the entrypoint MUST exit with 0
-_AND_ write the following to stdout:
+If `AOC_JSON` is set _AND_ a solution does not exist for a given day, then the
+entrypoint MUST exit with 0 _AND_ write the following to stdout (notice the
+quotes making it valid JSON):
+
+```
+"not implemented"
+```
+
+In the case that `AOC_JSON` is NOT set and the solution does not exist, then
+then entrypoint SHOULD, but is not required to, exit with 0 _AND_ write the
+following to stdout:
 
 ```
 not implemented
 ```
+
 
 ## Pipeline build task
 
 The build task in the pipeline is intended to be used by a submission to run
 linters, tests, and local benchmarks.
 
-It is RECOMMENDED that compiled submissions perform the appropriate compilation
-steps in the build task, providing a binary that can be propagated to the check
-step and the comparative benchmark step. To facilitate this, the
-`AOC_ARTIFACT_PATH` environment variable will be provided. This will specify a
-directory into which the compiled artifact(s) MUST be placed.
+A submission SHOULD contain a `ci` directory at the root of the repository, and
+that SHOULD contain at least a `build-task.yaml` that specifies the image the
+build step will use and what will be done during the build step. This is a
+[concourse CI task file](https://concourse-ci.org/tasks.html) that will be run
+as a part of the overall pipeline.
+
+The following is the build task from the python template.
+
+```yaml
+# ci/build-task.yaml
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    # the docker image to use
+    repository: mattcl/aoc-python
+    tag: 3.12
+
+inputs:
+  # this repository will be provided to the task in the registry-image as a
+  # directory named `repo`
+  - name: repo
+
+run:
+  # we execute the build script in the context of the this in the aoc-python
+  # container, which contains py 3.12 and poetry, among other things.
+  dir: repo
+  path: ci/scripts/build.sh
+
+```
+
+and the accompanying script at `ci/scripts/build.sh`
+
+```shell
+#!/bin/sh
+set -e
+
+# This script can pretty much do whatever, but the most basic thing would be
+# ensuring the project's dependencies are installable and that the tests and
+# benchmarks run
+
+poetry install
+
+# Without filtering any of the marks, this should run the example and real input
+# tests as well as running the benchmarks.
+poetry run pytest
+
+```
+
+If you need help writing this, Matt can provide additional examples/assistance.
 
 
 ## Runtime environment.
 
-Submissions MUST be runnable in a debian bullseye container that is provisioned
-with the following runtimes/packages (additional packages may be available, but
-these are the explicitly specified ones):
+Submissions MUST be runnable in a debian bullseye x86 container that is
+provisioned with the following runtimes/packages (additional packages may be
+available, but these are the explicitly specified ones):
 
 * python 3.12.x
 * ruby 3.2.2
