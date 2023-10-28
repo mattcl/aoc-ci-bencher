@@ -3,7 +3,7 @@ set -ex
 
 # unpack the tools
 cd aoc-tools
-tar -xvf aoc-tools-*-x86_64-unknown-linux-gnu.tar.gz
+tar -xvf aoc-tools-*-x86_64-unknown-linux-musl.tar.gz
 cd ../
 
 INPUTS_DIR="aoc-inputs/${YEAR}"
