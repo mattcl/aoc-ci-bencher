@@ -6,6 +6,7 @@ year = 2023
 username = "mattcl"
 repo = "https://github.com/mattcl/aoc2023"
 location = "mattcl"
+language = "rust"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "mattcl-aoc run"
 is_solver = true
@@ -14,6 +15,7 @@ is_solver = true
 username = "mattcl-py"
 repo = "https://github.com/mattcl/aoc2023-py"
 location = "mattcl-py"
+language = "python"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "mattcl-aoc-py"
 # no point in collecting identical inputs from this project
