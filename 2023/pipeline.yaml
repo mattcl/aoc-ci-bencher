@@ -178,7 +178,7 @@ jobs:
             - collect-inputs
 
       - task: solve-inputs
-        file: ci/2023/tasks/solve-inputs.yml
+        file: ci/2023/tasks/solve-inputs.yaml
         tags:
           - internal
 
