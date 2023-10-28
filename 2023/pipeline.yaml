@@ -145,15 +145,15 @@ jobs:
           - internal
         file: ci/tasks/git-commit.yaml
         input_mapping:
-          repo: aoc-inputs
+          repo: aoc-inputs-write
         output_mapping:
-          repo: aoc-inputs
+          repo: aoc-inputs-write
         params:
           COMMIT_MESSAGE: "ops: [CI] added new inputs"
 
       - put: aoc-inputs-write
         params:
-          repository: aoc-inputs
+          repository: aoc-inputs-write
           rebase: true
 
   - name: solve-inputs
@@ -187,15 +187,15 @@ jobs:
           - internal
         file: ci/tasks/git-commit.yaml
         input_mapping:
-          repo: aoc-inputs
+          repo: aoc-inputs-write
         output_mapping:
-          repo: aoc-inputs
+          repo: aoc-inputs-write
         params:
           COMMIT_MESSAGE: "ops: [CI] updated solutions"
 
       - put: aoc-inputs-write
         params:
-          repository: aoc-inputs
+          repository: aoc-inputs-write
           rebase: true
 
 

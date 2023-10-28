@@ -6,7 +6,7 @@ cd aoc-tools
 tar -xvf aoc-tools-*-x86_64-unknown-linux-musl.tar.gz
 cd ../
 
-INPUTS_DIR="aoc-inputs/${YEAR}"
+INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 # ensure the directory for this year exists
 mkdir -p "$INPUTS_DIR"
