@@ -1,0 +1,359 @@
+resource_types:
+  - name: slack-alert
+    type: registry-image
+    source:
+      repository: arbourd/concourse-slack-alert-resource
+
+  - name: gitea-package
+    type: registry-image
+    source:
+      repository: mattcl/concourse-gitea-package
+      tag: "0.2.1"
+
+job-common-settings: &job-common
+  # I guess we want to prevent multiple builds conflicting with each other
+  max_in_flight: 1
+  public: true
+  build_log_retention:
+    days: 25
+    builds: 30
+    minimum_succeeded_builds: 1
+  on_success:
+    put: notify
+    params:
+      alert_type: success
+  on_failure:
+    put: notify
+    params:
+      alert_type: failed
+  on_abort:
+    put: notify
+    params:
+      alert_type: aborted
+  on_error:
+    put: notify
+    params:
+      alert_type: errored
+
+resources:
+  - name: notify
+    type: slack-alert
+    source:
+      url: ((slack.webhook-url))
+      channel: ((slack.channel))
+      concourse_url: ((server.url))
+
+  - name: ci
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc-ci-bencher.git
+
+  - name: aoc-tools
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: aoc-tools
+    tags:
+      - internal
+
+  - name: mattcl-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: mattcl-aoc-2023
+    tags:
+      - internal
+
+  - name: aoc-inputs
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc-aggregated-inputs.git
+      branch: master
+      ignore_paths:
+        - '**/README.md'
+        - '**/application-benches.md'
+        - '**/solutions.md'
+        - '**/solutions.json'
+        - '**/participants.json'
+        - '**/benches.md'
+        - '**/benches_raw.csv'
+
+  # this is the same repository as the aoc-inputs resource, but this one allows
+  # writes (this is done to avoid new concourse version detection for ignored
+  # paths) see https://github.com/concourse/git-resource
+  - name: aoc-inputs-write
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:mattcl/aoc-aggregated-inputs.git
+      branch: master
+      private_key: ((aoc-inputs.deploy_key))
+
+  # the reset of these resources are participants
+  - name: mattcl
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc2023.git
+      ignore_paths:
+        - 'README.md'
+        - 'template/*'
+
+  - name: mattcl-py
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc2023-py.git
+      ignore_paths:
+        - 'README.md'
+
+jobs:
+  - name: collect-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-tools
+          trigger: false
+        - get: aoc-inputs
+          trigger: false
+        - get: mattcl
+          trigger: true
+        - get: mattcl-py
+          trigger: true
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: collect
+        file: ci/2023/tasks/collect-inputs.yml
+        tags:
+          - internal
+
+      - task: make-commit
+        tags:
+          - internal
+        file: ci/tasks/git-commit.yaml
+        input_mapping:
+          repo: aoc-inputs
+        output_mapping:
+          repo: aoc-inputs
+        params:
+          COMMIT_MESSAGE: "ops: [CI] added new inputs"
+
+      - put: aoc-inputs-write
+        params:
+          repository: aoc-inputs
+          rebase: true
+
+  - name: solve-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-tools
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+        - get: mattcl-bin
+          trigger: true
+        - get: aoc-inputs-write
+          trigger: false
+          passed:
+            - collect-inputs
+
+      - task: solve-inputs
+        file: ci/2023/tasks/solve-inputs.yml
+        tags:
+          - internal
+
+      - task: make-commit
+        tags:
+          - internal
+        file: ci/tasks/git-commit.yaml
+        input_mapping:
+          repo: aoc-inputs
+        output_mapping:
+          repo: aoc-inputs
+        params:
+          COMMIT_MESSAGE: "ops: [CI] updated solutions"
+
+      - put: aoc-inputs-write
+        params:
+          repository: aoc-inputs
+          rebase: true
+
+
+  - name: mattcl-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: mattcl
+          trigger: true
+          passed:
+            - collect-inputs
+
+      - task: build
+        file: mattcl/ci/build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: mattcl
+        output_mapping:
+          release: gnu-release
+        params:
+          CARGO_REGISTRIES_ANCALAGON_INDEX: ((ancalagon-registry.index))
+          CARGO_REGISTRIES_ANCALAGON_TOKEN: ((ancalagon-registry.token))
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: mattcl-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
+
+  # this is kind of pointless because this solution calculated the stored
+  # solutions
+  - name: mattcl-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: mattcl-bin
+          trigger: true
+          passed:
+            - mattcl-build
+        - get: aoc-tools
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+
+      - task: check-inputs
+        file: ci/2023/tasks/check-inputs.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: mattcl-bin
+        params:
+          PARTICIPANT: "mattcl"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2023/scripts/mattcl-check.sh"
+
+  - name: mattcl-py-build
+    <<: *job-common
+    plan:
+      - get: mattcl-py
+        trigger: true
+        passed:
+          - collect-inputs
+
+      - task: build
+        file: mattcl-py/ci/build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: mattcl-py
+
+  - name: mattcl-py-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: mattcl-py
+          trigger: true
+          passed:
+            - mattcl-py-build
+        - get: aoc-tools
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+
+      - task: check-inputs
+        file: ci/2023/tasks/check-inputs.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: mattcl-py
+        params:
+          PARTICIPANT: "mattcl-py"
+          # this is relative to the repo root, not the workspace
+          INSTALL: "ci/scripts/install.sh"
+        vars:
+          check-input-script: "ci/scripts/check-inputs.sh"
+
+  - name: comparative-bench
+    public: true
+    <<: *job-common
+    serial_groups: [benching]
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-tools
+          trigger: false
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+        - get: mattcl-bin
+          trigger: true
+          passed:
+            - mattcl-check-inputs
+        - get: mattcl-py
+          trigger: true
+          passed:
+            - mattcl-py-check-inputs
+
+      - task: comparative-benches
+        file: ci/2023/tasks/comparative-benchmarks.yaml
+        tags:
+          - ser6
+
+      - task: make-commit
+        tags:
+          - internal
+        file: ci/tasks/git-commit.yaml
+        input_mapping:
+          repo: aoc-inputs
+        output_mapping:
+          repo: aoc-inputs
+        params:
+          COMMIT_MESSAGE: "ops: [CI] added new benchmarks"
+
+      - put: aoc-inputs-write
+        params:
+          repository: aoc-inputs
+          rebase: true

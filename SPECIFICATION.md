@@ -219,6 +219,25 @@ poetry run pytest
 
 If you need help writing this, Matt can provide additional examples/assistance.
 
+## Optional Installer
+
+A submission MAY include an installer script for installing the submission if
+it's something that is installable.
+
+An example is the `ci/scripts/install.sh` from the python template:
+
+```shell
+#!/bin/sh
+set -e
+
+# build to create the dist
+poetry build
+
+# install the built package via pipx
+pipx install -f dist/{{ cookiecutter.__bin_name }}*.tar.gz
+
+```
+
 
 ## Runtime environment.
 

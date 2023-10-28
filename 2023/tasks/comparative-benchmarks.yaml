@@ -1,0 +1,23 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: mattcl/aoc-ci-bencher
+    tag: latest
+
+inputs:
+  - name: ci
+  - name: aoc-tools
+  - name: aoc-inputs
+  - name: mattcl-bin
+  - name: mattcl-py
+
+outputs:
+  - name: aoc-inputs
+
+params:
+  AOC_TOOLS_CONFIG: "ci/2023/config.toml"
+  YEAR: "2023"
+
+run:
+  path: ci/2023/scripts/comparative-benchmarks.sh

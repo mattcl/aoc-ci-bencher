@@ -1,5 +1,0 @@
-#!/bin/bash
-set -e
-cd $1
-# TODO: this needs to actually use the input
-AOC_INPUT="${INPUT_DIR}/$2" python *.py
