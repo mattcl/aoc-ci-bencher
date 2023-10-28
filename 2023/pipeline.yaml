@@ -168,14 +168,14 @@ jobs:
             - internal
         - get: aoc-inputs
           trigger: true
+          passed:
+            - collect-inputs
         - get: mattcl-bin
           trigger: true
           tags:
             - internal
         - get: aoc-inputs-write
           trigger: false
-          passed:
-            - collect-inputs
 
       - task: solve-inputs
         file: ci/2023/tasks/solve-inputs.yaml
