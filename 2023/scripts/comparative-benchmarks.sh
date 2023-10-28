@@ -18,7 +18,7 @@ cd mattcl-py
 ci/scripts/install.sh
 cd ../
 
-INPUTS_DIR="aoc-inputs/${YEAR}"
+INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 i=1
 while [ $i -ne 26 ];
