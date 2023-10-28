@@ -16,7 +16,7 @@ else
 fi
 
 # this is now above us
-INPUTS_DIR="../aoc-inputs/${YEAR}"
+INPUTS_DIR="../aoc-inputs-write/${YEAR}"
 
 # use the tools to check the inputs
 aoc-tools check-solutions "$PARTICIPANT" "$INPUTS_DIR"
