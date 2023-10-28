@@ -3,7 +3,7 @@ FROM python:3.12-slim-bullseye
 # pipx, virtualenv, poetry
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_HOME="/opt/poetry"
-ENV PATH $POETRY_HOME/bin:$PATH
+ENV PATH $POETRY_HOME/bin:/root/.local/bin:$PATH
 
 RUN pip install pipx && \
     pipx install virtualenv && \
