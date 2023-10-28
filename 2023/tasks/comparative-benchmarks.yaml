@@ -9,6 +9,7 @@ inputs:
   - name: ci
   - name: aoc-tools
   - name: aoc-inputs
+  - name: aoc-inputs-write
   - name: mattcl-bin
   - name: mattcl-py
 
