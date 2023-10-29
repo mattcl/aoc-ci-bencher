@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bullseye
+FROM python:3.12-slim
 
 # pipx, virtualenv, poetry
 ENV POETRY_NO_INTERACTION=1 \
