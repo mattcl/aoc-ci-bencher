@@ -1,6 +1,6 @@
 # Specification: Advent of code comparative benchmarking
 
-Version 1.0.0
+Version 1.1.0
 
 ## Introduction
 
@@ -241,7 +241,7 @@ pipx install -f dist/{{ cookiecutter.__bin_name }}*.tar.gz
 
 ## Runtime environment.
 
-Submissions MUST be runnable in a debian bullseye x86 container that is
+Submissions MUST be runnable in a debian bookworm x86 container that is
 provisioned with the following runtimes/packages (additional packages may be
 available, but these are the explicitly specified ones):
 

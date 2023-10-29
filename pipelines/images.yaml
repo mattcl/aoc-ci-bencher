@@ -15,7 +15,7 @@ resources:
     type: registry-image
     source:
       repository: python
-      tag: ((python.version))-slim-bullseye
+      tag: ((python.version))-slim
       username: ((dockerhub.user))
       password: ((dockerhub.token))
 

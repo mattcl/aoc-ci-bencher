@@ -22,7 +22,6 @@ ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
 ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.4.3
 ENV BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0
 
-
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
 RUN set -eux; \
@@ -58,13 +57,13 @@ RUN set -eux; \
         bzip2 \
         clang \
         libffi-dev \
-        libffi7 \
+        libffi8 \
         libgmp-dev \
         libgmp10 \
         libncurses-dev \
         libncurses5 \
         libtinfo5 \
-        llvm-11 \
+        llvm-14 \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
     curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh; \
