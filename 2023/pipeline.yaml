@@ -75,7 +75,7 @@ resources:
     type: git
     icon: github
     source:
-      uri: https://github.com/mattcl/aoc-aggregated-inputs.git
+      uri: https://github.com/mattcl/aoc-benchmarks.git
       branch: master
       ignore_paths:
         - '**/README.md'
@@ -93,7 +93,7 @@ resources:
     type: git
     icon: github
     source:
-      uri: git@github.com:mattcl/aoc-aggregated-inputs.git
+      uri: git@github.com:mattcl/aoc-benchmarks.git
       branch: master
       private_key: ((aoc-inputs.deploy_key))
 
