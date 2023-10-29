@@ -172,6 +172,8 @@ jobs:
             - collect-inputs
         - get: mattcl-bin
           trigger: true
+          passed:
+            - mattcl-build
           tags:
             - internal
         - get: aoc-inputs-write
