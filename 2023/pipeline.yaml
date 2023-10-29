@@ -78,6 +78,8 @@ resources:
       uri: https://github.com/mattcl/aoc-benchmarks.git
       branch: master
       ignore_paths:
+        - 'README.md'
+        - 'SPECIFICATION.md'
         - '**/README.md'
         - '**/application-benches.md'
         - '**/solutions.md'
