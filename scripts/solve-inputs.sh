@@ -16,4 +16,4 @@ cd ../
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 # use the tools to solve the inputs
-aoc-tools solve-inputs "$INPUTS_DIR"
+aoc-tools ci solve-inputs "$INPUTS_DIR"

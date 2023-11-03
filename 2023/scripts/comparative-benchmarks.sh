@@ -26,7 +26,7 @@ set +x
 i=1
 while [ $i -ne 26 ];
 do
-    aoc-tools bench "$i" "$INPUTS_DIR"
-    aoc-tools report "$i" "$INPUTS_DIR" -t ci/templates/report-template.md -o README.md
+    aoc-tools ci bench "$i" "$INPUTS_DIR"
+    aoc-tools ci report "$i" "$INPUTS_DIR" -t ci/templates/report-template.md -o README.md
     i=$((i + 1))
 done

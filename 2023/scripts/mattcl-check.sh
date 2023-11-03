@@ -16,4 +16,4 @@ mv aoc /usr/local/bin/mattcl-aoc
 INPUTS_DIR="../aoc-inputs-write/${YEAR}"
 
 # use the tools to check the inputs
-aoc-tools check-solutions mattcl "$INPUTS_DIR"
+aoc-tools ci check-solutions mattcl "$INPUTS_DIR"

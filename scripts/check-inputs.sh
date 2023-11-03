@@ -19,4 +19,4 @@ fi
 INPUTS_DIR="../aoc-inputs-write/${YEAR}"
 
 # use the tools to check the inputs
-aoc-tools check-solutions "$PARTICIPANT" "$INPUTS_DIR"
+aoc-tools ci check-solutions "$PARTICIPANT" "$INPUTS_DIR"
