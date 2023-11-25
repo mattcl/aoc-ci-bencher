@@ -6,6 +6,8 @@ dedicated hardware.
 
 [CI pipeline]({{ pipeline_url }})
 
+[Benchmark web UI](https://aoc.ancalagon.black)
+
 Participants are required to implement solutions that can handle any official
 input, and are requested to conform to the following specification:
 [https://github.com/mattcl/aoc-benchmarks/blob/master/SPECIFICATION.md](https://github.com/mattcl/aoc-benchmarks/blob/master/SPECIFICATION.md).

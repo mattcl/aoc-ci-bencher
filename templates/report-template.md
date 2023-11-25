@@ -11,6 +11,8 @@ to IO and other factors.
 
 [CI pipeline]({{ pipeline_url }})
 
+[Benchmark web UI](https://aoc.ancalagon.black)
+
 
 ## Participants (with solutions for day {{ day }})
 {% for project in participants %}

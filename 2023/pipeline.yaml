@@ -362,6 +362,8 @@ jobs:
         file: ci/2023/tasks/comparative-benchmarks.yaml
         tags:
           - ser6
+        params:
+          AOC_TOOLS_API_TOKEN: ((aoc-web.token))
 
       - task: make-commit
         tags:

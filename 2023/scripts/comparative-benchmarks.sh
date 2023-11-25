@@ -26,7 +26,11 @@ set +x
 i=1
 while [ $i -ne 26 ];
 do
-    aoc-tools ci bench "$i" "$INPUTS_DIR"
+    aoc-tools ci bench "$YEAR" "$i" "$INPUTS_DIR"
     aoc-tools ci report "$i" "$INPUTS_DIR" -t ci/templates/report-template.md -o README.md
     i=$((i + 1))
 done
+
+# make the unified benchmarks and publish them, ignoring any failures
+aoc-tools unify-benches "$INPUTS_DIR" -o unified.csv || true
+aoc-tools publish-benches unified.csv || true

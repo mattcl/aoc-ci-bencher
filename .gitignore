@@ -1,2 +1,4 @@
 secrets.yaml
 secret.yaml
+test_config.toml
+docker-compose.yaml

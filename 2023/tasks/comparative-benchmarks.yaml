@@ -17,7 +17,9 @@ outputs:
   - name: aoc-inputs-write
 
 params:
+  AOC_TOOLS_API_BASE: "https://aoc.ancalagon.black/api/"
   AOC_TOOLS_CONFIG: "ci/2023/config.toml"
+  AOC_TOOLS_API_TOKEN:
   YEAR: "2023"
 
 run:
