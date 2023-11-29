@@ -13,7 +13,7 @@ echo "$VERSION" > release/VERSION
 echo "Packaging $VERSION for $TARGET"
 
 mkdir dist
-cp "repo/target/release/aoc" dist/
+cp "repo/tmp/aoc" dist/
 
 cd dist
 ARCHIVE="lanjian-aoc-${VERSION}-${TARGET}.tar.gz"
