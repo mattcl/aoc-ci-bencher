@@ -12,5 +12,8 @@ inputs:
 outputs:
   - name: release
 
+params:
+  TARGET: "x86_64-unknown-linux-gnu"
+
 run:
   path: ci/2023/scripts/lanjian-package.sh
