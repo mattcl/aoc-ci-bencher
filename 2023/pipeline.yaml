@@ -71,6 +71,17 @@ resources:
     tags:
       - internal
 
+  - name: lanjian-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: lanjian-aoc-2023
+    tags:
+      - internal
+
   - name: aoc-inputs
     type: git
     icon: github
@@ -126,6 +137,15 @@ resources:
       ignore_paths:
         - 'README.md'
 
+  - name: lanjian
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/lanjian/aoc-2023.git
+      ignore_paths:
+        - 'README.md'
+        - 'template/*'
+
 jobs:
   - name: collect-inputs
     <<: *job-common
@@ -144,6 +164,8 @@ jobs:
         - get: mattcl-py
           trigger: true
         - get: chancalan
+          trigger: true
+        - get: lanjian
           trigger: true
         - get: aoc-inputs-write
           trigger: false
@@ -280,7 +302,6 @@ jobs:
         file: ci/2023/tasks/check-inputs.yaml
         tags:
           - internal
-          - ser6
         input_mapping:
           repo: mattcl-bin
         params:
@@ -330,7 +351,6 @@ jobs:
         file: ci/2023/tasks/check-inputs.yaml
         tags:
           - internal
-          - ser6
         input_mapping:
           repo: mattcl-py
         params:
@@ -381,7 +401,6 @@ jobs:
         file: ci/2023/tasks/check-inputs.yaml
         tags:
           - internal
-          - ser6
         input_mapping:
           repo: chancalan
         params:
@@ -390,6 +409,83 @@ jobs:
           INSTALL: "ci/scripts/install.sh"
         vars:
           check-input-script: "ci/scripts/check-inputs.sh"
+
+  - name: lanjian-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: lanjian
+          trigger: true
+          passed:
+            - collect-inputs
+
+      - task: build
+        file: ci/2023/tasks/lanjian-build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: lanjian
+
+      - task: package
+        file: ci/2023/tasks/lanjian-package.yaml
+        tags:
+          - internal
+        output_mapping:
+          release: gnu-release
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: lanjian-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
+
+  - name: lanjian-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: lanjian-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - lanjian-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2023/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: lanjian-bin
+        params:
+          PARTICIPANT: "lanjian"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2023/scripts/lanjian-check.sh"
 
   - name: comparative-bench
     public: true
@@ -423,6 +519,12 @@ jobs:
           trigger: true
           passed:
             - chancalan-check-inputs
+        - get: lanjian-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - lanjian-check-inputs
 
       - task: comparative-benches
         file: ci/2023/tasks/comparative-benchmarks.yaml

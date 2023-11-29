@@ -29,3 +29,11 @@ location = "chancalan"
 language = "python"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "chancalan-aoc-bench"
+
+[participants.lanjian]
+username = "lanjian"
+repo = "https://github.com/lanjian/aoc-2023"
+location = "lanjian"
+language = "rust"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "lanjian-aoc run"
