@@ -18,4 +18,4 @@ just build-cli
 
 # cp the target release for a later step
 mkdir tmp
-cp target/relase/aoc tmp/
+cp target/release/aoc tmp/
