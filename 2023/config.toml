@@ -17,6 +17,14 @@ repo = "https://github.com/mattcl/aoc2023-py"
 location = "mattcl-py"
 language = "python"
 input_cmd = "ci/scripts/input_path.sh"
-entrypoint = "mattcl-aoc-py"
+entrypoint = "mattcl-aoc-py-bench"
 # no point in collecting identical inputs from this project
 skip_inputs = true
+
+[participants.chancalan]
+username = "chancalan"
+repo = "https://github.com/chancalan/aoc2023"
+location = "chancalan"
+language = "python"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "chancalan-aoc-bench"

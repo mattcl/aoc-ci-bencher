@@ -18,6 +18,11 @@ cd mattcl-py
 ci/scripts/install.sh
 cd ../
 
+# install chancalan
+cd chancalan
+ci/scripts/install.sh
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x
