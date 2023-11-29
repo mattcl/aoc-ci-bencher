@@ -1,9 +1,6 @@
 #!/bin/sh
 set -e
 
-# our task has called our input repo
-cd repo
-
 # fail fast if we won't pass a simple cargo check
 cargo check --all-targets
 
