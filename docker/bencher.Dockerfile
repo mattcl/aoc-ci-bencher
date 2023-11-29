@@ -64,6 +64,7 @@ RUN set -eux; \
         libncurses5 \
         libtinfo5 \
         llvm-14 \
+        lua5.4 \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
     curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh; \

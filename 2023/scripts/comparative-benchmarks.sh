@@ -7,6 +7,8 @@ tar -xvf aoc-tools-*-x86_64-unknown-linux-musl.tar.gz
 mv aoc-tools /usr/local/bin/
 cd ../
 
+aoc-tools --version
+
 # unpack and install the mattcl solution
 cd mattcl-bin
 tar -xvf aoc-*-x86_64-unknown-linux-gnu.tar.gz
