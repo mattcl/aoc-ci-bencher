@@ -151,7 +151,7 @@ resources:
     icon: github
     source:
       uri: https://github.com/pting/aoc2023
-      branch: master
+      branch: main
       ignore_paths:
         - 'README.md'
 
