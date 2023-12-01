@@ -31,6 +31,11 @@ tar -xvf lanjian-aoc-*-x86_64-unknown-linux-gnu.tar.gz
 mv aoc /usr/local/bin/lanjian-aoc
 cd ../
 
+# install pting
+cd pting
+ci/scripts/install.sh
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x

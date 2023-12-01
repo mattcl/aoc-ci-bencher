@@ -146,6 +146,15 @@ resources:
         - 'README.md'
         - 'template/*'
 
+  - name: pting
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/pting/aoc2023
+      branch: master
+      ignore_paths:
+        - 'README.md'
+
 jobs:
   - name: collect-inputs
     <<: *job-common
@@ -166,6 +175,8 @@ jobs:
         - get: chancalan
           trigger: true
         - get: lanjian
+          trigger: true
+        - get: pting
           trigger: true
         - get: aoc-inputs-write
           trigger: false
@@ -487,6 +498,55 @@ jobs:
           # override this to be our check script
           check-input-script: "ci/2023/scripts/lanjian-check.sh"
 
+  - name: pting-build
+    <<: *job-common
+    plan:
+      - get: pting
+        trigger: true
+        passed:
+          - collect-inputs
+
+      - task: build
+        file: pting/ci/build-task.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: pting
+
+  - name: pting-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: pting
+          trigger: true
+          passed:
+            - pting-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2023/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: pting
+        params:
+          PARTICIPANT: "pting"
+          # this is relative to the repo root, not the workspace
+          INSTALL: "ci/scripts/install.sh"
+        vars:
+          check-input-script: "ci/scripts/check-inputs.sh"
+
   - name: comparative-bench
     public: true
     <<: *job-common
@@ -525,6 +585,10 @@ jobs:
             - internal
           passed:
             - lanjian-check-inputs
+        - get: pting
+          trigger: true
+          passed:
+            - pting-check-inputs
 
       - task: comparative-benches
         file: ci/2023/tasks/comparative-benchmarks.yaml

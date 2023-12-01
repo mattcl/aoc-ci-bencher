@@ -37,3 +37,11 @@ location = "lanjian"
 language = "rust"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "lanjian-aoc run"
+
+[participants.pting]
+username = "pting"
+repo = "https://github.com/pting/aoc2023"
+location = "pting"
+language = "python"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "pting-aoc-bench run"
