@@ -571,7 +571,7 @@ jobs:
         tags:
           - internal
         input_mapping:
-          repo: pting
+          repo: kcen
 
   - name: kcen-check-inputs
     <<: *job-common
