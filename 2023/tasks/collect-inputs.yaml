@@ -15,6 +15,7 @@ inputs:
   - name: chancalan
   - name: lanjian
   - name: pting
+  - name: kcen
 
 outputs:
   - name: aoc-inputs-write

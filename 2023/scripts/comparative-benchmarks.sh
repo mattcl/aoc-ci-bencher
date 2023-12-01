@@ -36,6 +36,11 @@ cd pting
 ci/scripts/install.sh
 cd ../
 
+# install kcen
+cd kcen
+ci/scripts/install.sh
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x

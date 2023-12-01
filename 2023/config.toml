@@ -45,3 +45,11 @@ location = "pting"
 language = "python"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "pting-aoc-bench run"
+
+[participants.kcen]
+username = "kcen"
+repo = "https://github.com/kcen/aoc2023"
+location = "kcen"
+language = "python"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "kcen-aoc-bench run"
