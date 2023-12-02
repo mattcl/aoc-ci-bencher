@@ -64,7 +64,6 @@ RUN set -eux; \
         libncurses5 \
         libtinfo5 \
         llvm-14 \
-        lua5.4 \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
     curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh; \
@@ -141,7 +140,17 @@ RUN set -eux; \
 # rough smoke test
 	ruby --version; \
 	gem --version; \
-	bundle --version
+	bundle --version; \
+	apt-get update && apt-get install -y --no-install-recommends \
+		autoconf \
+		ca-certificates \
+		g++ \
+		gcc \
+		make \
+        lua5.4 \
+        nodejs \
+        npm \
+	;
 
 # don't create ".bundle" in all our apps
 ENV GEM_HOME /usr/local/bundle
