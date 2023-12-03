@@ -12,10 +12,9 @@ npm install -g yarn
 cp -r repo /mikofo
 yarn --cwd /mikofo install
 
-cd repo
+INPUTS_DIR="${PWD}/aoc-inputs-write/${YEAR}"
 
-# this is now above us
-INPUTS_DIR="../aoc-inputs-write/${YEAR}"
+cd repo
 
 # use the tools to check the inputs
 aoc-tools ci check-solutions mikofo "$INPUTS_DIR"
