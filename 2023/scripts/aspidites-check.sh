@@ -9,7 +9,7 @@ cd ../
 
 # unpack and install the lanjian solution
 cd repo
-tar -xvf lanjian-aoc-*.tar.gz
+tar -xvf aspidites-aoc-*.tar.gz
 mv aoc2023 /usr/local/bin/aspidites-aoc
 
 # this is now above us
