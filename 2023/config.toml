@@ -61,3 +61,11 @@ location = "aspidites"
 language = "haskell"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "aspidites-aoc --json"
+
+[participants.mikofo]
+username = "mikofo"
+repo = "https://github.com/mikofo/advent-of-code-2023"
+location = "mikofo"
+language = "javascript"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "yarn -s --cwd /mikofo start"

@@ -47,6 +47,12 @@ tar -xvf aspidites-aoc-*.tar.gz
 mv aoc2023 /usr/local/bin/aspidites-aoc
 cd ../
 
+# install mikofo
+npm install -g yarn
+cd mikifo
+yarn install
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x

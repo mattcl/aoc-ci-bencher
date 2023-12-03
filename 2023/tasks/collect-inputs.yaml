@@ -17,6 +17,7 @@ inputs:
   - name: pting
   - name: kcen
   - name: aspidites
+  - name: mikofo
 
 outputs:
   - name: aoc-inputs-write
