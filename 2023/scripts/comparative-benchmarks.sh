@@ -49,9 +49,8 @@ cd ../
 
 # install mikofo
 npm install -g yarn
-cd mikofo
-yarn install
-cd ../
+cp -r mikofo /mikofo
+yarn --cwd /mikofo install
 
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
