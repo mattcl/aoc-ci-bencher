@@ -17,7 +17,7 @@ cp "repo/tmp/aoc2023" dist/
 
 cd dist
 ARCHIVE="aspidites-aoc-${VERSION}.tar.gz"
-tar czf "$ARCHIVE" "aoc"
+tar czf "$ARCHIVE" "aoc2023"
 cd ../
 
 mv "dist/$ARCHIVE" "release/$ARCHIVE"
