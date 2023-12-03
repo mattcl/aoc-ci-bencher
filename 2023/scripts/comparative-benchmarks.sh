@@ -41,6 +41,12 @@ cd kcen
 ci/scripts/install.sh
 cd ../
 
+# install aspidites
+cd aspidites
+tar -xvf aspidites-aoc-*.tar.gz
+mv aoc2023 /usr/local/bin/aspidites-aoc
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x

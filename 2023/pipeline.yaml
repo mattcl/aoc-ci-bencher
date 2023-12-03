@@ -82,6 +82,17 @@ resources:
     tags:
       - internal
 
+  - name: aspidites-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: aspidites-aoc-2023
+    tags:
+      - internal
+
   - name: aoc-inputs
     type: git
     icon: github
@@ -164,6 +175,15 @@ resources:
       ignore_paths:
         - 'README.md'
 
+  - name: aspidites
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/aspidites/aoc2023
+      branch: main
+      ignore_paths:
+        - 'README.md'
+
 jobs:
   - name: collect-inputs
     <<: *job-common
@@ -188,6 +208,8 @@ jobs:
         - get: pting
           trigger: true
         - get: kcen
+          trigger: true
+        - get: aspidites
           trigger: true
         - get: aoc-inputs-write
           trigger: false
@@ -607,6 +629,83 @@ jobs:
         vars:
           check-input-script: "ci/scripts/check-inputs.sh"
 
+  - name: aspidites-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aspidites
+          trigger: true
+          passed:
+            - collect-inputs
+
+      - task: build
+        file: ci/2023/tasks/aspidites-build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: lanjian
+
+      - task: package
+        file: ci/2023/tasks/aspidites-package.yaml
+        tags:
+          - internal
+        output_mapping:
+          release: gnu-release
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: aspidites-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
+
+  - name: aspidites-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aspidites-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - aspidites-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2023/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: aspidites-bin
+        params:
+          PARTICIPANT: "aspidites"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2023/scripts/aspidites-check.sh"
+
   - name: comparative-bench
     public: true
     <<: *job-common
@@ -653,6 +752,12 @@ jobs:
           trigger: true
           passed:
             - kcen-check-inputs
+        - get: aspidites-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - aspidites-check-inputs
 
       - task: comparative-benches
         file: ci/2023/tasks/comparative-benchmarks.yaml

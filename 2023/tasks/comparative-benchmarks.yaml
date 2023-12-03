@@ -16,6 +16,7 @@ inputs:
   - name: lanjian-bin
   - name: pting
   - name: kcen
+  - name: aspidites
 
 outputs:
   - name: aoc-inputs-write
