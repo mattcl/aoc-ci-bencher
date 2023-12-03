@@ -188,7 +188,7 @@ resources:
     type: git
     icon: github
     source:
-      uri: https://github.com/mikifo/advent-of-code-2023
+      uri: https://github.com/mikofo/advent-of-code-2023
       branch: main
       ignore_paths:
         - 'README.md'
