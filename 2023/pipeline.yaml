@@ -764,7 +764,7 @@ jobs:
           # this is relative to the repo root, not the workspace
           INSTALL: "ci/scripts/install.sh"
         vars:
-          check-input-script: "ci/2023/scripts/mikifo-check.sh"
+          check-input-script: "ci/2023/scripts/mikofo-check.sh"
 
   - name: comparative-bench
     public: true
