@@ -11,6 +11,7 @@ cd ../
 npm install -g yarn
 cp -r repo /mikofo
 yarn --cwd /mikofo install
+AOC_DAY=1 AOC_INPUT="$PWD/aoc-inputs-write/2023/day_001/input-mattcl" AOC_JSON=true yarn --cwd /mikofo start
 
 INPUTS_DIR="${PWD}/aoc-inputs-write/${YEAR}"
 
