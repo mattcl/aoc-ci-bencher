@@ -49,7 +49,7 @@ cd ../
 
 # install mikofo
 npm install -g yarn
-cd mikifo
+cd mikofo
 yarn install
 cd ../
 
