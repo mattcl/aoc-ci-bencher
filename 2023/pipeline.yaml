@@ -646,7 +646,7 @@ jobs:
           - internal
           - ser6
         input_mapping:
-          repo: lanjian
+          repo: aspidites
 
       - task: package
         file: ci/2023/tasks/aspidites-package.yaml
