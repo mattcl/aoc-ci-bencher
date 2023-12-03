@@ -21,7 +21,7 @@ caches:
   - path: ../../../root/.cabal/store
 
   # cache the target folder to speed up builds
-  # - path: repo/dist-newstyle
+  - path: repo/dist-newstyle
 
 run:
   # we execute the build script in the context of the this in the aoc-python
