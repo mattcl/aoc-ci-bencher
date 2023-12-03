@@ -726,7 +726,7 @@ jobs:
           - collect-inputs
 
       - task: build
-        file: mikofo/ci/build-task.yaml
+        file: mikofo/ci/build_task.yaml
         tags:
           - internal
         input_mapping:
