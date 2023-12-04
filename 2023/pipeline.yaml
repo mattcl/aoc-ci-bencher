@@ -297,6 +297,8 @@ jobs:
       - in_parallel:
         - get: aoc-tools
           trigger: false
+          tags:
+            - internal
         - get: mattcl
           trigger: true
           passed:
