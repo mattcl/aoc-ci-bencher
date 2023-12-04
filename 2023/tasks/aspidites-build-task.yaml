@@ -27,4 +27,4 @@ run:
   # we execute the build script in the context of the this in the aoc-python
   # container, which contains py 3.12 and poetry, among other things.
   dir: repo
-  path: ../ci/2023/scripts/aspidites-build.sh
+  path: ci/scripts/install.sh
