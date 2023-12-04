@@ -16,8 +16,8 @@ ENV LANG C.UTF-8
 
 # haskell
 ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
-ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.4.6
-ENV BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0
+ENV BOOTSTRAP_HASKELL_GHC_VERSION=9.8.1
+ENV BOOTSTRAP_HASKELL_CABAL_VERSION=3.10.2.0
 
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
