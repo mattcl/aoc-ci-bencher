@@ -7,6 +7,9 @@ cabal build
 # run tests
 cabal test
 
+# run benchmarks
+cabal bench
+
 # run tests
 cabal install
 
