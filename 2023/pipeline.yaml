@@ -82,6 +82,17 @@ resources:
     tags:
       - internal
 
+  - name: mikofo-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: mikofo-aoc-2023-bun
+    tags:
+      - internal
+
   - name: lanjian-bin
     type: gitea-package
     icon: package-up
@@ -815,17 +826,38 @@ jobs:
   - name: mikofo-build
     <<: *job-common
     plan:
-      - get: mikofo
-        trigger: true
-        passed:
-          - collect-inputs
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: mikofo
+          trigger: true
+          passed:
+            - collect-inputs
 
       - task: build
-        file: mikofo/ci/build_task.yaml
+        file: ci/2023/tasks/mikofo-build-task.yaml
         tags:
           - internal
         input_mapping:
           repo: mikofo
+        output_mapping:
+          release: gnu-release
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: mikofo-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
 
   - name: mikofo-check-inputs
     <<: *job-common
@@ -833,8 +865,10 @@ jobs:
       - in_parallel:
         - get: ci
           trigger: false
-        - get: mikofo
+        - get: mikofo-bin
           trigger: true
+          tags:
+            - internal
           passed:
             - mikofo-build
         - get: aoc-tools
@@ -852,13 +886,13 @@ jobs:
         file: ci/2023/tasks/check-inputs.yaml
         tags:
           - internal
+        privileged: true
         input_mapping:
-          repo: mikofo
+          repo: mikofo-bin
         params:
           PARTICIPANT: "mikofo"
-          # this is relative to the repo root, not the workspace
-          INSTALL: "ci/scripts/install.sh"
         vars:
+          # override this to be our check script
           check-input-script: "ci/2023/scripts/mikofo-check.sh"
 
   - name: comparative-bench
@@ -919,7 +953,7 @@ jobs:
             - internal
           passed:
             - aspidites-check-inputs
-        - get: mikofo
+        - get: mikofo-bin
           trigger: true
           passed:
             - mikofo-check-inputs

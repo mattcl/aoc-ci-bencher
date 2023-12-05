@@ -21,6 +21,12 @@ tar -xvf aoc-js-*.tar.gz
 mv mattcl-aoc2023-js /usr/local/bin/
 cd ../
 
+# unpack and install the mikofo solution
+cd mikofo-bin
+tar -xvf aoc-js-*.tar.gz
+mv mikofo-advent-of-code-2023-js /usr/local/bin/
+cd ../
+
 # install mattcl-py
 cd mattcl-py
 ci/scripts/install.sh
@@ -53,17 +59,12 @@ tar -xvf aspidites-aoc-*.tar.gz
 mv aoc2023 /usr/local/bin/aspidites-aoc
 cd ../
 
-# install mikofo
-npm install -g yarn
-cp -r mikofo /mikofo
-yarn --cwd /mikofo install
-
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x
 # we don't need the script debugging from this point on
 
-i=3
+i=1
 while [ $i -ne 26 ];
 do
     aoc-tools ci bench "$YEAR" "$i" "$INPUTS_DIR"
