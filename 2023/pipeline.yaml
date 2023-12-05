@@ -501,6 +501,7 @@ jobs:
         file: ci/2023/tasks/check-inputs.yaml
         tags:
           - internal
+        privileged: true
         input_mapping:
           repo: mattcl-ts-bin
         params:
@@ -927,6 +928,7 @@ jobs:
         file: ci/2023/tasks/comparative-benchmarks.yaml
         tags:
           - ser6
+        privileged: true
         params:
           AOC_TOOLS_API_TOKEN: ((aoc-web.token))
 
