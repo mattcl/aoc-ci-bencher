@@ -15,6 +15,12 @@ tar -xvf aoc-*-x86_64-unknown-linux-gnu.tar.gz
 mv aoc /usr/local/bin/mattcl-aoc
 cd ../
 
+# unpack and install the mattcl-ts solution
+cd mattcl-ts-bin
+tar -xvf aoc-js-*.tar.gz
+mv mattcl-aoc2023-js /usr/local/bin/
+cd ../
+
 # install mattcl-py
 cd mattcl-py
 ci/scripts/install.sh

@@ -11,6 +11,7 @@ inputs:
   - name: aoc-inputs
   - name: aoc-inputs-write
   - name: mattcl-bin
+  - name: mattcl-ts-bin
   - name: mattcl-py
   - name: chancalan
   - name: lanjian-bin

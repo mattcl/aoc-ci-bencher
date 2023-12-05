@@ -22,6 +22,16 @@ entrypoint = "mattcl-aoc-py-bench"
 # no point in collecting identical inputs from this project
 skip_inputs = true
 
+[participants.mattcl-ts]
+username = "mattcl-ts"
+repo = "https://github.com/mattcl/aoc2023-js"
+location = "mattcl-ts"
+language = "typescript (bun)"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "mattcl-aoc2023-js"
+# I'm not even including inputs in this
+skip_inputs = true
+
 [participants.chancalan]
 username = "chancalan"
 repo = "https://github.com/chancalan/aoc2023"

@@ -71,6 +71,17 @@ resources:
     tags:
       - internal
 
+  - name: mattcl-ts-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: mattcl-aoc-2023-bun
+    tags:
+      - internal
+
   - name: lanjian-bin
     type: gitea-package
     icon: package-up
@@ -136,6 +147,14 @@ resources:
     icon: github
     source:
       uri: https://github.com/mattcl/aoc2023-py.git
+      ignore_paths:
+        - 'README.md'
+
+  - name: mattcl-ts
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc2023-js.git
       ignore_paths:
         - 'README.md'
 
@@ -209,6 +228,8 @@ jobs:
         - get: mattcl
           trigger: true
         - get: mattcl-py
+          trigger: true
+        - get: mattcl-ts
           trigger: true
         - get: chancalan
           trigger: true
@@ -419,6 +440,74 @@ jobs:
           INSTALL: "ci/scripts/install.sh"
         vars:
           check-input-script: "ci/scripts/check-inputs.sh"
+
+  - name: mattcl-ts-build
+    <<: *job-common
+    plan:
+      - get: mattcl-ts
+        trigger: true
+        passed:
+          - collect-inputs
+
+      - task: build
+        file: mattcl-ts/ci/build-task.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: mattcl-ts
+        output_mapping:
+          release: gnu-release
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: mattcl-ts-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
+
+  - name: mattcl-ts-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: mattcl-ts-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - mattcl-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2023/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: mattcl-ts-bin
+        params:
+          PARTICIPANT: "mattcl-ts"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2023/scripts/mattcl-ts-check.sh"
 
   - name: chancalan-build
     <<: *job-common
@@ -795,6 +884,12 @@ jobs:
             - internal
           passed:
             - mattcl-check-inputs
+        - get: mattcl-ts-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - mattcl-ts-check-inputs
         - get: mattcl-py
           trigger: true
           passed:

@@ -12,6 +12,7 @@ inputs:
   - name: aoc-inputs-write
   - name: mattcl
   - name: mattcl-py
+  - name: mattcl-ts
   - name: chancalan
   - name: lanjian
   - name: pting
