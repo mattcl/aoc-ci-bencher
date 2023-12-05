@@ -888,8 +888,8 @@ jobs:
           trigger: true
           tags:
             - internal
-          passed:
-            - mattcl-ts-check-inputs
+          # passed:
+          #   - mattcl-ts-check-inputs
         - get: mattcl-py
           trigger: true
           passed:
