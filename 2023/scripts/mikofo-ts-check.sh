@@ -10,7 +10,7 @@ cd ../
 # unpack and install the mattcl solution
 cd repo
 tar -xvf aoc-js-*.tar.gz
-mv mikofo-advent-of-code-2023-js
+mv mikofo-advent-of-code-2023-js /usr/local/bin/
 
 # this is now above us
 INPUTS_DIR="../aoc-inputs-write/${YEAR}"
