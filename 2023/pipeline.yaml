@@ -485,7 +485,7 @@ jobs:
           tags:
             - internal
           passed:
-            - mattcl-build
+            - mattcl-ts-build
         - get: aoc-tools
           trigger: false
           tags:
