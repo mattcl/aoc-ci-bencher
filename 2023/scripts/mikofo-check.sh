@@ -12,5 +12,7 @@ cd repo
 tar -xvf aoc-js-*.tar.gz
 mv mikofo-advent-of-code-2023-js /usr/local/bin/
 
+INPUTS_DIR="../aoc-inputs-write/${YEAR}"
+
 # use the tools to check the inputs
 aoc-tools ci check-solutions mikofo "$INPUTS_DIR"
