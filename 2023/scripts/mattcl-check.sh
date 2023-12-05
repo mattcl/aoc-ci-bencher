@@ -13,7 +13,7 @@ tar -xvf aoc-*-x86_64-unknown-linux-gnu.tar.gz
 mv aoc /usr/local/bin/mattcl-aoc
 
 # this is now above us
-INPUTS_DIR="aoc-inputs-write/${YEAR}"
+INPUTS_DIR="../aoc-inputs-write/${YEAR}"
 
 # use the tools to check the inputs
 aoc-tools ci check-solutions mattcl "$INPUTS_DIR"

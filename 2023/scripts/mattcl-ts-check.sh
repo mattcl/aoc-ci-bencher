@@ -11,9 +11,10 @@ cd ../
 cd repo
 tar -xvf aoc-js-*.tar.gz
 mv mattcl-aoc2023-js /usr/local/bin/
-cd ../
 
 which mattcl-aoc2023-js
+
+AOC_DAY=1 AOC_INPUT=../aoc-inputs-write/2023/day_001/input-mattcl mattcl-aoc2023-js
 
 # this is now above us
 INPUTS_DIR="../aoc-inputs-write/${YEAR}"
