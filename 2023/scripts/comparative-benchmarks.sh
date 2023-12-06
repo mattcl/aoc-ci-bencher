@@ -64,7 +64,7 @@ INPUTS_DIR="aoc-inputs-write/${YEAR}"
 set +x
 # we don't need the script debugging from this point on
 
-i=4
+i=1
 while [ $i -ne 26 ];
 do
     aoc-tools ci bench "$YEAR" "$i" "$INPUTS_DIR"
