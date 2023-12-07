@@ -69,9 +69,18 @@ while [ $i -ne 26 ];
 do
     aoc-tools ci bench "$YEAR" "$i" "$INPUTS_DIR"
     aoc-tools ci report "$i" "$INPUTS_DIR" -t ci/templates/report-template.md -o README.md
+
+    # publish benches as we go
+    padded=$(printf "%03d" "$i")
+    day_dir="${INPUTS_DIR}/day_${padded}"
+    if [ -d "$day_dir" ]; then
+        pushd "$day_dir"
+        aoc-tools publish-benches unified.csv || true
+        popd
+    fi
     i=$((i + 1))
 done
 
 # make the unified benchmarks and publish them, ignoring any failures
-aoc-tools unify-benches "$INPUTS_DIR" -o unified.csv || true
-aoc-tools publish-benches unified.csv || true
+# aoc-tools unify-benches "$INPUTS_DIR" -o unified.csv || true
+# aoc-tools publish-benches unified.csv || true
