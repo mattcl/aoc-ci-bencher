@@ -64,8 +64,8 @@ INPUTS_DIR="aoc-inputs-write/${YEAR}"
 set +x
 # we don't need the script debugging from this point on
 
-i=5
-while [ $i -ne 26 ];
+i=1
+while [ $i -ne 2 ];
 do
     aoc-tools ci bench "$YEAR" "$i" "$INPUTS_DIR"
     aoc-tools ci report "$i" "$INPUTS_DIR" -t ci/templates/report-template.md -o README.md
