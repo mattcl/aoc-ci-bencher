@@ -64,8 +64,8 @@ INPUTS_DIR="aoc-inputs-write/${YEAR}"
 set +x
 # we don't need the script debugging from this point on
 
-i=1
-while [ $i -ne 2 ];
+i=25
+while [ $i -ne 4 ];
 do
     aoc-tools ci bench "$YEAR" "$i" "$INPUTS_DIR"
     aoc-tools ci report "$i" "$INPUTS_DIR" -t ci/templates/report-template.md -o README.md
@@ -78,7 +78,7 @@ do
         aoc-tools publish-benches benches_raw.csv || true
         popd
     fi
-    i=$((i + 1))
+    i=$((i - 1))
 done
 
 # make the unified benchmarks and publish them, ignoring any failures
