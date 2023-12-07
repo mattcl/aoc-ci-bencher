@@ -75,7 +75,7 @@ do
     day_dir="${INPUTS_DIR}/day_${padded}"
     if [ -d "$day_dir" ]; then
         pushd "$day_dir"
-        aoc-tools publish-benches unified.csv || true
+        aoc-tools publish-benches benches_raw.csv || true
         popd
     fi
     i=$((i + 1))
