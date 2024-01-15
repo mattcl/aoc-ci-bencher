@@ -10,9 +10,8 @@ cargo test
 # run integration tests
 just test
 
-# benches too slow
 # run benchmarks
-# just bench-all
+just bench-all
 
 # build the cli
 just build-cli
