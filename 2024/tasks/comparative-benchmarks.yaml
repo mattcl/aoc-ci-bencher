@@ -1,0 +1,26 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: mattcl/aoc-ci-bencher
+    tag: latest
+
+inputs:
+  - name: ci
+  - name: aoc-tools
+  - name: aoc-inputs
+  - name: aoc-inputs-write
+  - name: mattcl-bin
+  - name: mattcl-py
+
+outputs:
+  - name: aoc-inputs-write
+
+params:
+  AOC_TOOLS_API_BASE: "https://aoc.ancalagon.black/api/"
+  AOC_TOOLS_CONFIG: "ci/2024/config.toml"
+  AOC_TOOLS_API_TOKEN:
+  YEAR: "2024"
+
+run:
+  path: ci/2024/scripts/comparative-benchmarks.sh

@@ -1,0 +1,24 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: mattcl/aoc-ci-bencher
+    tag: latest
+
+inputs:
+  - name: ci
+  - name: aoc-tools
+  - name: aoc-inputs
+  - name: aoc-inputs-write
+  - name: mattcl
+  - name: mattcl-py
+
+outputs:
+  - name: aoc-inputs-write
+
+params:
+  AOC_TOOLS_CONFIG: "ci/2024/config.toml"
+  YEAR: "2024"
+
+run:
+  path: ci/scripts/collect-inputs.sh

@@ -1,0 +1,23 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: mattcl/ci-rust-slim
+    tag: 1.82
+
+inputs:
+  - name: ci
+  - name: aoc-tools
+  - name: aoc-inputs
+  - name: aoc-inputs-write
+  - name: mattcl-bin
+
+outputs:
+  - name: aoc-inputs-write
+
+params:
+  AOC_TOOLS_CONFIG: "ci/2024/config.toml"
+  YEAR: "2024"
+
+run:
+  path: ci/scripts/solve-inputs.sh

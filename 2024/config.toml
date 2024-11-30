@@ -1,0 +1,23 @@
+[general]
+pipeline_url = "http://ci.papercode.net:8080/teams/main/pipelines/aoc2024"
+year = 2024
+timeout = 30
+
+[participants.mattcl]
+username = "mattcl"
+repo = "https://github.com/mattcl/aoc2024"
+location = "mattcl"
+language = "rust"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "mattcl-aoc run"
+is_solver = true
+
+[participants.mattcl-py]
+username = "mattcl-py"
+repo = "https://github.com/mattcl/aoc2024-py"
+location = "mattcl-py"
+language = "python"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "mattcl-aoc-py-bench"
+# no point in collecting identical inputs from this project
+skip_inputs = true
