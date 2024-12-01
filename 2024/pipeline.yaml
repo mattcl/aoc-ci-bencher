@@ -564,6 +564,12 @@ jobs:
             - internal
           passed:
             - lanjian-check-inputs
+        - get: kcen-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - kcen-check-inputs
 
       - task: comparative-benches
         file: ci/2024/tasks/comparative-benchmarks.yaml
