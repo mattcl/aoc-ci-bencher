@@ -21,3 +21,19 @@ input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "mattcl-aoc-py-bench"
 # no point in collecting identical inputs from this project
 skip_inputs = true
+
+[participants.lanjian]
+username = "lanjian"
+repo = "https://github.com/lanjian/aoc-2024"
+location = "lanjian"
+language = "rust"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "lanjian-aoc run"
+
+[participants.kcen]
+username = "kcen"
+repo = "https://github.com/kcen/aoc2024"
+location = "kcen"
+language = "nim"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "kcen-aoc"

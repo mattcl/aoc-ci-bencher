@@ -20,6 +20,12 @@ cd mattcl-py
 ci/scripts/install.sh
 cd ../
 
+# unpack and install the lanjian solution
+cd lanjian-bin
+tar -xvf lanjian-aoc-*-x86_64-unknown-linux-gnu.tar.gz
+mv aoc /usr/local/bin/lanjian-aoc
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x

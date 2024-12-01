@@ -12,6 +12,7 @@ inputs:
   - name: aoc-inputs-write
   - name: mattcl-bin
   - name: mattcl-py
+  - name: lanjian-bin
 
 outputs:
   - name: aoc-inputs-write
