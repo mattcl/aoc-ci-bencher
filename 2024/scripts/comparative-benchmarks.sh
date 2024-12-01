@@ -26,6 +26,12 @@ tar -xvf lanjian-aoc-*-x86_64-unknown-linux-gnu.tar.gz
 mv aoc /usr/local/bin/lanjian-aoc
 cd ../
 
+# unpack and install the kcen solution
+cd kcen-bin
+tar -xvf kcen-aoc-*.tar.gz
+mv kcen-aoc /usr/local/bin/kcen-aoc
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x
