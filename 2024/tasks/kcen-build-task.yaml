@@ -6,6 +6,7 @@ image_resource:
     tag: latest
 
 inputs:
+  - name: ci
   - name: repo
 
 run:
