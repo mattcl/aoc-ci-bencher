@@ -32,6 +32,11 @@ tar -xvf kcen-aoc-*.tar.gz
 mv kcen-aoc /usr/local/bin/kcen-aoc
 cd ../
 
+# install mattcl-py
+cd mikofo
+ci/scripts/install.sh
+cd ../
+
 INPUTS_DIR="aoc-inputs-write/${YEAR}"
 
 set +x

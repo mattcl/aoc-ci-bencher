@@ -37,3 +37,11 @@ location = "kcen"
 language = "nim"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "kcen-aoc"
+
+[participants.mikofo]
+username = "mikofo"
+repo = "https://github.com/mikofo/aoc2024"
+location = "mikofo"
+language = "python"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "mikofo-aoc-py-bench"
