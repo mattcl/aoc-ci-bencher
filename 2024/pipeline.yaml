@@ -476,8 +476,6 @@ jobs:
         file: ci/2024/tasks/kcen-package.yaml
         tags:
           - internal
-        input_mapping:
-          repo: kcen
         output_mapping:
           release: gnu-release
 
