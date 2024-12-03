@@ -2,7 +2,7 @@ platform: linux
 image_resource:
   type: registry-image
   source:
-    repository: nimlang/choosenim
+    repository: mattcl/aoc-ci-bencher
     tag: latest
 
 inputs:
