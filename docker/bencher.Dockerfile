@@ -62,6 +62,7 @@ RUN set -eux; \
         lua5.4 \
         nodejs \
         npm \
+        nim \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
     curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
@@ -70,3 +71,4 @@ RUN set -eux; \
 ENV PATH $PATH:/usr/lib/llvm-11/bin
 ENV PATH=${PATH}:/root/.local/bin
 ENV PATH=${PATH}:/root/.ghcup/bin
+ENV PATH=/root/.nimble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
