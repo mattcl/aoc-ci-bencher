@@ -56,6 +56,7 @@ RUN set -eux; \
         libgmp10 \
         libncurses-dev \
         libncurses5 \
+        libpcre3-dev \
         libtinfo5 \
         llvm-14 \
         lua5.4 \
