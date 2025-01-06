@@ -340,10 +340,15 @@ jobs:
   - name: mattcl-py-build
     <<: *job-common
     plan:
-      - get: mattcl-py
-        trigger: true
-        passed:
-          - collect-inputs
+      - in_parallel:
+        - get: mattcl-py
+          trigger: true
+          passed:
+            - collect-inputs
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
 
       - task: build
         file: mattcl-py/ci/build-task.yaml
