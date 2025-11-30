@@ -1,0 +1,665 @@
+resource_types:
+  - name: slack-alert
+    type: registry-image
+    source:
+      repository: arbourd/concourse-slack-alert-resource
+
+  - name: gitea-package
+    type: registry-image
+    source:
+      repository: mattcl/concourse-gitea-package
+      tag: "0.2.1"
+
+job-common-settings: &job-common
+  # I guess we want to prevent multiple builds conflicting with each other
+  max_in_flight: 1
+  public: true
+  build_log_retention:
+    days: 25
+    builds: 30
+    minimum_succeeded_builds: 1
+  on_success:
+    put: notify
+    params:
+      alert_type: success
+  on_failure:
+    put: notify
+    params:
+      alert_type: failed
+  on_abort:
+    put: notify
+    params:
+      alert_type: aborted
+  on_error:
+    put: notify
+    params:
+      alert_type: errored
+
+resources:
+  - name: notify
+    type: slack-alert
+    source:
+      url: ((slack.webhook-url))
+      channel: ((slack.channel))
+      concourse_url: ((server.url))
+
+  - name: ci
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc-ci-bencher.git
+
+  - name: aoc-tools
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: aoc-tools
+    tags:
+      - internal
+
+  - name: mattcl-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: mattcl-aoc-2025
+    tags:
+      - internal
+
+  - name: lanjian-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: lanjian-aoc-2025
+    tags:
+      - internal
+
+  - name: kcen-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: kcen-aoc-2025
+    tags:
+      - internal
+
+  - name: aoc-inputs
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc-benchmarks.git
+      branch: master
+      ignore_paths:
+        - 'README.md'
+        - 'SPECIFICATION.md'
+        - '**/README.md'
+        - '**/application-benches.md'
+        - '**/solutions.md'
+        - '**/solutions.json'
+        - '**/participants.json'
+        - '**/benches.md'
+        - '**/benches_raw.csv'
+
+  # this is the same repository as the aoc-inputs resource, but this one allows
+  # writes (this is done to avoid new concourse version detection for ignored
+  # paths) see https://github.com/concourse/git-resource
+  - name: aoc-inputs-write
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:mattcl/aoc-benchmarks.git
+      branch: master
+      private_key: ((aoc-inputs.deploy_key))
+
+  # the reset of these resources are participants
+  - name: mattcl
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc2025.git
+      ignore_paths:
+        - 'README.md'
+        - 'template/*'
+
+  - name: mattcl-py
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/aoc2025-py.git
+      ignore_paths:
+        - 'README.md'
+
+  - name: lanjian
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/lanjian/aoc-2025.git
+      ignore_paths:
+        - 'README.md'
+        - 'template/*'
+
+  # - name: kcen
+  #   type: git
+  #   icon: github
+  #   source:
+  #     uri: https://github.com/kcen/aoc2025
+  #     branch: main
+  #     ignore_paths:
+  #       - 'README.md'
+
+  # - name: mikofo
+  #   type: git
+  #   icon: github
+  #   source:
+  #     uri: https://github.com/mikofo/aoc2025
+  #     branch: main
+  #     ignore_paths:
+  #       - 'README.md'
+
+jobs:
+  - name: collect-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: false
+        - get: mattcl
+          trigger: true
+        - get: mattcl-py
+          trigger: true
+        - get: lanjian
+          trigger: true
+        # - get: kcen
+        #   trigger: true
+        # - get: mikofo
+        #   trigger: true
+        # - get: aoc-inputs-write
+        #   trigger: false
+
+      - task: collect
+        file: ci/2025/tasks/collect-inputs.yaml
+        tags:
+          - internal
+
+      - task: make-commit
+        tags:
+          - internal
+        file: ci/tasks/git-commit.yaml
+        input_mapping:
+          repo: aoc-inputs-write
+        output_mapping:
+          repo: aoc-inputs-write
+        params:
+          COMMIT_MESSAGE: "ops: [CI] added new inputs"
+
+      - put: aoc-inputs-write
+        params:
+          repository: aoc-inputs-write
+          rebase: true
+
+  - name: solve-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - collect-inputs
+        - get: mattcl-bin
+          trigger: true
+          passed:
+            - mattcl-build
+          tags:
+            - internal
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: solve-inputs
+        file: ci/2025/tasks/solve-inputs.yaml
+        tags:
+          - internal
+
+      - task: make-commit
+        tags:
+          - internal
+        file: ci/tasks/git-commit.yaml
+        input_mapping:
+          repo: aoc-inputs-write
+        output_mapping:
+          repo: aoc-inputs-write
+        params:
+          COMMIT_MESSAGE: "ops: [CI] updated solutions"
+
+      - put: aoc-inputs-write
+        params:
+          repository: aoc-inputs-write
+          rebase: true
+
+
+  - name: mattcl-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: mattcl
+          trigger: true
+          passed:
+            - collect-inputs
+
+      - task: build
+        file: mattcl/ci/build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: mattcl
+        output_mapping:
+          release: gnu-release
+        params:
+          CARGO_REGISTRIES_ANCALAGON_INDEX: ((ancalagon-registry.index))
+          CARGO_REGISTRIES_ANCALAGON_TOKEN: ((ancalagon-registry.token))
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: mattcl-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
+
+  # this is kind of pointless because this solution calculated the stored
+  # solutions
+  - name: mattcl-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: mattcl-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - mattcl-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2025/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: mattcl-bin
+        params:
+          PARTICIPANT: "mattcl"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2025/scripts/mattcl-check.sh"
+
+  - name: mattcl-py-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: mattcl-py
+          trigger: true
+          passed:
+            - collect-inputs
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+
+      - task: build
+        file: mattcl-py/ci/build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: mattcl-py
+
+  - name: mattcl-py-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: mattcl-py
+          trigger: true
+          passed:
+            - mattcl-py-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2025/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: mattcl-py
+        params:
+          PARTICIPANT: "mattcl-py"
+          # this is relative to the repo root, not the workspace
+          INSTALL: "ci/scripts/install.sh"
+        vars:
+          check-input-script: "ci/scripts/check-inputs.sh"
+
+  - name: lanjian-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: lanjian
+          trigger: true
+          passed:
+            - collect-inputs
+
+      - task: build
+        file: ci/2025/tasks/lanjian-build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: lanjian
+
+      - task: package
+        file: ci/2025/tasks/lanjian-package.yaml
+        tags:
+          - internal
+        output_mapping:
+          release: gnu-release
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: lanjian-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
+
+  - name: lanjian-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: lanjian-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - lanjian-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2025/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: lanjian-bin
+        params:
+          PARTICIPANT: "lanjian"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2025/scripts/lanjian-check.sh"
+
+  # - name: kcen-build
+  #   <<: *job-common
+  #   plan:
+  #     - in_parallel:
+  #       - get: ci
+  #         trigger: false
+  #       - get: kcen
+  #         trigger: true
+  #         passed:
+  #           - collect-inputs
+
+  #     - task: build
+  #       file: ci/2025/tasks/kcen-build-task.yaml
+  #       tags:
+  #         - internal
+  #         - ser6
+  #       input_mapping:
+  #         repo: kcen
+
+  #     - task: package
+  #       file: ci/2025/tasks/kcen-package.yaml
+  #       tags:
+  #         - internal
+  #       output_mapping:
+  #         release: gnu-release
+
+  #     - load_var: bin-version
+  #       file: gnu-release/VERSION
+
+  #     - load_var: gnu-file
+  #       file: gnu-release/ARCHIVE_NAME
+
+  #     - put: kcen-bin
+  #       tags:
+  #         - internal
+  #       inputs:
+  #         - gnu-release
+  #       params:
+  #         version: ((.:bin-version))
+  #         files:
+  #           - gnu-release/((.:gnu-file))
+
+  # - name: kcen-check-inputs
+  #   <<: *job-common
+  #   plan:
+  #     - in_parallel:
+  #       - get: ci
+  #         trigger: false
+  #       - get: kcen-bin
+  #         trigger: true
+  #         tags:
+  #           - internal
+  #         passed:
+  #           - kcen-build
+  #       - get: aoc-tools
+  #         trigger: false
+  #         tags:
+  #           - internal
+  #       - get: aoc-inputs
+  #         trigger: true
+  #         passed:
+  #           - solve-inputs
+  #       - get: aoc-inputs-write
+  #         trigger: false
+
+  #     - task: check-inputs
+  #       file: ci/2025/tasks/check-inputs.yaml
+  #       tags:
+  #         - internal
+  #       input_mapping:
+  #         repo: kcen-bin
+  #       params:
+  #         PARTICIPANT: "kcen"
+  #       vars:
+  #         # override this to be our check script
+  #         check-input-script: "ci/2025/scripts/kcen-check.sh"
+
+  # - name: mikofo-build
+  #   <<: *job-common
+  #   plan:
+  #     - get: mikofo
+  #       trigger: true
+  #       passed:
+  #         - collect-inputs
+
+  #     - task: build
+  #       file: mikofo/ci/build-task.yaml
+  #       tags:
+  #         - internal
+  #       input_mapping:
+  #         repo: mikofo
+
+  # - name: mikofo-check-inputs
+  #   <<: *job-common
+  #   plan:
+  #     - in_parallel:
+  #       - get: ci
+  #         trigger: false
+  #       - get: mikofo
+  #         trigger: true
+  #         passed:
+  #           - mikofo-build
+  #       - get: aoc-tools
+  #         trigger: false
+  #         tags:
+  #           - internal
+  #       - get: aoc-inputs
+  #         trigger: true
+  #         passed:
+  #           - solve-inputs
+  #       - get: aoc-inputs-write
+  #         trigger: false
+
+  #     - task: check-inputs
+  #       file: ci/2025/tasks/check-inputs.yaml
+  #       tags:
+  #         - internal
+  #       input_mapping:
+  #         repo: mikofo
+  #       params:
+  #         PARTICIPANT: "mikofo"
+  #         # this is relative to the repo root, not the workspace
+  #         INSTALL: "ci/scripts/install.sh"
+  #       vars:
+  #         check-input-script: "ci/scripts/check-inputs.sh"
+
+  - name: comparative-bench
+    public: true
+    <<: *job-common
+    serial_groups: [benching]
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+        - get: mattcl-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - mattcl-check-inputs
+        - get: mattcl-py
+          trigger: true
+          passed:
+            - mattcl-py-check-inputs
+        - get: lanjian-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - lanjian-check-inputs
+        - get: kcen-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - kcen-check-inputs
+        - get: mikofo
+          trigger: true
+          passed:
+            - mikofo-check-inputs
+
+      - task: comparative-benches
+        file: ci/2025/tasks/comparative-benchmarks.yaml
+        tags:
+          - ser6
+        privileged: true
+        params:
+          AOC_TOOLS_API_TOKEN: ((aoc-web.token))
+
+      - task: make-commit
+        tags:
+          - internal
+        file: ci/tasks/git-commit.yaml
+        input_mapping:
+          repo: aoc-inputs-write
+        output_mapping:
+          repo: aoc-inputs-write
+        params:
+          COMMIT_MESSAGE: "ops: [CI] added new benchmarks"
+
+      - put: aoc-inputs-write
+        params:
+          repository: aoc-inputs-write
+          rebase: true

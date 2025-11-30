@@ -1,0 +1,47 @@
+[general]
+pipeline_url = "http://ci.papercode.net:8080/teams/main/pipelines/aoc2025"
+year = 2025
+timeout = 30
+
+[participants.mattcl]
+username = "mattcl"
+repo = "https://github.com/mattcl/aoc2025"
+location = "mattcl"
+language = "rust"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "mattcl-aoc run"
+is_solver = true
+
+[participants.mattcl-py]
+username = "mattcl-py"
+repo = "https://github.com/mattcl/aoc2025-py"
+location = "mattcl-py"
+language = "python"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "mattcl-aoc-py-bench"
+# no point in collecting identical inputs from this project
+skip_inputs = true
+
+[participants.lanjian]
+username = "lanjian"
+repo = "https://github.com/lanjian/aoc-2025"
+location = "lanjian"
+language = "rust"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "lanjian-aoc run"
+
+# [participants.kcen]
+# username = "kcen"
+# repo = "https://github.com/kcen/aoc2025"
+# location = "kcen"
+# language = "nim"
+# input_cmd = "ci/scripts/input_path.sh"
+# entrypoint = "kcen-aoc"
+
+# [participants.mikofo]
+# username = "mikofo"
+# repo = "https://github.com/mikofo/aoc2025"
+# location = "mikofo"
+# language = "python"
+# input_cmd = "ci/scripts/input_path.sh"
+# entrypoint = "mikofo-aoc-bench"

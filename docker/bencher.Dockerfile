@@ -1,4 +1,4 @@
-FROM mattcl/aoc-python:3.12
+FROM mattcl/aoc-python:3.14
 
 # ruby and friends
 # RUN ghcup install cabal
@@ -64,8 +64,7 @@ RUN set -eux; \
         npm \
         nim \
 	; \
-	rm -rf /var/lib/apt/lists/*; \
-    curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+	rm -rf /var/lib/apt/lists/*
 
 # don't create ".bundle" in all our apps
 ENV PATH $PATH:/usr/lib/llvm-11/bin

@@ -1,0 +1,19 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: bitnami/git
+    tag: latest
+
+inputs:
+  - name: ci
+  - name: repo
+
+outputs:
+  - name: release
+
+params:
+  TARGET: "x86_64-unknown-linux-gnu"
+
+run:
+  path: ci/2024/scripts/lanjian-package.sh

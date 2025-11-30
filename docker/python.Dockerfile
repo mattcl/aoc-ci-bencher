@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.14-bookworm-slim
 
 # pipx, virtualenv, poetry
 ENV POETRY_NO_INTERACTION=1 \

@@ -1,0 +1,16 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: bitnami/git
+    tag: latest
+
+inputs:
+  - name: ci
+  - name: repo
+
+outputs:
+  - name: release
+
+run:
+  path: ci/2025/scripts/kcen-package.sh
