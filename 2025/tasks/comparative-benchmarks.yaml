@@ -21,9 +21,9 @@ outputs:
 
 params:
   AOC_TOOLS_API_BASE: "https://aoc.ancalagon.black/api/"
-  AOC_TOOLS_CONFIG: "ci/2024/config.toml"
+  AOC_TOOLS_CONFIG: "ci/2025/config.toml"
   AOC_TOOLS_API_TOKEN:
-  YEAR: "2024"
+  YEAR: "2025"
 
 run:
-  path: ci/2024/scripts/comparative-benchmarks.sh
+  path: ci/2025/scripts/comparative-benchmarks.sh
