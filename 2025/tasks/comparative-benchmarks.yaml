@@ -13,8 +13,8 @@ inputs:
   - name: mattcl-bin
   - name: mattcl-py
   - name: lanjian-bin
-  - name: kcen-bin
-  - name: mikofo
+  # - name: kcen-bin
+  # - name: mikofo
 
 outputs:
   - name: aoc-inputs-write
