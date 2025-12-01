@@ -13,6 +13,7 @@ inputs:
   - name: mattcl
   - name: mattcl-py
   - name: lanjian
+  - name: whyando
   # - name: kcen
   # - name: mikofo
 

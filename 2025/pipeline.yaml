@@ -82,6 +82,17 @@ resources:
     tags:
       - internal
 
+  - name: whyando-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: whyando-aoc-2025
+    tags:
+      - internal
+
   # - name: kcen-bin
   #   type: gitea-package
   #   icon: package-up
@@ -148,6 +159,15 @@ resources:
         - 'README.md'
         - 'template/*'
 
+  - name: whyando
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/whyando/aoc-2025.git
+      ignore_paths:
+        - 'README.md'
+        - 'template/*'
+
   # - name: kcen
   #   type: git
   #   icon: github
@@ -184,6 +204,8 @@ jobs:
         - get: mattcl-py
           trigger: true
         - get: lanjian
+          trigger: true
+        - get: whyando
           trigger: true
         # - get: kcen
         #   trigger: true
@@ -469,6 +491,83 @@ jobs:
           # override this to be our check script
           check-input-script: "ci/2025/scripts/lanjian-check.sh"
 
+  - name: whyando-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: whyando
+          trigger: true
+          passed:
+            - collect-inputs
+
+      - task: build
+        file: ci/2025/tasks/whyando-build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: whyando
+
+      - task: package
+        file: ci/2025/tasks/whyando-package.yaml
+        tags:
+          - internal
+        output_mapping:
+          release: gnu-release
+
+      - load_var: bin-version
+        file: gnu-release/VERSION
+
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
+
+      - put: whyando-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
+
+  - name: whyando-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: whyando-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - whyando-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
+
+      - task: check-inputs
+        file: ci/2025/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: whyando-bin
+        params:
+          PARTICIPANT: "whyando"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2025/scripts/whyando-check.sh"
+
   # - name: kcen-build
   #   <<: *job-common
   #   plan:
@@ -629,6 +728,12 @@ jobs:
             - internal
           passed:
             - lanjian-check-inputs
+        - get: whyando-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - whyando-check-inputs
         # - get: kcen-bin
         #   trigger: true
         #   tags:
