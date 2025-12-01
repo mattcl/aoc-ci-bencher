@@ -16,4 +16,4 @@ params:
   TARGET: "x86_64-unknown-linux-gnu"
 
 run:
-  path: ci/2024/scripts/lanjian-package.sh
+  path: ci/2025/scripts/lanjian-package.sh

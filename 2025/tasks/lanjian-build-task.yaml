@@ -22,4 +22,4 @@ caches:
 
 run:
   dir: repo
-  path: ../ci/2024/scripts/lanjian-build.sh
+  path: ../ci/2025/scripts/lanjian-build.sh
