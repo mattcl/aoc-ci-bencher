@@ -14,7 +14,7 @@ inputs:
   - name: mattcl-py
   - name: lanjian
   - name: whyando
-  # - name: kcen
+  - name: kcen
   # - name: mikofo
 
 outputs:

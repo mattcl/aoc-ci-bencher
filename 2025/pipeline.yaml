@@ -93,16 +93,16 @@ resources:
     tags:
       - internal
 
-  # - name: kcen-bin
-  #   type: gitea-package
-  #   icon: package-up
-  #   source:
-  #     uri: ((gitea-package.uri))
-  #     owner: ((gitea-package.owner))
-  #     token: ((gitea-package.token))
-  #     package: kcen-aoc-2025
-  #   tags:
-  #     - internal
+  - name: kcen-bin
+    type: gitea-package
+    icon: package-up
+    source:
+      uri: ((gitea-package.uri))
+      owner: ((gitea-package.owner))
+      token: ((gitea-package.token))
+      package: kcen-aoc-2025
+    tags:
+      - internal
 
   - name: aoc-inputs
     type: git
@@ -168,14 +168,14 @@ resources:
         - 'README.md'
         - 'template/*'
 
-  # - name: kcen
-  #   type: git
-  #   icon: github
-  #   source:
-  #     uri: https://github.com/kcen/aoc2025
-  #     branch: main
-  #     ignore_paths:
-  #       - 'README.md'
+  - name: kcen
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/kcen/aoc2025
+      branch: main
+      ignore_paths:
+        - 'README.md'
 
   # - name: mikofo
   #   type: git
@@ -207,8 +207,8 @@ jobs:
           trigger: true
         - get: whyando
           trigger: true
-        # - get: kcen
-        #   trigger: true
+        - get: kcen
+          trigger: true
         # - get: mikofo
         #   trigger: true
         - get: aoc-inputs-write
@@ -568,82 +568,82 @@ jobs:
           # override this to be our check script
           check-input-script: "ci/2025/scripts/whyando-check.sh"
 
-  # - name: kcen-build
-  #   <<: *job-common
-  #   plan:
-  #     - in_parallel:
-  #       - get: ci
-  #         trigger: false
-  #       - get: kcen
-  #         trigger: true
-  #         passed:
-  #           - collect-inputs
+  - name: kcen-build
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: kcen
+          trigger: true
+          passed:
+            - collect-inputs
 
-  #     - task: build
-  #       file: ci/2025/tasks/kcen-build-task.yaml
-  #       tags:
-  #         - internal
-  #         - ser6
-  #       input_mapping:
-  #         repo: kcen
+      - task: build
+        file: ci/2025/tasks/kcen-build-task.yaml
+        tags:
+          - internal
+          - ser6
+        input_mapping:
+          repo: kcen
 
-  #     - task: package
-  #       file: ci/2025/tasks/kcen-package.yaml
-  #       tags:
-  #         - internal
-  #       output_mapping:
-  #         release: gnu-release
+      - task: package
+        file: ci/2025/tasks/kcen-package.yaml
+        tags:
+          - internal
+        output_mapping:
+          release: gnu-release
 
-  #     - load_var: bin-version
-  #       file: gnu-release/VERSION
+      - load_var: bin-version
+        file: gnu-release/VERSION
 
-  #     - load_var: gnu-file
-  #       file: gnu-release/ARCHIVE_NAME
+      - load_var: gnu-file
+        file: gnu-release/ARCHIVE_NAME
 
-  #     - put: kcen-bin
-  #       tags:
-  #         - internal
-  #       inputs:
-  #         - gnu-release
-  #       params:
-  #         version: ((.:bin-version))
-  #         files:
-  #           - gnu-release/((.:gnu-file))
+      - put: kcen-bin
+        tags:
+          - internal
+        inputs:
+          - gnu-release
+        params:
+          version: ((.:bin-version))
+          files:
+            - gnu-release/((.:gnu-file))
 
-  # - name: kcen-check-inputs
-  #   <<: *job-common
-  #   plan:
-  #     - in_parallel:
-  #       - get: ci
-  #         trigger: false
-  #       - get: kcen-bin
-  #         trigger: true
-  #         tags:
-  #           - internal
-  #         passed:
-  #           - kcen-build
-  #       - get: aoc-tools
-  #         trigger: false
-  #         tags:
-  #           - internal
-  #       - get: aoc-inputs
-  #         trigger: true
-  #         passed:
-  #           - solve-inputs
-  #       - get: aoc-inputs-write
-  #         trigger: false
+  - name: kcen-check-inputs
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: ci
+          trigger: false
+        - get: kcen-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - kcen-build
+        - get: aoc-tools
+          trigger: false
+          tags:
+            - internal
+        - get: aoc-inputs
+          trigger: true
+          passed:
+            - solve-inputs
+        - get: aoc-inputs-write
+          trigger: false
 
-  #     - task: check-inputs
-  #       file: ci/2025/tasks/check-inputs.yaml
-  #       tags:
-  #         - internal
-  #       input_mapping:
-  #         repo: kcen-bin
-  #       params:
-  #         PARTICIPANT: "kcen"
-  #       vars:
-  #         # override this to be our check script
-  #         check-input-script: "ci/2025/scripts/kcen-check.sh"
+      - task: check-inputs
+        file: ci/2025/tasks/check-inputs.yaml
+        tags:
+          - internal
+        input_mapping:
+          repo: kcen-bin
+        params:
+          PARTICIPANT: "kcen"
+        vars:
+          # override this to be our check script
+          check-input-script: "ci/2025/scripts/kcen-check.sh"
 
   # - name: mikofo-build
   #   <<: *job-common
@@ -734,12 +734,12 @@ jobs:
             - internal
           passed:
             - whyando-check-inputs
-        # - get: kcen-bin
-        #   trigger: true
-        #   tags:
-        #     - internal
-        #   passed:
-        #     - kcen-check-inputs
+        - get: kcen-bin
+          trigger: true
+          tags:
+            - internal
+          passed:
+            - kcen-check-inputs
         # - get: mikofo
         #   trigger: true
         #   passed:
