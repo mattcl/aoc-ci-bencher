@@ -4,7 +4,7 @@ image_resource:
   source:
     # TODO: Consider updating aoc-bencher to Debian trixie (so this #just_works on nim 2.2.4)
     repository: nimlang/nim
-    tag: 2.2.4-alpine-regular
+    tag: 2.2.4-ubuntu-slim
 
 inputs:
   - name: ci
