@@ -30,13 +30,13 @@ language = "rust"
 input_cmd = "ci/scripts/input_path.sh"
 entrypoint = "lanjian-aoc run"
 
-# [participants.kcen]
-# username = "kcen"
-# repo = "https://github.com/kcen/aoc2025"
-# location = "kcen"
-# language = "nim"
-# input_cmd = "ci/scripts/input_path.sh"
-# entrypoint = "kcen-aoc"
+[participants.kcen]
+username = "kcen"
+repo = "https://github.com/kcen/aoc2025"
+location = "kcen"
+language = "nim"
+input_cmd = "ci/scripts/input_path.sh"
+entrypoint = "kcen-aoc"
 
 # [participants.mikofo]
 # username = "mikofo"

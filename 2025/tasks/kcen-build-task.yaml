@@ -2,8 +2,9 @@ platform: linux
 image_resource:
   type: registry-image
   source:
-    repository: mattcl/aoc-ci-bencher
-    tag: latest
+    # TODO: Consider updating aoc-bencher to Debian trixie (so this #just_works on nim 2.2.4)
+    repository: nimlang/nim
+    tag: 2.2.4-alpine-slim
 
 inputs:
   - name: ci
