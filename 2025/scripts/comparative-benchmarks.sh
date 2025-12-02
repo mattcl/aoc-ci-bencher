@@ -32,7 +32,7 @@ tar -xvf whyando-aoc-*-x86_64-unknown-linux-gnu.tar.gz
 mv aoc-2025 /usr/local/bin/whyando-aoc
 cd ../
 
-unpack and install the kcen solution
+# unpack and install the kcen solution
 cd kcen-bin
 tar -xvf kcen-aoc-*.tar.gz
 mv kcen-aoc /usr/local/bin/kcen-aoc
