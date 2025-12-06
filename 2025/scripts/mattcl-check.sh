@@ -9,7 +9,7 @@ cd ../
 
 # unpack and install the mattcl solution
 cd repo
-tar -xvf aoc-*-x86_64-unknown-linux-gnu.tar.gz
+tar -xvf aoc-*-x86_64-unknown-linux-musl.tar.gz
 mv aoc /usr/local/bin/mattcl-aoc
 
 # this is now above us
