@@ -13,7 +13,7 @@ outputs:
   - name: release
 
 params:
-  TARGET: "x86_64-unknown-linux-gnu"
+  TARGET: "x86_64-unknown-linux-musl"
 
 run:
   path: ci/2025/scripts/lanjian-package.sh

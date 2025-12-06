@@ -8,8 +8,9 @@ cargo check --all-targets
 cargo test
 
 # build the cli
-cargo build --release
+# cargo build --release
+RUSTFLAGS="-C target-cpu=native" cargo build --release --target=x86_64-unknown-linux-musl
 
 # cp the target release for a later step
 mkdir tmp
-cp target/release/aoc-2025 tmp/
+cp target/x86_64-unknown-linux-musl/release/aoc-2025 tmp/

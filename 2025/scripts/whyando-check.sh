@@ -9,7 +9,7 @@ cd ../
 
 # unpack and install the lanjian solution
 cd repo
-tar -xvf whyando-aoc-*-x86_64-unknown-linux-gnu.tar.gz
+tar -xvf whyando-aoc-*-x86_64-unknown-linux-musl.tar.gz
 mv aoc-2025 /usr/local/bin/whyando-aoc
 
 # this is now above us

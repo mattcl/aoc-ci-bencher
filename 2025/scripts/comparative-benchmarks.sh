@@ -22,13 +22,13 @@ cd ../
 
 # unpack and install the lanjian solution
 cd lanjian-bin
-tar -xvf lanjian-aoc-*-x86_64-unknown-linux-gnu.tar.gz
+tar -xvf lanjian-aoc-*-x86_64-unknown-linux-musl.tar.gz
 mv aoc /usr/local/bin/lanjian-aoc
 cd ../
 
 # unpack and install the whyando solution
 cd whyando-bin
-tar -xvf whyando-aoc-*-x86_64-unknown-linux-gnu.tar.gz
+tar -xvf whyando-aoc-*-x86_64-unknown-linux-musl.tar.gz
 mv aoc-2025 /usr/local/bin/whyando-aoc
 cd ../
 

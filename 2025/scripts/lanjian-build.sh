@@ -14,8 +14,9 @@ just test
 just bench-all
 
 # build the cli
-just build-cli
+# just build-cli
+RUSTFLAGS="-C target-cpu=native" cargo build -p aoc-cli --profile release --target=x86_64-unknown-linux-musl
 
 # cp the target release for a later step
 mkdir tmp
-cp target/release/aoc tmp/
+cp target/x86_64-unknown-linux-musl/release/aoc tmp/
