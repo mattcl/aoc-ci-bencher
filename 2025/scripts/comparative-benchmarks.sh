@@ -22,7 +22,7 @@ cd ../
 
 # unpack and install the lanjian solution
 cd lanjian-bin
-tar -xvf lanjian-aoc-*-x86_64-unknown-linux-musl.tar.gz
+tar -xvf lanjian-aoc-*-x86_64-unknown-linux-*.tar.gz
 mv aoc /usr/local/bin/lanjian-aoc
 cd ../
 
