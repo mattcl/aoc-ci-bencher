@@ -28,7 +28,7 @@ cd ../
 
 # unpack and install the whyando solution
 cd whyando-bin
-tar -xvf whyando-aoc-*-x86_64-unknown-linux-musl.tar.gz
+tar -xvf whyando-aoc-*-x86_64-unknown-linux-*.tar.gz
 mv aoc-2025 /usr/local/bin/whyando-aoc
 cd ../
 
