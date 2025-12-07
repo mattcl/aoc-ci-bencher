@@ -3,7 +3,7 @@ set -ex
 
 cd repo
 
-VERSION=$(git rev-parse HEAD)
+VERSION=$(git rev-parse --short HEAD)
 
 cd ../
 
