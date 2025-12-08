@@ -18,4 +18,4 @@ just build-cli-ci
 
 # cp the target release for a later step
 mkdir tmp
-cp target/x86_64-unknown-linux-musl/release/aoc tmp/
+cp target/x86_64-unknown-linux-musl/release-ci/aoc tmp/
