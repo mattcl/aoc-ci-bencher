@@ -1,6 +1,7 @@
 [general]
 pipeline_url = "http://ci.papercode.net:8080/teams/main/pipelines/aoc2025"
 year = 2025
+days = 12
 timeout = 30
 
 [participants.mattcl]
